@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ydinvoimalaonnettomuusmalli</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+</head>
+<body>
+    <h1>Ydinvoimalaonnettomuusmalli</h1>
+    
+    <label for="voimala">Valitse voimalaitos:</label>
+    <select id="voimala">
+        <option value="60.19,24.94">Loviisa</option>
+        <option value="61.24,21.46">Olkiluoto</option>
+        <option value="user">Määritä itse</option>
+    </select>
+
+    <label for="ines">INES-luokka:</label>
+    <select id="ines">
+        <option value="4">INES 4 (pieni päästö)</option>
+        <option value="5">INES 5 (kohtalainen päästö)</option>
+        <option value="6">INES 6 (laaja päästö)</option>
+        <option value="7">INES 7 (katastrofaalinen päästö)</option>
+    </select>
+
+    <button onclick="simulate()">Simuloi</button>
+
+    <div id="map"></div>
+
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
