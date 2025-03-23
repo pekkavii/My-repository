@@ -52,8 +52,14 @@ function drawPlume(lat, lon, ines) {
     let lengthFactor = 1 + windSpeed / 5; // Tuuli venyttää pilveä
     let shiftFactor = windSpeed * 2; // Pilven siirtymä km
 
-    let semiMinor = size * 1000;
-    let semiMajor = semiMinor * lengthFactor;
+    let semiMinor = size * 1000; // Pienempi akseli (metreinä)
+    let semiMajor = semiMinor * lengthFactor; // Pidempi akseli (venytys)
+
+    // Testataan kiinteillä arvoilla, jos pilvi ei näy
+    if (semiMajor < 1000 || semiMinor < 500) {
+        semiMajor = 50000;
+        semiMinor = 20000;
+    }
 
     // Lasketaan uusi keskipiste tuulen mukaan
     let newLat = lat + (shiftFactor / 111) * Math.cos(windRad);
@@ -64,19 +70,17 @@ function drawPlume(lat, lon, ines) {
         map.removeLayer(plumeLayer);
     }
 
-    // Lisätään uusi pilvi
+    // Lisätään uusi pilvi (käytetään kiinteitä kokoarvoja testin vuoksi)
     plumeLayer = L.ellipse([newLat, newLon], [semiMajor, semiMinor], {
         color: 'red',
         fillColor: 'orange',
         fillOpacity: 0.4,
-        rotation: windDirection // Ei muunnettu radiaaneiksi
+        rotation: windDirection
     }).addTo(map);
 
     console.log(`🟢 Voimala: lat=${lat}, lon=${lon}`);
     console.log(`🌫️ Pilvi: lat=${newLat}, lon=${newLon}, suunta=${windDirection}°, nopeus=${windSpeed} m/s`);
 }
-
-
 
 
 
