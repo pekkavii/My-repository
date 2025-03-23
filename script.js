@@ -5,13 +5,13 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 }).addTo(map);
 
 let marker;
+let plantMarker;
+let plumeLayer;
 
 function simulate() {
     let voimalaValinta = document.getElementById("powerPlant").value;
+    let ines = parseInt(document.getElementById("ines").value);
 
- 
-  let ines = parseInt(document.getElementById("ines").value);
-    
     let lat, lon;
     if (voimalaValinta === "user") {
         alert("Klikkaa karttaa asettaaksesi voimalan sijainnin.");
@@ -34,13 +34,7 @@ function simulate() {
     }
 }
 
-let plantMarker;
-let plumeLayer;
-
-function drawPlume(ines) {
-    let powerPlantSelect = document.getElementById("voimala").value;  // Yhtenäinen ID
-    let [lat, lon] = powerPlantSelect.split(',').map(Number);
-
+function drawPlume(lat, lon, ines) {
     // Päivitetään voimalan markkeri
     if (!plantMarker) {
         plantMarker = L.marker([lat, lon]).addTo(map);
@@ -75,7 +69,7 @@ function drawPlume(ines) {
         color: 'red',
         fillColor: 'orange',
         fillOpacity: 0.4,
-        rotation: windDirection * (Math.PI / 180)  // Oikea yksikkö
+        rotation: windDirection // Ei muunnettu radiaaneiksi
     }).addTo(map);
 
     console.log(`🟢 Voimala: lat=${lat}, lon=${lon}`);
