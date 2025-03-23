@@ -31,10 +31,21 @@ function simulate() {
     }
 }
 
+
+
+let plantMarker; // Muuttuja markkerille
+
 function drawPlume(ines) {
     // Haetaan valittu voimalan sijainti
     let powerPlantSelect = document.getElementById("powerPlant").value;
     let [lat, lon] = powerPlantSelect.split(',').map(Number);
+
+    // **Päivitetään markkeri**
+    if (plantMarker) {
+        plantMarker.setLatLng([lat, lon]);
+    } else {
+        plantMarker = L.marker([lat, lon]).addTo(map);
+    }
 
     let size = (ines - 3) * 30;  // Perusleveys kilometreissä
 
@@ -68,6 +79,6 @@ function drawPlume(ines) {
     // Siirretään pilvi uuteen sijaintiin
     plume.setLatLng([newLat, newLon]);
 
-    console.log(`Pilvi piirrettävänä: lat=${newLat}, lon=${newLon}, suunta=${windDirection}°, nopeus=${windSpeed} m/s`);
+    console.log(`🟢 Reaktori: lat=${lat}, lon=${lon}`);
+    console.log(`🌫️ Pilvi piirrettävänä: lat=${newLat}, lon=${newLon}, suunta=${windDirection}°, nopeus=${windSpeed} m/s`);
 }
-
