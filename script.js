@@ -31,7 +31,11 @@ function simulate() {
     }
 }
 
-function drawPlume(lat, lon, ines) {
+function drawPlume(ines) {
+    // Haetaan valittu voimalan sijainti
+    let powerPlantSelect = document.getElementById("powerPlant").value;
+    let [lat, lon] = powerPlantSelect.split(',').map(Number);
+
     let size = (ines - 3) * 30;  // Perusleveys kilometreissä
 
     // Haetaan tuulen suunta ja nopeus
@@ -66,5 +70,4 @@ function drawPlume(lat, lon, ines) {
 
     console.log(`Pilvi piirrettävänä: lat=${newLat}, lon=${newLon}, suunta=${windDirection}°, nopeus=${windSpeed} m/s`);
 }
-
 
