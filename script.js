@@ -7,7 +7,7 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 let marker;
 
 function simulate() {
-    let voimalaValinta = document.getElementById("voimala").value;
+    let voimalaValinta = document.getElementById("powerPlant").value;
 
  
   let ines = parseInt(document.getElementById("ines").value);
@@ -35,59 +35,54 @@ function simulate() {
 }
 
 let plantMarker;
-let plumeLayer;  // Tallennetaan pilvi tähän
+let plumeLayer;
 
 function drawPlume(ines) {
-    let powerPlantSelect = document.getElementById("powerPlant").value;
+    let powerPlantSelect = document.getElementById("voimala").value;  // Yhtenäinen ID
     let [lat, lon] = powerPlantSelect.split(',').map(Number);
 
-    // Jos markkeria ei ole, luodaan se, muuten siirretään
+    // Päivitetään voimalan markkeri
     if (!plantMarker) {
         plantMarker = L.marker([lat, lon]).addTo(map);
     } else {
         plantMarker.setLatLng([lat, lon]);
     }
 
-    let size = (ines - 3) * 30;  // Pilven perusleveys kilometreinä
+    let size = (ines - 3) * 30; // Pilven koko kilometreinä
 
     // Haetaan tuulen suunta ja nopeus
     let windDirection = parseFloat(document.getElementById("windDirection").value);
     let windSpeed = parseFloat(document.getElementById("windSpeed").value);
 
-    // Muutetaan asteet radiaaneiksi
     let windRad = windDirection * (Math.PI / 180);
-
-    // Lasketaan pilven venytys ja siirtymä
     let lengthFactor = 1 + windSpeed / 5; // Tuuli venyttää pilveä
-    let shiftFactor = windSpeed * 2; // Siirretään pilveä tuulen suuntaan
+    let shiftFactor = windSpeed * 2; // Pilven siirtymä km
 
-    // Luodaan ellipsin parametrit
-    let semiMinor = size * 1000;  // Pienempi akseli metreinä
-    let semiMajor = semiMinor * lengthFactor;  // Pidempi akseli (venytys)
-
-    // Poistetaan edellinen pilvi, jos se on olemassa
-    if (plumeLayer) {
-        map.removeLayer(plumeLayer);
-    }
-
-    // Piirretään uusi ellipsi
-    plumeLayer = L.ellipse([lat, lon], [semiMajor, semiMinor], {
-        color: 'red',
-        fillColor: 'orange',
-        fillOpacity: 0.4,
-        rotation: windDirection
-    }).addTo(map);
+    let semiMinor = size * 1000;
+    let semiMajor = semiMinor * lengthFactor;
 
     // Lasketaan uusi keskipiste tuulen mukaan
     let newLat = lat + (shiftFactor / 111) * Math.cos(windRad);
     let newLon = lon + (shiftFactor / (111 * Math.cos(lat * Math.PI / 180))) * Math.sin(windRad);
 
-    // Siirretään pilvi uuteen sijaintiin
-    plumeLayer.setLatLng([newLat, newLon]);
+    // Poistetaan aiempi pilvi
+    if (plumeLayer) {
+        map.removeLayer(plumeLayer);
+    }
 
-    console.log(`🟢 Reaktori: lat=${lat}, lon=${lon}`);
-    console.log(`🌫️ Pilvi piirrettävänä: lat=${newLat}, lon=${newLon}, suunta=${windDirection}°, nopeus=${windSpeed} m/s`);
+    // Lisätään uusi pilvi
+    plumeLayer = L.ellipse([newLat, newLon], [semiMajor, semiMinor], {
+        color: 'red',
+        fillColor: 'orange',
+        fillOpacity: 0.4,
+        rotation: windDirection * (Math.PI / 180)  // Oikea yksikkö
+    }).addTo(map);
+
+    console.log(`🟢 Voimala: lat=${lat}, lon=${lon}`);
+    console.log(`🌫️ Pilvi: lat=${newLat}, lon=${newLon}, suunta=${windDirection}°, nopeus=${windSpeed} m/s`);
 }
+
+
 
 
 
