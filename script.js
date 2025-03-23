@@ -38,23 +38,33 @@ function drawPlume(lat, lon, ines) {
     let windDirection = parseFloat(document.getElementById("windDirection").value);
     let windSpeed = parseFloat(document.getElementById("windSpeed").value);
 
-    // Lasketaan tuulen vaikutus pilven pituuteen ja siirtymään
-    let lengthFactor = 1 + windSpeed / 5; // Nopeampi tuuli venyttää pilveä
+    // Muutetaan asteet radiaaneiksi
+    let windRad = windDirection * (Math.PI / 180);
+
+    // Lasketaan pilven venytys ja siirtymä
+    let lengthFactor = 1 + windSpeed / 5; // Tuuli venyttää pilveä
     let shiftFactor = windSpeed * 2; // Siirretään pilveä tuulen suuntaan
 
-    let plume = L.ellipse([lat, lon], [size * 1000, size * 1000 * lengthFactor], {
+    // Luodaan ellipsin parametrit
+    let semiMinor = size * 1000;  // Pienempi akseli
+    let semiMajor = semiMinor * lengthFactor;  // Pidempi akseli (venytys)
+
+    // Piirretään ellipsi ilman siirtoa
+    let plume = L.ellipse([lat, lon], [semiMajor, semiMinor], {
         color: 'red',
         fillColor: 'orange',
         fillOpacity: 0.4,
         rotation: windDirection
     }).addTo(map);
 
-    // Siirretään pilveä tuulen suuntaan
-    let newLat = lat + (shiftFactor / 111) * Math.cos(windDirection * Math.PI / 180);
-    let newLon = lon + (shiftFactor / (111 * Math.cos(lat * Math.PI / 180))) * Math.sin(windDirection * Math.PI / 180);
+    // Lasketaan uusi keskipiste tuulen mukaan
+    let newLat = lat + (shiftFactor / 111) * Math.cos(windRad);
+    let newLon = lon + (shiftFactor / (111 * Math.cos(lat * Math.PI / 180))) * Math.sin(windRad);
 
+    // Siirretään pilvi uuteen sijaintiin
     plume.setLatLng([newLat, newLon]);
 
-    setTimeout(() => map.removeLayer(plume), 10000); // Poistaa pilven 10 sekunnin jälkeen
+    console.log(`Pilvi piirrettävänä: lat=${newLat}, lon=${newLon}, suunta=${windDirection}°, nopeus=${windSpeed} m/s`);
 }
+
 
