@@ -24,6 +24,11 @@
         <option value="6">INES 6 (laaja päästö)</option>
         <option value="7">INES 7 (katastrofaalinen päästö)</option>
     </select>
+<label for="windDirection">Tuulen suunta (°):</label>
+<input type="number" id="windDirection" value="90" min="0" max="360">
+
+<label for="windSpeed">Tuulen nopeus (m/s):</label>
+<input type="number" id="windSpeed" value="5" min="0">
 
     <button onclick="simulate()">Simuloi</button>
 
