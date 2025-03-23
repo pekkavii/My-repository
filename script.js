@@ -1,4 +1,5 @@
-let map = L.map('map').setView([60.19, 24.94], 6);
+let map = L.map('map').setView([60.3775, 26.3550], 7); // Loviisan sijainti oletuksena
+
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; OpenStreetMap contributors'
 }).addTo(map);
