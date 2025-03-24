@@ -47,31 +47,24 @@ function drawPlume(lat, lon, ines) {
     let shiftFactor = windSpeed * 2;
     let windRad = windDirection * (Math.PI / 180);
 
-    // Lasketaan keskipiste niin, että voimala jää ellipsin takaosaan
-    let newLat = lat + (semiMajor / 111) * Math.cos(windRad);
-    let newLon = lon + (semiMajor / (111 * Math.cos(lat * Math.PI / 180))) * Math.sin(windRad);
+    // Lasketaan keskipiste niin, että voimala jää ellipsin toiseen reunaan
+    let newLat = lat + (shiftFactor / 222) * Math.cos(windRad);
+    let newLon = lon + (shiftFactor / (222 * Math.cos(lat * Math.PI / 180))) * Math.sin(windRad);
 
     // Poistetaan vanha pilvi
     if (plumeLayer) {
         map.removeLayer(plumeLayer);
     }
 
-    // Valitaan väri INES-luokan mukaan
-    let colorMap = {
-        4: { border: "yellow", fill: "lightyellow" },
-        5: { border: "orange", fill: "gold" },
-        6: { border: "red", fill: "darkorange" },
-        7: { border: "darkred", fill: "firebrick" }
-    };
-    let { border, fill } = colorMap[ines] || { border: "gray", fill: "lightgray" };
-
     // Piirretään uusi ellipsi
-    plumeLayer = drawEllipse(newLat, newLon, semiMajor / 1000, semiMinor / 1000, windDirection, border, fill);
+    plumeLayer = drawEllipse(newLat, newLon, semiMinor / 1000, semiMajor / 1000, windDirection);
+
 }
 
-function drawEllipse(lat, lon, semiMajor, semiMinor, rotation, borderColor, fillColor) {
+
+function drawEllipse(lat, lon, semiMajor, semiMinor, rotation) {
     let points = [];
-    let steps = 36; // Ellipsin tarkkuus
+    let steps = 36; // Ellipsin tarkkuus (36 pistettä)
     let angleStep = (2 * Math.PI) / steps;
     
     let rotationRad = rotation * (Math.PI / 180);
@@ -94,15 +87,8 @@ function drawEllipse(lat, lon, semiMajor, semiMinor, rotation, borderColor, fill
     points.push(points[0]); // Sulje polygoni
 
     return L.polygon(points, {
-        color: borderColor,
-        fillColor: fillColor,
+        color: 'red',
+        fillColor: 'orange',
         fillOpacity: 0.4
     }).addTo(map);
 }
-
-
-
-
-
-
-
