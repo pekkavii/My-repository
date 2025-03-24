@@ -61,7 +61,6 @@ function drawPlume(lat, lon, ines) {
 
 }
 
-
 function drawEllipse(lat, lon, semiMajor, semiMinor, rotation) {
     let points = [];
     let steps = 36; // Ellipsin tarkkuus (36 pistettä)
@@ -92,3 +91,4 @@ function drawEllipse(lat, lon, semiMajor, semiMinor, rotation) {
         fillOpacity: 0.4
     }).addTo(map);
 }
+
