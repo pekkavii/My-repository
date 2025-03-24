@@ -35,52 +35,62 @@ function simulate() {
 }
 
 function drawPlume(lat, lon, ines) {
-    // Päivitetään voimalan markkeri
-    if (!plantMarker) {
-        plantMarker = L.marker([lat, lon]).addTo(map);
-    } else {
-        plantMarker.setLatLng([lat, lon]);
-    }
+    let size = (ines - 3) * 30 * 1000; // Pilven koko metreinä
 
-    let size = (ines - 3) * 30; // Pilven koko kilometreinä
-
-    // Haetaan tuulen suunta ja nopeus
     let windDirection = parseFloat(document.getElementById("windDirection").value);
     let windSpeed = parseFloat(document.getElementById("windSpeed").value);
 
+    let lengthFactor = 1 + windSpeed / 5;
+    let semiMinor = size;  
+    let semiMajor = semiMinor * lengthFactor;
+
+    let shiftFactor = windSpeed * 2;
     let windRad = windDirection * (Math.PI / 180);
-    let lengthFactor = 1 + windSpeed / 5; // Tuuli venyttää pilveä
-    let shiftFactor = windSpeed * 2; // Pilven siirtymä km
 
-    let semiMinor = size * 1000; // Pienempi akseli (metreinä)
-    let semiMajor = semiMinor * lengthFactor; // Pidempi akseli (venytys)
-
-    // Testataan kiinteillä arvoilla, jos pilvi ei näy
-    if (semiMajor < 1000 || semiMinor < 500) {
-        semiMajor = 50000;
-        semiMinor = 20000;
-    }
-
-    // Lasketaan uusi keskipiste tuulen mukaan
     let newLat = lat + (shiftFactor / 111) * Math.cos(windRad);
     let newLon = lon + (shiftFactor / (111 * Math.cos(lat * Math.PI / 180))) * Math.sin(windRad);
 
-    // Poistetaan aiempi pilvi
+    // Poistetaan vanha pilvi
     if (plumeLayer) {
         map.removeLayer(plumeLayer);
     }
 
-    // Lisätään uusi pilvi (käytetään kiinteitä kokoarvoja testin vuoksi)
-    plumeLayer = L.ellipse([newLat, newLon], [semiMajor, semiMinor], {
+    // Piirretään uusi ellipsi
+    plumeLayer = drawEllipse(newLat, newLon, semiMajor / 1000, semiMinor / 1000, windDirection);
+}
+
+
+function drawEllipse(lat, lon, semiMajor, semiMinor, rotation) {
+    let points = [];
+    let steps = 36; // Ellipsin tarkkuus (36 pistettä)
+    let angleStep = (2 * Math.PI) / steps;
+    
+    let rotationRad = rotation * (Math.PI / 180);
+
+    for (let i = 0; i < steps; i++) {
+        let angle = i * angleStep;
+        let x = semiMajor * Math.cos(angle);
+        let y = semiMinor * Math.sin(angle);
+
+        // Kierrä ellipsi
+        let rotatedX = x * Math.cos(rotationRad) - y * Math.sin(rotationRad);
+        let rotatedY = x * Math.sin(rotationRad) + y * Math.cos(rotationRad);
+
+        let pointLat = lat + (rotatedY / 111);  
+        let pointLon = lon + (rotatedX / (111 * Math.cos(lat * Math.PI / 180)));
+
+        points.push([pointLat, pointLon]);
+    }
+
+    points.push(points[0]); // Sulje polygoni
+
+    return L.polygon(points, {
         color: 'red',
         fillColor: 'orange',
-        fillOpacity: 0.4,
-        rotation: windDirection
+        fillOpacity: 0.4
     }).addTo(map);
-
-    console.log(`🟢 Voimala: lat=${lat}, lon=${lon}`);
-    console.log(`🌫️ Pilvi: lat=${newLat}, lon=${newLon}, suunta=${windDirection}°, nopeus=${windSpeed} m/s`);
 }
+
 
 
 
