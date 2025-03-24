@@ -41,7 +41,7 @@ function drawPlume(lat, lon, ines) {
     let windSpeed = parseFloat(document.getElementById("windSpeed").value);
 
     let lengthFactor = 1 + windSpeed / 5;
-    let semiMinor = size;  
+    let semiMinor = size / 2;  
     let semiMajor = semiMinor * lengthFactor;
 
     let shiftFactor = windSpeed * 2;
@@ -56,7 +56,8 @@ function drawPlume(lat, lon, ines) {
     }
 
     // Piirretään uusi ellipsi
-    plumeLayer = drawEllipse(newLat, newLon, semiMajor / 1000, semiMinor / 1000, windDirection);
+    plumeLayer = drawEllipse(newLat, newLon, semiMinor / 1000, semiMajor / 1000, windDirection);
+
 }
 
 
