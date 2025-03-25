@@ -58,7 +58,6 @@ function drawPlume(lat, lon, ines) {
 
     // Piirretään uusi ellipsi
     plumeLayer = drawEllipse(newLat, newLon, semiMinor / 1000, semiMajor / 1000, windDirection);
-
 }
 
 function drawEllipse(lat, lon, semiMajor, semiMinor, rotation) {
