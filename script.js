@@ -48,8 +48,8 @@ function drawPlume(lat, lon, ines) {
     let windRad = windDirection * (Math.PI / 180);
 
     // Lasketaan keskipiste niin, että voimala jää ellipsin toiseen reunaan
-    let newLat = lat + (semiMajor / 111) * Math.cos(windRad);
-    let newLon = lon + (semiMajor / (111 * Math.cos(lat * Math.PI / 180))) * Math.sin(windRad);
+    let newLat = lat + (shiftFactor / 111) * Math.cos(windRad);
+    let newLon = lon + (shiftFactor / (111 * Math.cos(lat * Math.PI / 180))) * Math.sin(windRad);
 
     // Poistetaan vanha pilvi
     if (plumeLayer) {
