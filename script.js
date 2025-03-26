@@ -44,15 +44,17 @@ function drawPlume(lat, lon, ines) {
     let semiMinor = size / 2;  
     let semiMajor = semiMinor * lengthFactor;
 
-    let shiftFactor = windSpeed * 2;
     let windRad = windDirection * (Math.PI / 180);
 
-    // Lasketaan keskipiste niin, että voimala jää ellipsin toiseen reunaan
-    let newLat = lat + (semiMajor / 111) * Math.cos(windRad);
-    let newLon = lon + (semiMajor / (111 * Math.max(0.1, Math.abs(Math.cos(lat * Math.PI / 180))))) * Math.sin(windRad);
+    // Lasketaan keskipiste niin, että voimala jää ellipsin takareunaan
+    let deltaLat = (semiMajor / 111) * Math.cos(windRad);
+    let deltaLon = (semiMajor / 111) * Math.sin(windRad) / Math.cos(lat * Math.PI / 180);
 
-    console.log("Ellipsin keskipiste: ", newLat, newLon);
-    
+    let newLat = lat + deltaLat;
+    let newLon = lon + deltaLon;
+
+    console.log("Ellipsin keskipiste:", newLat, newLon);
+
     // Poistetaan vanha pilvi
     if (plumeLayer) {
         map.removeLayer(plumeLayer);
