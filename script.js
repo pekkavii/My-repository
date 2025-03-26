@@ -49,7 +49,7 @@ function drawPlume(lat, lon, ines) {
 
     // Lasketaan keskipiste niin, että voimala jää ellipsin toiseen reunaan
     let newLat = lat + (semiMajor / 111) * Math.cos(windRad);
-    let newLon = lon + (semiMajor / (111 * Math.cos(lat * Math.PI / 180))) * Math.sin(windRad);
+    let newLon = lon + (semiMajor / (111 * Math.max(0.1, Math.abs(Math.cos(lat * Math.PI / 180))))) * Math.sin(windRad);
 
     console.log("Ellipsin keskipiste: ", newLat, newLon);
     
