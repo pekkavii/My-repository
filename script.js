@@ -53,7 +53,7 @@ function drawPlume(lat, lon, ines) {
     let newLat = lat + deltaLat;
     let newLon = lon + deltaLon;
 
-    console.log("Ellipsin keskipiste:", newLat, newLon);
+    console.log("Ellipsin keskipiste, delta menetelmä:", newLat, newLon);
 
     // Poistetaan vanha pilvi
     if (plumeLayer) {
@@ -65,7 +65,7 @@ function drawPlume(lat, lon, ines) {
 }
 
 function drawEllipse(lat, lon, semiMajor, semiMinor, rotation) {
-    console.log("Ellipsi: ", lat, lon, semiMajor, semiMinor, rotation);
+    console.log("Ellipsi, delta menetelmä: ", lat, lon, semiMajor, semiMinor, rotation);
     let points = [];
     let steps = 36; // Ellipsin tarkkuus (36 pistettä)
     let angleStep = (2 * Math.PI) / steps;
