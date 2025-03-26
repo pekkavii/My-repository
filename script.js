@@ -51,6 +51,8 @@ function drawPlume(lat, lon, ines) {
     let newLat = lat + (semiMajor / 111) * Math.cos(windRad);
     let newLon = lon + (semiMajor / (111 * Math.cos(lat * Math.PI / 180))) * Math.sin(windRad);
 
+    console.log("Ellipsin keskipiste: ", newLat, newLon);
+    
     // Poistetaan vanha pilvi
     if (plumeLayer) {
         map.removeLayer(plumeLayer);
@@ -61,6 +63,7 @@ function drawPlume(lat, lon, ines) {
 }
 
 function drawEllipse(lat, lon, semiMajor, semiMinor, rotation) {
+    console.log("Ellipsi: ", lat, lon, semiMajor, semiMinor, rotation);
     let points = [];
     let steps = 36; // Ellipsin tarkkuus (36 pistettä)
     let angleStep = (2 * Math.PI) / steps;
@@ -89,5 +92,8 @@ function drawEllipse(lat, lon, semiMajor, semiMinor, rotation) {
         fillColor: 'orange',
         fillOpacity: 0.4
     }).addTo(map);
+
+    console.log("Ellipsi lisätty kartalle");
+    return polygon;
 }
 
