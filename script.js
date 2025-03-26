@@ -46,14 +46,14 @@ function drawPlume(lat, lon, ines) {
 
     let windRad = windDirection * (Math.PI / 180);
 
+    console.log("Lähtöarvot:", { lat, lon, semiMajor, windDirection, windSpeed });console.log("Lähtöarvot:", { lat, lon, semiMajor, windDirection, windSpeed });
+    
     // Lasketaan keskipiste niin, että voimala jää ellipsin takareunaan
-    let deltaLat = (semiMajor / 111) * Math.cos(windRad);
-    let deltaLon = (semiMajor / (111 * Math.cos(lat * Math.PI / 180))) * Math.sin(windRad);
+    let semiMajorKm = semiMajor / 1000; // Muutetaan kilometreiksi
+    let newLat = lat + (semiMajorKm / 111) * Math.cos(windRad);
+    let newLon = lon + (semiMajorKm / (111 * Math.cos(lat * Math.PI / 180))) * Math.sin(windRad);
 
-    let newLat = lat + deltaLat;
-    let newLon = lon + deltaLon;
-
-    console.log("Ellipsin keskipiste, korjattu menetelmä:", newLat, newLon);
+    console.log("Uusi keskipiste:", newLat, newLon);
 
     // Poistetaan vanha pilvi
     if (plumeLayer) {
