@@ -61,7 +61,7 @@ function drawPlume(lat, lon, ines) {
     }
 
     // Piirretään uusi ellipsi
-    plumeLayer = drawEllipse(newLat, newLon, semiMajor / 1000, semiMinor / 1000, windDirection);
+    plumeLayer = drawEllipse(newLat, newLon, semiMajor / 1000, semiMinor / 1000, windDirection + 90);
 }
 
 
