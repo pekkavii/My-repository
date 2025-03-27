@@ -79,8 +79,8 @@ function drawEllipse(lat, lon, semiMajor, semiMinor, rotation) {
         let y = semiMinor * Math.sin(angle);
 
         // Kierrä ellipsi
-        let rotatedX = x * Math.cos(rotationRad) - y * Math.sin(rotationRad);
-        let rotatedY = x * Math.sin(rotationRad) + y * Math.cos(rotationRad);
+        let rotatedX = x * Math.cos(rotationRad) + y * Math.sin(rotationRad);
+        let rotatedY = -x * Math.sin(rotationRad) + y * Math.cos(rotationRad);
 
         let pointLat = lat + (rotatedY / 111);  
         let pointLon = lon + (rotatedX / (111 * Math.cos(lat * Math.PI / 180)));
