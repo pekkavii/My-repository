@@ -8,3 +8,16 @@ body {
     height: 500px;
     margin-top: 20px;
 }
+
+#construction-banner {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: red;
+    color: white;
+    text-align: center;
+    font-size: 18px;
+    padding: 10px;
+    z-index: 1000;
+}
