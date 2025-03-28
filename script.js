@@ -40,7 +40,7 @@ function drawPlumes(lat, lon, ines) {
     let windSpeed = parseFloat(document.getElementById("windSpeed").value);
     
     let scaleFactors = [1, 0.5, 0.25]; // Koko-asteikot eri tasoille
-    let colors = ['green', 'orange', 'red ']; // Värit eri tasoille
+    let colors = ['green', 'orange', 'red']; // Värit eri tasoille
      
     // Poistetaan vanhat pilvet
     plumeLayers.forEach(layer => map.removeLayer(layer));
