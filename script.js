@@ -50,9 +50,10 @@ function drawPlumes(lat, lon, ines) {
         let semiMajor = baseSize * scale;
         let semiMinor = semiMajor / (1 + windSpeed / 5);
         let windRad = windDirection * (Math.PI / 180);
-        
-        let newLat = lat + (semiMajor / 111) * Math.cos(windRad);
-        let newLon = lon + (semiMajor / (111 * Math.cos(lat * Math.PI / 180))) * Math.sin(windRad);
+
+        let semiMajorKm = semiMajor / 1000; // Muutetaan kilometreiksi
+        let newLat = lat + (semiMajorKm / 111) * Math.cos(windRad);
+        let newLon = lon + (semiMajorKm / (111 * Math.cos(lat * Math.PI / 180))) * Math.sin(windRad);
         
         let plume = drawEllipse(newLat, newLon, semiMinor / 1000, semiMajor / 1000, windDirection, colors[index]);
         plumeLayers.push(plume);
@@ -72,8 +73,8 @@ function drawEllipse(lat, lon, semiMajor, semiMinor, rotation, color) {
         let y = semiMinor * Math.sin(angle);
 
         // Kierrä ellipsi
-        let rotatedX = x * Math.cos(rotationRad) - y * Math.sin(rotationRad);
-        let rotatedY = x * Math.sin(rotationRad) + y * Math.cos(rotationRad);
+        let rotatedX = x * Math.cos(rotationRad) + y * Math.sin(rotationRad);
+        let rotatedY = -x * Math.sin(rotationRad) + y * Math.cos(rotationRad);
 
         let pointLat = lat + (rotatedY / 111);  
         let pointLon = lon + (rotatedX / (111 * Math.cos(lat * Math.PI / 180)));
