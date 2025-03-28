@@ -6,7 +6,7 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 
 let marker;
 let plantMarker;
-let plumeLayer;
+let plumeLayers = []; // Taulukko useille pilville
 
 function simulate() {
     let voimalaValinta = document.getElementById("powerPlant").value;
@@ -22,7 +22,7 @@ function simulate() {
             lat = e.latlng.lat;
             lon = e.latlng.lng;
             marker = L.marker([lat, lon]).addTo(map);
-            drawPlume(lat, lon, ines);
+            drawPlumes(lat, lon, ines);
         });
     } else {
         [lat, lon] = voimalaValinta.split(",").map(Number);
@@ -30,43 +30,36 @@ function simulate() {
             map.removeLayer(marker);
         }
         marker = L.marker([lat, lon]).addTo(map);
-        drawPlume(lat, lon, ines);
+        drawPlumes(lat, lon, ines);
     }
 }
 
-function drawPlume(lat, lon, ines) {
-    let size = (ines - 3) * 30 * 1000; // Pilven koko metreinä
-
+function drawPlumes(lat, lon, ines) {
+    let baseSize = (ines - 3) * 30 * 1000; // Pilven koko metreinä
     let windDirection = parseFloat(document.getElementById("windDirection").value);
     let windSpeed = parseFloat(document.getElementById("windSpeed").value);
-
-    let lengthFactor = 1 + windSpeed / 5;
-    let semiMinor = size / 2;  
-    let semiMajor = semiMinor * lengthFactor;
-
-    let windRad = windDirection * (Math.PI / 180);
-
-    console.log("Lähtöarvot:", { lat, lon, semiMajor, windDirection, windSpeed });console.log("Lähtöarvot:", { lat, lon, semiMajor, windDirection, windSpeed });
     
-    // Lasketaan keskipiste niin, että voimala jää ellipsin takareunaan
-    let semiMajorKm = semiMajor / 1000; // Muutetaan kilometreiksi
-    let newLat = lat - (semiMajorKm / 111) * Math.cos(windRad);
-    let newLon = lon - (semiMajorKm / (111 * Math.cos(lat * Math.PI / 180))) * Math.sin(windRad);
+    let scaleFactors = [1, 0.5, 0.25]; // Koko-asteikot eri tasoille
+    let colors = ['red', 'orange', 'green']; // Värit eri tasoille
     
-    console.log("Uusi keskipiste:", newLat, newLon);
-
-    // Poistetaan vanha pilvi
-    if (plumeLayer) {
-        map.removeLayer(plumeLayer);
-    }
-
-    // Piirretään uusi ellipsi
-    plumeLayer = drawEllipse(newLat, newLon, semiMajor / 1000, semiMinor / 1000, windDirection - 90);
+    // Poistetaan vanhat pilvet
+    plumeLayers.forEach(layer => map.removeLayer(layer));
+    plumeLayers = [];
+    
+    scaleFactors.forEach((scale, index) => {
+        let semiMajor = baseSize * scale;
+        let semiMinor = semiMajor / (1 + windSpeed / 5);
+        let windRad = windDirection * (Math.PI / 180);
+        
+        let newLat = lat + (semiMajor / 111) * Math.cos(windRad);
+        let newLon = lon + (semiMajor / (111 * Math.cos(lat * Math.PI / 180))) * Math.sin(windRad);
+        
+        let plume = drawEllipse(newLat, newLon, semiMinor / 1000, semiMajor / 1000, windDirection, colors[index]);
+        plumeLayers.push(plume);
+    });
 }
 
-
-function drawEllipse(lat, lon, semiMajor, semiMinor, rotation) {
-    console.log("Ellipsi, korjattu menetelmä: ", lat, lon, semiMajor, semiMinor, rotation);
+function drawEllipse(lat, lon, semiMajor, semiMinor, rotation, color) {
     let points = [];
     let steps = 36; // Ellipsin tarkkuus (36 pistettä)
     let angleStep = (2 * Math.PI) / steps;
@@ -79,8 +72,8 @@ function drawEllipse(lat, lon, semiMajor, semiMinor, rotation) {
         let y = semiMinor * Math.sin(angle);
 
         // Kierrä ellipsi
-        let rotatedX = x * Math.cos(rotationRad) + y * Math.sin(rotationRad);
-        let rotatedY = -x * Math.sin(rotationRad) + y * Math.cos(rotationRad);
+        let rotatedX = x * Math.cos(rotationRad) - y * Math.sin(rotationRad);
+        let rotatedY = x * Math.sin(rotationRad) + y * Math.cos(rotationRad);
 
         let pointLat = lat + (rotatedY / 111);  
         let pointLon = lon + (rotatedX / (111 * Math.cos(lat * Math.PI / 180)));
@@ -91,12 +84,8 @@ function drawEllipse(lat, lon, semiMajor, semiMinor, rotation) {
     points.push(points[0]); // Sulje polygoni
 
     return L.polygon(points, {
-        color: 'red',
-        fillColor: 'orange',
+        color: color,
+        fillColor: color,
         fillOpacity: 0.4
     }).addTo(map);
-
-    console.log("Ellipsi lisätty kartalle");
-    return polygon;
 }
-
