@@ -41,8 +41,6 @@ function simulate() {
     let voimalaValinta = document.getElementById("powerPlant").value;
     let ines = parseInt(document.getElementById("ines").value);
     
-
-
     let lat, lon;
     if (voimalaValinta === "user") {
         alert("Klikkaa karttaa asettaaksesi voimalan sijainnin.");
@@ -53,6 +51,7 @@ function simulate() {
             lat = e.latlng.lat;
             lon = e.latlng.lng;
             marker = L.marker([lat, lon]).addTo(map);
+            map.setView([lat, lon], 7);  // Keskitetään kartta heti markerin jälkeen
             drawPlumes(lat, lon, ines);
         });
     } else {
@@ -61,6 +60,7 @@ function simulate() {
             map.removeLayer(marker);
         }
         marker = L.marker([lat, lon]).addTo(map);
+        map.setView([lat, lon], 7);  // Keskitetään kartta heti markerin jälkeen
         drawPlumes(lat, lon, ines);
     }
 }
