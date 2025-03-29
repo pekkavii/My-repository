@@ -1,3 +1,32 @@
+fetch('power_plants.json')
+    .then(response => response.json())
+    .then(data => {
+        let select = document.getElementById("powerPlant");
+        let detailsDiv = document.getElementById("plantDetails");
+
+        data.forEach(plant => {
+            let option = document.createElement("option");
+            option.value = `${plant.lat},${plant.lon}`;
+            option.textContent = `${plant.name} (${plant.country})`;
+            option.dataset.details = JSON.stringify(plant); // Tallennetaan lisätiedot valintaan
+            select.appendChild(option);
+        });
+
+        select.addEventListener("change", function() {
+            let selectedOption = select.options[select.selectedIndex];
+            let plant = JSON.parse(selectedOption.dataset.details);
+            
+            detailsDiv.innerHTML = `
+                <p><strong>Voimala:</strong> ${plant.name}</p>
+                <p><strong>Maa:</strong> ${plant.country}</p>
+                <p><strong>Reaktorityyppi:</strong> ${plant.reactor_type}</p>
+                <p><strong>Sähköteho:</strong> ${plant.electrical_power_MW} MW</p>
+            `;
+        });
+    })
+    .catch(error => console.error("Voimaloiden lataaminen epäonnistui:", error));
+
+
 let map = L.map('map').setView([60.3775, 26.3550], 7); // Loviisan sijainti oletuksena
 
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
