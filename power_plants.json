@@ -1,0 +1,34 @@
+[
+    { 
+        "name": "Loviisa", 
+        "country": "Suomi", 
+        "reactor_type": "VVER-440", 
+        "electrical_power_MW": 1010, 
+        "lat": 60.3775, 
+        "lon": 26.355 
+    },
+    { 
+        "name": "Olkiluoto", 
+        "country": "Suomi", 
+        "reactor_type": "EPR-1600", 
+        "electrical_power_MW": 1600, 
+        "lat": 61.2392, 
+        "lon": 21.4384 
+    },
+    { 
+        "name": "Forsmark", 
+        "country": "Ruotsi", 
+        "reactor_type": "BWR-1000", 
+        "electrical_power_MW": 3280, 
+        "lat": 60.4033, 
+        "lon": 18.1697 
+    },
+    { 
+        "name": "Ringhals", 
+        "country": "Ruotsi", 
+        "reactor_type": "PWR", 
+        "electrical_power_MW": 2272, 
+        "lat": 57.2576, 
+        "lon": 12.1112 
+    }
+]
