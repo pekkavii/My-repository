@@ -3,6 +3,11 @@ fetch('power_plants.json')
     .then(data => {
         let select = document.getElementById("powerPlantSelection");
 
+if (!select) {
+    console.error("Voimalaa ei valittu!");
+    return;
+}
+        
         data.forEach(plant => {
             let option = document.createElement("option");
             option.value = `${plant.lat},${plant.lon}`;
@@ -49,8 +54,21 @@ let plumeLayers = []; // Taulukko pilville
 
 function simulate(lat, lon) {
     let ines = parseInt(document.getElementById("ines").value);
+
+    let ines = parseInt(inesInput);
+    console.log("INES-arvo:", ines);
+    if (isNaN(ines) || ines < 3 || ines > 7) {
+        console.error("Virheellinen INES-arvo:", ines);
+        return;
+    }
+    
     let windDirection = parseFloat(document.getElementById("windDirection").value);
     let windSpeed = parseFloat(document.getElementById("windSpeed").value);
+
+    if (isNaN(windDirection) || isNaN(windSpeed)) {
+    console.error("Virheellinen tuulen arvo:", windDirection, windSpeed);
+    return;
+    }
 
     // Lasketaan ellipsin koko (metreinä)
     let baseSize = (ines - 3) * 30 * 1000;
@@ -82,6 +100,11 @@ function drawEllipse(lat, lon, semiMajor, semiMinor, rotation, color) {
     let angleStep = (2 * Math.PI) / steps;
     
     let rotationRad = rotation * (Math.PI / 180);
+
+        if (isNaN(lat) || isNaN(lon)) {
+        console.error("Virhe: lat tai lon on NaN!", lat, lon);
+        return;
+    }
 
     for (let i = 0; i < steps; i++) {
         let angle = i * angleStep;
