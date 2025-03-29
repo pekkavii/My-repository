@@ -16,36 +16,26 @@
     <option value="">Valitse voimala</option>
 </select>
 
-<div id="controls">
-    <label>Voimalaitos:</label>
-    <select id="powerPlant">...</select>
+<div id="controls" style="position: absolute; top: 10px; left: 10px; background: rgba(255,255,255,0.8); padding: 10px; border-radius: 5px;">
+    <label for="powerPlantSelection">Valitse ydinvoimala:</label>
+    <select id="powerPlantSelection">
+        <option value="">Valitse voimala</option>
+    </select>
+
     <label>INES-luokka:</label>
     <input type="number" id="ines" min="3" max="7" value="5">
+    
     <label>Tuulen suunta:</label>
     <input type="number" id="windDirection" min="0" max="360" value="90">
+    
     <label>Tuulen nopeus (m/s):</label>
     <input type="number" id="windSpeed" min="0" max="20" value="5">
+    
     <button onclick="simulate()">Simuloi</button>
 </div>
 
-<div id="plantDetails" style="position: absolute; top: 10px; right: 10px; background: white; padding: 10px; border-radius: 5px;">
-    <p><strong>Voimala:</strong> -</p>
-    <p><strong>Maa:</strong> -</p>
-    <p><strong>Reaktorityyppi:</strong> -</p>
-    <p><strong>Sähköteho:</strong> - MW</p>
-</div>
+<div id="map" style="height: 500px; width: 100%;"></div>
 
-    
-<div id="construction-banner">🚧 This site is under construction 🚧</div>
-
-    <div id="map"></div>
-
-<style>
-    #map {
-        height: 500px;
-        width: 100%;
-    }
-</style>
 
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
    <script src="https://rawgit.com/gregallensworth/Leaflet.Ellipse/master/leaflet.ellipse.js"></script>
