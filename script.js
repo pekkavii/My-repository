@@ -41,7 +41,7 @@ function simulate() {
     let voimalaValinta = document.getElementById("powerPlant").value;
     let ines = parseInt(document.getElementById("ines").value);
     
-    map.setView([lat, lon], 7); // Keskittää kartan valittuun voimalaan
+
 
     let lat, lon;
     if (voimalaValinta === "user") {
