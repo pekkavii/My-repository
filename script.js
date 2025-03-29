@@ -1,3 +1,4 @@
+let voimalaitokset = {}; // Tallennetaan voimalat tähän
 fetch('power_plants.json')
     .then(response => response.json())
     .then(data => {
@@ -10,6 +11,9 @@ fetch('power_plants.json')
             option.textContent = `${plant.name} (${plant.country})`;
             option.dataset.details = JSON.stringify(plant); // Tallennetaan lisätiedot valintaan
             select.appendChild(option);
+
+            // Tallennetaan objektiin avaimella "nimi (maa)"
+            voimalaitokset[`${plant.name} (${plant.country})`] = plant;
         });
 
         select.addEventListener("change", function() {
@@ -38,63 +42,32 @@ let plantMarker;
 let plumeLayers = []; // Taulukko useille pilville
 
 function simulate() {
-    let voimalaValinta = document.getElementById("powerPlantSelection").value;
+    let select = document.getElementById("powerPlantSelection");
+    let voimalaValinta = select.options[select.selectedIndex].text; // Haetaan nimi (maa)
 
-    if (!voimalaitokset[voimalaValinta]) {
+    let plant = voimalaitokset[voimalaValinta];
+
+    if (!plant) {
         console.error("Voimalaa ei löydy tiedoista:", voimalaValinta);
         return;
     }
 
-    let lat = voimalaitokset[voimalaValinta].lat;
-    let lon = voimalaitokset[voimalaValinta].lon;
+    let lat = plant.lat;
+    let lon = plant.lon;
 
     if (marker) {
         map.removeLayer(marker);
     }
 
     marker = L.marker([lat, lon]).addTo(map)
-        .bindPopup(`<b>Voimalaitos:</b> ${voimalaValinta}<br>
-                    <b>Maa:</b> ${voimalaitokset[voimalaValinta].maa}<br>
-                    <b>Reaktori:</b> ${voimalaitokset[voimalaValinta].tyyppi}<br>
-                    <b>Sähköteho:</b> ${voimalaitokset[voimalaValinta].teho} MW`)
+        .bindPopup(`<b>Voimalaitos:</b> ${plant.name}<br>
+                    <b>Maa:</b> ${plant.country}<br>
+                    <b>Reaktori:</b> ${plant.reactor_type}<br>
+                    <b>Sähköteho:</b> ${plant.electrical_power_MW} MW`)
         .openPopup();
 
-    let ines = parseInt(document.getElementById("ines").value);
-    
-    let lat, lon;
-    if (voimalaValinta === "user") {
-        alert("Klikkaa karttaa asettaaksesi voimalan sijainnin.");
-        map.on('click', function(e) {
-            if (marker) {
-                map.removeLayer(marker);
-            }
-            lat = e.latlng.lat;
-            lon = e.latlng.lng;
-            marker = L.marker([lat, lon]).addTo(map)
-                .bindPopup(`<b>Voimalaitos:</b> ${document.getElementById("powerPlantSelection").selectedOptions[0].text}<br>
-                    <b>Maa:</b> ${voimalaitokset[voimalaValinta].maa}<br>
-                    <b>Reaktori:</b> ${voimalaitokset[voimalaValinta].tyyppi}<br>
-                    <b>Sähköteho:</b> ${voimalaitokset[voimalaValinta].teho} MW`)
-                .openPopup();
-
-            map.setView([lat, lon], 7);  // Keskitetään kartta heti markerin jälkeen
-            drawPlumes(lat, lon, ines);
-        });
-    } else {
-        [lat, lon] = voimalaValinta.split(",").map(Number);
-        if (marker) {
-            map.removeLayer(marker);
-        }
-            marker = L.marker([lat, lon]).addTo(map)
-                .bindPopup(`<b>Voimalaitos:</b> ${document.getElementById("powerPlantSelection").selectedOptions[0].text}<br>
-                    <b>Maa:</b> ${voimalaitokset[voimalaValinta].maa}<br>
-                    <b>Reaktori:</b> ${voimalaitokset[voimalaValinta].tyyppi}<br>
-                    <b>Sähköteho:</b> ${voimalaitokset[voimalaValinta].teho} MW`)
-                .openPopup();
-
-        map.setView([lat, lon], 7);  // Keskitetään kartta heti markerin jälkeen
-        drawPlumes(lat, lon, ines);
-    }
+    map.setView([lat, lon], 7);  // Keskitetään kartta voimalan kohdalle
+    drawPlumes(lat, lon, parseInt(document.getElementById("ines").value));
 }
 
 function drawPlumes(lat, lon, ines) {
