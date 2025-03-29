@@ -16,22 +16,18 @@
 <select id="powerPlant">
     <option value="">Valitse voimala</option>
 </select>
-<div id="plantDetails"></div>
 
-    <label for="ines">INES-luokka:</label>
-    <select id="ines">
-        <option value="4">INES 4 (pieni päästö)</option>
-        <option value="5">INES 5 (kohtalainen päästö)</option>
-        <option value="6">INES 6 (laaja päästö)</option>
-        <option value="7">INES 7 (katastrofaalinen päästö)</option>
-    </select>
-<label for="windDirection">Tuulen suunta (°):</label>
-<input type="number" id="windDirection" value="90" min="0" max="360">
-
-<label for="windSpeed">Tuulen nopeus (m/s):</label>
-<input type="number" id="windSpeed" value="5" min="0">
-
+<div id="controls">
+    <label>Voimalaitos:</label>
+    <select id="powerPlant">...</select>
+    <label>INES-luokka:</label>
+    <input type="number" id="ines" min="3" max="7" value="5">
+    <label>Tuulen suunta:</label>
+    <input type="number" id="windDirection" min="0" max="360" value="90">
+    <label>Tuulen nopeus (m/s):</label>
+    <input type="number" id="windSpeed" min="0" max="20" value="5">
     <button onclick="simulate()">Simuloi</button>
+</div>
 
 <div id="construction-banner">🚧 This site is under construction 🚧</div>
 
