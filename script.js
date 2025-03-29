@@ -1,7 +1,7 @@
 fetch('power_plants.json')
     .then(response => response.json())
     .then(data => {
-        let select = document.getElementById("powerPlant");
+        let select = document.getElementById("powerPlantSelection");
         let detailsDiv = document.getElementById("plantDetails");
 
         data.forEach(plant => {
@@ -38,7 +38,27 @@ let plantMarker;
 let plumeLayers = []; // Taulukko useille pilville
 
 function simulate() {
-    let voimalaValinta = document.getElementById("powerPlant").value;
+    let voimalaValinta = document.getElementById("powerPlantSelection").value;
+
+    if (!voimalaitokset[voimalaValinta]) {
+        console.error("Voimalaa ei löydy tiedoista:", voimalaValinta);
+        return;
+    }
+
+    let lat = voimalaitokset[voimalaValinta].lat;
+    let lon = voimalaitokset[voimalaValinta].lon;
+
+    if (marker) {
+        map.removeLayer(marker);
+    }
+
+    marker = L.marker([lat, lon]).addTo(map)
+        .bindPopup(`<b>Voimalaitos:</b> ${voimalaValinta}<br>
+                    <b>Maa:</b> ${voimalaitokset[voimalaValinta].maa}<br>
+                    <b>Reaktori:</b> ${voimalaitokset[voimalaValinta].tyyppi}<br>
+                    <b>Sähköteho:</b> ${voimalaitokset[voimalaValinta].teho} MW`)
+        .openPopup();
+
     let ines = parseInt(document.getElementById("ines").value);
     
     let lat, lon;
@@ -51,7 +71,7 @@ function simulate() {
             lat = e.latlng.lat;
             lon = e.latlng.lng;
             marker = L.marker([lat, lon]).addTo(map)
-                .bindPopup(`<b>Voimalaitos:</b> ${document.getElementById("powerPlant").selectedOptions[0].text}<br>
+                .bindPopup(`<b>Voimalaitos:</b> ${document.getElementById("powerPlantSelection").selectedOptions[0].text}<br>
                     <b>Maa:</b> ${voimalaitokset[voimalaValinta].maa}<br>
                     <b>Reaktori:</b> ${voimalaitokset[voimalaValinta].tyyppi}<br>
                     <b>Sähköteho:</b> ${voimalaitokset[voimalaValinta].teho} MW`)
@@ -66,7 +86,7 @@ function simulate() {
             map.removeLayer(marker);
         }
             marker = L.marker([lat, lon]).addTo(map)
-                .bindPopup(`<b>Voimalaitos:</b> ${document.getElementById("powerPlant").selectedOptions[0].text}<br>
+                .bindPopup(`<b>Voimalaitos:</b> ${document.getElementById("powerPlantSelection").selectedOptions[0].text}<br>
                     <b>Maa:</b> ${voimalaitokset[voimalaValinta].maa}<br>
                     <b>Reaktori:</b> ${voimalaitokset[voimalaValinta].tyyppi}<br>
                     <b>Sähköteho:</b> ${voimalaitokset[voimalaValinta].teho} MW`)
