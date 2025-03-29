@@ -50,7 +50,13 @@ function simulate() {
             }
             lat = e.latlng.lat;
             lon = e.latlng.lng;
-            marker = L.marker([lat, lon]).addTo(map);
+            marker = L.marker([lat, lon]).addTo(map)
+                .bindPopup(`<b>Voimalaitos:</b> ${document.getElementById("powerPlant").selectedOptions[0].text}<br>
+                    <b>Maa:</b> ${voimalaitokset[voimalaValinta].maa}<br>
+                    <b>Reaktori:</b> ${voimalaitokset[voimalaValinta].tyyppi}<br>
+                    <b>Sähköteho:</b> ${voimalaitokset[voimalaValinta].teho} MW`)
+                .openPopup();
+
             map.setView([lat, lon], 7);  // Keskitetään kartta heti markerin jälkeen
             drawPlumes(lat, lon, ines);
         });
@@ -59,7 +65,13 @@ function simulate() {
         if (marker) {
             map.removeLayer(marker);
         }
-        marker = L.marker([lat, lon]).addTo(map);
+            marker = L.marker([lat, lon]).addTo(map)
+                .bindPopup(`<b>Voimalaitos:</b> ${document.getElementById("powerPlant").selectedOptions[0].text}<br>
+                    <b>Maa:</b> ${voimalaitokset[voimalaValinta].maa}<br>
+                    <b>Reaktori:</b> ${voimalaitokset[voimalaValinta].tyyppi}<br>
+                    <b>Sähköteho:</b> ${voimalaitokset[voimalaValinta].teho} MW`)
+                .openPopup();
+
         map.setView([lat, lon], 7);  // Keskitetään kartta heti markerin jälkeen
         drawPlumes(lat, lon, ines);
     }
