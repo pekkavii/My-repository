@@ -1,35 +1,42 @@
-let voimalaitokset = {}; // Tallennetaan voimalat tähän
 fetch('power_plants.json')
     .then(response => response.json())
     .then(data => {
         let select = document.getElementById("powerPlantSelection");
-        let detailsDiv = document.getElementById("plantDetails");
 
         data.forEach(plant => {
             let option = document.createElement("option");
             option.value = `${plant.lat},${plant.lon}`;
             option.textContent = `${plant.name} (${plant.country})`;
-            option.dataset.details = JSON.stringify(plant); // Tallennetaan lisätiedot valintaan
+            option.dataset.details = JSON.stringify(plant);
             select.appendChild(option);
-
-            // Tallennetaan objektiin avaimella "nimi (maa)"
-            voimalaitokset[`${plant.name} (${plant.country})`] = plant;
         });
 
         select.addEventListener("change", function() {
             let selectedOption = select.options[select.selectedIndex];
             let plant = JSON.parse(selectedOption.dataset.details);
-            
-            detailsDiv.innerHTML = `
-                <p><strong>Voimala:</strong> ${plant.name}</p>
-                <p><strong>Maa:</strong> ${plant.country}</p>
-                <p><strong>Reaktorityyppi:</strong> ${plant.reactor_type}</p>
-                <p><strong>Sähköteho:</strong> ${plant.electrical_power_MW} MW</p>
-            `;
+
+            let lat = plant.lat;
+            let lon = plant.lon;
+
+            if (marker) {
+                map.removeLayer(marker);
+            }
+
+            marker = L.marker([lat, lon]).addTo(map)
+                .bindPopup(`
+                    <b>${plant.name}</b><br>
+                    <b>Maa:</b> ${plant.country}<br>
+                    <b>Reaktori:</b> ${plant.reactor_type}<br>
+                    <b>Sähköteho:</b> ${plant.electrical_power_MW} MW
+                `)
+                .openPopup();
+
+            map.setView([lat, lon], 7);  // Keskitetään kartta valittuun voimalaan
+
+            simulate(lat, lon); // Kutsutaan simulaatiota heti
         });
     })
     .catch(error => console.error("Voimaloiden lataaminen epäonnistui:", error));
-
 
 let map = L.map('map').setView([60.3775, 26.3550], 7); // Loviisan sijainti oletuksena
 
@@ -38,59 +45,32 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 }).addTo(map);
 
 let marker;
-let plantMarker;
-let plumeLayers = []; // Taulukko useille pilville
+let plumeLayers = []; // Taulukko pilville
 
-function simulate() {
-    let select = document.getElementById("powerPlantSelection");
-    let voimalaValinta = select.options[select.selectedIndex].text; // Haetaan nimi (maa)
-
-    let plant = voimalaitokset[voimalaValinta];
-
-    if (!plant) {
-        console.error("Voimalaa ei löydy tiedoista:", voimalaValinta);
-        return;
-    }
-
-    let lat = plant.lat;
-    let lon = plant.lon;
-
-    if (marker) {
-        map.removeLayer(marker);
-    }
-
-    marker = L.marker([lat, lon]).addTo(map)
-        .bindPopup(`<b>Voimalaitos:</b> ${plant.name}<br>
-                    <b>Maa:</b> ${plant.country}<br>
-                    <b>Reaktori:</b> ${plant.reactor_type}<br>
-                    <b>Sähköteho:</b> ${plant.electrical_power_MW} MW`)
-        .openPopup();
-
-    map.setView([lat, lon], 7);  // Keskitetään kartta voimalan kohdalle
-    drawPlumes(lat, lon, parseInt(document.getElementById("ines").value));
-}
-
-function drawPlumes(lat, lon, ines) {
-    let baseSize = (ines - 3) * 30 * 1000; // Pilven koko metreinä
+function simulate(lat, lon) {
+    let ines = parseInt(document.getElementById("ines").value);
     let windDirection = parseFloat(document.getElementById("windDirection").value);
     let windSpeed = parseFloat(document.getElementById("windSpeed").value);
+
+    // Lasketaan ellipsin koko (metreinä)
+    let baseSize = (ines - 3) * 30 * 1000;
     
-    let scaleFactors = [1, 0.5, 0.25]; // Koko-asteikot eri tasoille
-    let colors = ['green', 'orange', 'red']; // Värit eri tasoille
-     
+    let scaleFactors = [1, 0.5, 0.25];
+    let colors = ['green', 'orange', 'red'];
+
     // Poistetaan vanhat pilvet
     plumeLayers.forEach(layer => map.removeLayer(layer));
     plumeLayers = [];
-    
+
     scaleFactors.forEach((scale, index) => {
         let semiMajor = baseSize * scale;
         let semiMinor = semiMajor / (1 + windSpeed / 5);
         let windRad = windDirection * (Math.PI / 180);
 
-        let semiMajorKm = semiMajor / 1000; // Muutetaan kilometreiksi
+        let semiMajorKm = semiMajor / 1000;
         let newLat = lat + (semiMajorKm / 111) * Math.cos(windRad);
         let newLon = lon + (semiMajorKm / (111 * Math.cos(lat * Math.PI / 180))) * Math.sin(windRad);
-        
+
         let plume = drawEllipse(newLat, newLon, semiMinor / 1000, semiMajor / 1000, windDirection, colors[index]);
         plumeLayers.push(plume);
     });
@@ -98,7 +78,7 @@ function drawPlumes(lat, lon, ines) {
 
 function drawEllipse(lat, lon, semiMajor, semiMinor, rotation, color) {
     let points = [];
-    let steps = 36; // Ellipsin tarkkuus (36 pistettä)
+    let steps = 36;
     let angleStep = (2 * Math.PI) / steps;
     
     let rotationRad = rotation * (Math.PI / 180);
@@ -108,11 +88,10 @@ function drawEllipse(lat, lon, semiMajor, semiMinor, rotation, color) {
         let x = semiMajor * Math.cos(angle);
         let y = semiMinor * Math.sin(angle);
 
-        // Kierrä ellipsi
         let rotatedX = x * Math.cos(rotationRad) + y * Math.sin(rotationRad);
         let rotatedY = -x * Math.sin(rotationRad) + y * Math.cos(rotationRad);
 
-        let pointLat = lat + (rotatedY / 111);  
+        let pointLat = lat + (rotatedY / 111);
         let pointLon = lon + (rotatedX / (111 * Math.cos(lat * Math.PI / 180)));
 
         points.push([pointLat, pointLon]);
