@@ -17,9 +17,16 @@ select.addEventListener("change", function() {
     let selectedOption = select.options[select.selectedIndex];
     let plant = JSON.parse(selectedOption.dataset.details);
 
-    let lat = plant.lat;
-    let lon = plant.lon;
+let lat = parseFloat(plant.lat);
+let lon = parseFloat(plant.lon);
 
+if (isNaN(lat) || isNaN(lon)) {
+    console.error("Virhe: lat tai lon on NaN!", plant.lat, plant.lon);
+    return;
+}
+
+
+    
     if (marker) {
         map.removeLayer(marker);
     }
