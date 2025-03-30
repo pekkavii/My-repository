@@ -57,7 +57,10 @@ function simulate(lat, lon) {
         console.error("Virheellinen INES-arvo:", ines);
         return;
     }
-
+    if (isNaN(lat) || isNaN(lon)) {
+        console.error("Virhe: lat tai lon on NaN!", lat, lon);
+        return;
+    }
     
     let windDirection = parseFloat(document.getElementById("windDirection").value);
     let windSpeed = parseFloat(document.getElementById("windSpeed").value);
