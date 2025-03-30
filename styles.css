@@ -9,7 +9,7 @@ body {
     margin-top: 20px;
 }
 
-#controls {
+#varasto {
     position: absolute;
     top: 10px;
     left: 50%;
@@ -24,6 +24,20 @@ body {
     flex-wrap: wrap;
     align-items: center;
 }
+
+#controls {
+    position: absolute;
+    top: 10px; /* Säädä tätä tarvittaessa */
+    right: 10px; /* Varmistaa, että laatikko ei ole näytön ulkopuolella */
+    background: white;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
+    z-index: 1000; /* Varmistaa, että laatikko näkyy kartan päällä */
+    max-width: 300px; /* Rajaa leveyden */
+    overflow: auto; /* Varmistaa, ettei sisältö mene ulos */
+}
+
 
 #controls select, #controls input {
     padding: 5px;
