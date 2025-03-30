@@ -13,31 +13,34 @@ fetch('power_plants.json')
             select.appendChild(option);
         });
 
-        select.addEventListener("change", function() {
-            let selectedOption = select.options[select.selectedIndex];
-            let plant = JSON.parse(selectedOption.dataset.details);
+select.addEventListener("change", function() {
+    let selectedOption = select.options[select.selectedIndex];
+    let plant = JSON.parse(selectedOption.dataset.details);
 
-            let lat = plant.lat;
-            let lon = plant.lon;
+    let lat = plant.lat;
+    let lon = plant.lon;
 
-            if (marker) {
-                map.removeLayer(marker);
-            }
+    if (marker) {
+        map.removeLayer(marker);
+    }
 
-            marker = L.marker([lat, lon]).addTo(map)
-                .bindPopup(`
-                    <b>${plant.name}</b><br>
-                    <b>Maa:</b> ${plant.country}<br>
-                    <b>Reaktori:</b> ${plant.reactor_type}<br>
-                    <b>Sähköteho:</b> ${plant.electrical_power_MW} MW
-                `)
-                .openPopup();
+    marker = L.marker([lat, lon]).addTo(map)
+        .bindPopup(`
+            <b>${plant.name}</b><br>
+            <b>Maa:</b> ${plant.country}<br>
+            <b>Reaktori:</b> ${plant.reactor_type}<br>
+            <b>Sähköteho:</b> ${plant.electrical_power_MW} MW
+        `)
+        .openPopup();
 
-            map.setView([lat, lon], 7);  // Keskitetään kartta valittuun voimalaan
+    map.setView([lat, lon], 7);
 
-            simulate(lat, lon); // Kutsutaan simulaatiota heti
-        });
-    })
+    // Tallennetaan valittu sijainti, mutta ei kutsuta simulate() vielä
+    selectedLat = lat;
+    selectedLon = lon;
+});
+
+        
     .catch(error => console.error("Voimaloiden lataaminen epäonnistui:", error));
 
 let map = L.map('map').setView([60.3775, 26.3550], 7); // Loviisan sijainti oletuksena
