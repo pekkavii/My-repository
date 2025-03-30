@@ -3,8 +3,6 @@ fetch('power_plants.json')
     .then(data => {
         let select = document.getElementById("powerPlantSelection");
 
-
-        
         data.forEach(plant => {
             let option = document.createElement("option");
             option.value = `${plant.lat},${plant.lon}`;
@@ -13,41 +11,37 @@ fetch('power_plants.json')
             select.appendChild(option);
         });
 
-select.addEventListener("change", function() {
-    let selectedOption = select.options[select.selectedIndex];
-    let plant = JSON.parse(selectedOption.dataset.details);
+        select.addEventListener("change", function() {
+            let selectedOption = select.options[select.selectedIndex];
+            let plant = JSON.parse(selectedOption.dataset.details);
 
-let lat = parseFloat(plant.lat);
-let lon = parseFloat(plant.lon);
+            let lat = parseFloat(plant.lat);
+            let lon = parseFloat(plant.lon);
 
-if (isNaN(lat) || isNaN(lon)) {
-    console.error("Virhe: lat tai lon on NaN!", plant.lat, plant.lon);
-    return;
-}
+            if (isNaN(lat) || isNaN(lon)) {
+                console.error("Virhe: lat tai lon on NaN!", plant.lat, plant.lon);
+                return;
+            }
 
+            if (marker) {
+                map.removeLayer(marker);
+            }
 
-    
-    if (marker) {
-        map.removeLayer(marker);
-    }
+            marker = L.marker([lat, lon]).addTo(map)
+                .bindPopup(`
+                    <b>${plant.name}</b><br>
+                    <b>Maa:</b> ${plant.country}<br>
+                    <b>Reaktori:</b> ${plant.reactor_type}<br>
+                    <b>Sähköteho:</b> ${plant.electrical_power_MW} MW
+                `)
+                .openPopup();
 
-    marker = L.marker([lat, lon]).addTo(map)
-        .bindPopup(`
-            <b>${plant.name}</b><br>
-            <b>Maa:</b> ${plant.country}<br>
-            <b>Reaktori:</b> ${plant.reactor_type}<br>
-            <b>Sähköteho:</b> ${plant.electrical_power_MW} MW
-        `)
-        .openPopup();
+            map.setView([lat, lon], 7);
 
-    map.setView([lat, lon], 7);
-
-    // Tallennetaan valittu sijainti, mutta ei kutsuta simulate() vielä
-    selectedLat = lat;
-    selectedLon = lon;
-});
-
-        
+            selectedLat = lat;
+            selectedLon = lon;
+        });
+    })
     .catch(error => console.error("Voimaloiden lataaminen epäonnistui:", error));
 
 let map = L.map('map').setView([60.3775, 26.3550], 7); // Loviisan sijainti oletuksena
