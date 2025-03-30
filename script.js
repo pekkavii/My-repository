@@ -72,9 +72,16 @@ function simulate(lat, lon) {
         return;
     }
     
-    let windDirection = parseFloat(document.getElementById("windDirection").value);
-    let windSpeed = parseFloat(document.getElementById("windSpeed").value);
 
+let windDirection = parseFloat(document.getElementById("windDirection").value);
+if (isNaN(windDirection)) {
+    windDirection = 90; // Oletusarvo
+}
+
+let windSpeed = parseFloat(document.getElementById("windSpeed").value);
+if (isNaN(windSpeed)) {
+    windSpeed = 5; // Oletusarvo
+}
 
 
     // Lasketaan ellipsin koko (metreinä)
@@ -89,7 +96,14 @@ function simulate(lat, lon) {
 
     scaleFactors.forEach((scale, index) => {
         let semiMajor = baseSize * scale;
-        let semiMinor = semiMajor / (1 + windSpeed / 5);
+
+let semiMinor = semiMajor / (1 + windSpeed / 5);
+if (semiMinor < 100) {  // Vähintään 100m pienempi akseli
+    semiMinor = 100;
+}
+
+
+        
         let windRad = windDirection * (Math.PI / 180);
 
         let semiMajorKm = semiMajor / 1000;
