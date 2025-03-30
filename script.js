@@ -125,3 +125,11 @@ function drawEllipse(lat, lon, semiMajor, semiMinor, rotation, color) {
         fillOpacity: 0.4
     }).addTo(map);
 }
+
+document.getElementById("simulateButton").addEventListener("click", function() {
+    if (selectedLat === undefined || selectedLon === undefined) {
+        console.error("Voimalaa ei ole valittu!");
+        return;
+    }
+    simulate(selectedLat, selectedLon);
+});
