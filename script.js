@@ -54,8 +54,9 @@ let marker;
 let plumeLayers = []; // Taulukko pilville
 
 function simulate(lat, lon) {
-    let inesInput = parseInt(document.getElementById("ines").value);
-    let ines = parseInt(inesInput);
+
+    let ines = parseInt(document.getElementById("ines").value);
+
     console.log("INES-arvo:", ines);
     if (isNaN(ines) || ines < 3 || ines > 7) {
         console.error("Virheellinen INES-arvo:", ines);
