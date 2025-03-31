@@ -1,7 +1,7 @@
 fetch('power_plants.json')
     .then(response => response.json())
     .then(data => {
-        let select = document.getElementById("powerPlantSelection");
+        let select = document.getElementById("powerPlantSelectionMain");
 
         data.forEach(plant => {
             let option = document.createElement("option");
