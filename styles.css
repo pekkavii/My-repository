@@ -9,25 +9,10 @@ body {
     margin-top: 20px;
 }
 
-#varasto {
-    position: absolute;
-    top: 10px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: rgba(255, 255, 255, 0.8); /* Lievä läpinäkyvyys */
-    padding: 10px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-    z-index: 1000;
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-    align-items: center;
-}
 
 #controls {
     position: absolute;
-    top: 10px; /* Säädä tätä tarvittaessa */
+    top: 100px; /* Säädä tätä tarvittaessa */
     right: 10px; /* Varmistaa, että laatikko ei ole näytön ulkopuolella */
     background: white;
     padding: 10px;
