@@ -10,36 +10,29 @@
 </head>
 <body>
     <h1>Ydinvoimalaonnettomuusmalli</h1>
-    
-    <label for="powerPlantSelectionMain">Valitse ydinvoimala:</label>
-    <select id="powerPlantSelectionMain">
-        <option value="">Valitse voimala</option>
-    </select>
 
-    <button id="simulateButtonMain">Simuloi</button>
-
+<div id="container">
     <div id="controls">
+        <label for="powerPlantSelection">Valitse ydinvoimala:</label>
+        <select id="powerPlantSelection">
+            <option value="">Valitse voimala</option>
+        </select>
         <label>INES-luokka:</label>
-
-
-<label for="ines">INES-luokka:</label>
-<select id="ines">
-    <option value="3">3 - Vakava poikkeama</option>
-    <option value="4">4 - Onnettomuus, paikallinen vaikutus</option>
-    <option value="5" selected>5 - Onnettomuus, laajempi vaikutus</option>
-    <option value="6">6 - Vakava onnettomuus</option>
-    <option value="7">7 - Suurin onnettomuus</option>
-</select>
-
-        
+        <select id="ines">
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5" selected>5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+        </select>
         <label>Tuulen suunta:</label>
         <input type="number" id="windDirection" min="0" max="360" value="90">
-        
         <label>Tuulen nopeus (m/s):</label>
         <input type="number" id="windSpeed" min="0" max="20" value="5">
+        <button id="simulateButton">Simuloi</button>
     </div>
-
-    <div id="map" style="height: 500px; width: 100%;"></div>
+    <div id="map"></div>
+</div>
 
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script src="https://rawgit.com/gregallensworth/Leaflet.Ellipse/master/leaflet.ellipse.js"></script>
