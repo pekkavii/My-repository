@@ -1,7 +1,7 @@
 fetch('power_plants.json')
     .then(response => response.json())
     .then(data => {
-        let select = document.getElementById("powerPlantSelectionMain");
+        let select = document.getElementById("powerPlantSelection");
 
         data.forEach(plant => {
             let option = document.createElement("option");
@@ -142,7 +142,7 @@ function drawEllipse(lat, lon, semiMajor, semiMinor, rotation, color) {
     }).addTo(map);
 }
 
-document.getElementById("simulateButtonMain").addEventListener("click", function() {
+document.getElementById("simulateButton").addEventListener("click", function() {
     if (selectedLat === undefined || selectedLon === undefined) {
         console.error("Voimalaa ei ole valittu!");
         return;
