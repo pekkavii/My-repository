@@ -12,7 +12,7 @@ body {
 
 #controls {
     position: absolute;
-    top: 100px; /* Säädä tätä tarvittaessa */
+    top: 10px; /* Säädä tätä tarvittaessa */
     right: 10px; /* Varmistaa, että laatikko ei ole näytön ulkopuolella */
     background: white;
     padding: 10px;
