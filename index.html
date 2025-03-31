@@ -20,7 +20,17 @@
 
     <div id="controls" style="position: absolute; top: 10px; left: 10px; background: rgba(255,255,255,0.8); padding: 10px; border-radius: 5px;">
         <label>INES-luokka:</label>
-        <input type="number" id="ines" min="3" max="7" value="5">
+
+
+<label for="ines">INES-luokka:</label>
+<select id="ines">
+    <option value="3">3 - Vakava poikkeama</option>
+    <option value="4">4 - Onnettomuus, paikallinen vaikutus</option>
+    <option value="5" selected>5 - Onnettomuus, laajempi vaikutus</option>
+    <option value="6">6 - Vakava onnettomuus</option>
+    <option value="7">7 - Suurin onnettomuus</option>
+</select>
+
         
         <label>Tuulen suunta:</label>
         <input type="number" id="windDirection" min="0" max="360" value="90">
