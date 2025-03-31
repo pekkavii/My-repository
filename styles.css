@@ -10,20 +10,22 @@ body {
 }
 
 #map {
-    flex-grow: 1;
-    position: relative;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh; /* Koko ruudun korkeus */
 }
 
 #controls {
     position: absolute;
-    top: 0;
+    top: 10px; /* Asettaa laatikon kartan yläreunaan */
     right: 10px;
     background: rgba(255,255,255,0.8);
     padding: 10px;
     border-radius: 5px;
-    z-index: 1000;
+    z-index: 1000; /* Pitää laatikon kartan päällä */
 }
-
 
 #controls select, #controls input {
     padding: 5px;
