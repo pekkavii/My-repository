@@ -3,12 +3,6 @@ body {
     text-align: center;
 }
 
-#container {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-}
-
 #map {
     position: absolute;
     top: 0;
