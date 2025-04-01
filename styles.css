@@ -38,6 +38,12 @@ html, body {
     width: 100%; /* Saa syötekentät täyttämään laatikon */
 }
 
+#controls h1 {
+    font-size: 20px; /* Voit säätää kokoa sopivaksi */
+    margin-bottom: 10px; /* Lisää hieman tilaa otsikon alle */
+    text-align: center; /* Keskittää otsikon */
+}
+
 /*
 #controls select, #controls input {
     padding: 5px;
