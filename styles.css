@@ -19,7 +19,7 @@ html, body {
 
 #controls {
     position: absolute;
-    top: 10px; /* Siirtää laatikon alemmas*/
+    top: 50px; /* Siirtää laatikon alemmas*/
     right: 10px;
     width: 50vw; /* Leveys 50% näytön leveydestä */
     max-width: 400px; /* Maksimileveys, ettei laatikko veny liikaa */
