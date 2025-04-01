@@ -19,7 +19,7 @@ html, body {
 
 #controls {
     position: absolute;
-    top: 50px; /* Siirtää laatikon alemmas, jotta se ei mene zoomaussäätimen alle */
+    top: 10px; /* Siirtää laatikon alemmas*/
     right: 10px;
     width: 50vw; /* Leveys 50% näytön leveydestä */
     max-width: 400px; /* Maksimileveys, ettei laatikko veny liikaa */
@@ -45,6 +45,23 @@ html, body {
     border-radius: 4px;
 }
 */
+
+#simulateButton {
+    background-color: #007bff; /* Sininen tausta */
+    color: white; /* Valkoinen teksti */
+    font-size: 16px;
+    font-weight: bold;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer; /* Vaihtaa hiiren osoittimen kädeksi */
+    transition: background-color 0.3s;
+    width: 100%;
+}
+
+#simulateButton:hover {
+    background-color: #0056b3; /* Tummentaa painiketta hoverin aikana */
+}
 
 #construction-banner {
     position: fixed;
