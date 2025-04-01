@@ -29,14 +29,22 @@ html, body {
     z-index: 1000; /* Pitää laatikon kartan päällä */
 }
 
+#controls label, 
+#controls select, 
+#controls input, 
+#controls button {
+    display: block; /* Asettaa jokaisen elementin omalle rivilleen */
+    margin-bottom: 10px; /* Lisää tilaa elementtien väliin */
+    width: 100%; /* Saa syötekentät täyttämään laatikon */
+}
 
-
+/*
 #controls select, #controls input {
     padding: 5px;
     border: 1px solid #ccc;
     border-radius: 4px;
 }
-
+*/
 
 #construction-banner {
     position: fixed;
