@@ -19,13 +19,17 @@ html, body {
 
 #controls {
     position: absolute;
-    top: 10px; /* Asettaa laatikon kartan yläreunaan */
+    top: 50px; /* Siirtää laatikon alemmas, jotta se ei mene zoomaussäätimen alle */
     right: 10px;
-    background: rgba(255,255,255,0.8);
+    width: 50vw; /* Leveys 50% näytön leveydestä */
+    max-width: 400px; /* Maksimileveys, ettei laatikko veny liikaa */
+    background: rgba(255, 255, 255, 0.8);
     padding: 10px;
     border-radius: 5px;
     z-index: 1000; /* Pitää laatikon kartan päällä */
 }
+
+
 
 #controls select, #controls input {
     padding: 5px;
