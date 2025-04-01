@@ -11,41 +11,40 @@
         "name": "Olkiluodon ydinvoimalaitos",
         "country": "Suomi", 
         "reactor_type": "EPR, 2 BWR",
-        "electrical_power_MW": 1780 + 2 * 890 
+        "electrical_power_MW": 3560, 
         "lat": 61.2392, 
         "lon": 21.4384 
     },
-{
-    "name": "Forsmarkin ydinvoimalaitos",
-    "country": "Ruotsi",
-    "lat": 60.4033,
-    "lon": 18.1667,
-    "reactor_type": "3 BWR",
-    "electrical_power_MW": 1010 + 1120 + 1190
-},
-{
-    "name": "Ringhalsin ydinvoimalaitos",
-    "country": "Ruotsi",
-    "lat": 57.2500,
-    "lon": 12.1100,
-    "reactor_type": "2 PWR",
-    "electrical_power_MW": 2 * 1120
+    {
+        "name": "Forsmarkin ydinvoimalaitos",
+        "country": "Ruotsi",
+        "lat": 60.4033,
+        "lon": 18.1667,
+        "reactor_type": "3 BWR",
+        "electrical_power_MW": 3320
     },
     {
-    "name": "Oskarshamnin ydinvoimalaitos",
-    "country": "Ruotsi",
-    "lat": 57.4158,
-    "lon": 16.6672,
-    "reactor_type": "BWR",
-    "electrical_power_MW": 1400
-},
+        "name": "Ringhalsin ydinvoimalaitos",
+        "country": "Ruotsi",
+        "lat": 57.2500,
+        "lon": 12.1100,
+        "reactor_type": "2 PWR",
+        "electrical_power_MW": 2240
+    },
     {
-    "name": "Zaporižžjan ydinvoimalaitos",
-    "country": "Ukraina",
-    "lat": 47.5111,
-    "lon": 34.5865,
-    "reactor_type": "6 VVER-1000",
-    "electrical_power_MW": 5700
-}
-
+        "name": "Oskarshamnin ydinvoimalaitos",
+        "country": "Ruotsi",
+        "lat": 57.4158,
+        "lon": 16.6672,
+        "reactor_type": "BWR",
+        "electrical_power_MW": 1400
+    },
+    {
+        "name": "Zaporižžjan ydinvoimalaitos",
+        "country": "Ukraina",
+        "lat": 47.5111,
+        "lon": 34.5865,
+        "reactor_type": "6 VVER-1000",
+        "electrical_power_MW": 5700
+    }
 ]
