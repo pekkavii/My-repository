@@ -15,8 +15,10 @@ html, body {
     position: absolute;
     top: 0;
     left: 0;
-    width: 100vw; /* Käyttää koko näkymäleveyden */
-    height: 100vh; /* Käyttää koko näkymäkorkeuden */
+    width: 100%; /* Käytä prosentteja vw:n sijaan */
+    height: 100vh;
+    max-width: 100vw; /* Estää ylivuodon */
+    overflow: hidden;
 }
 
 #controls {
