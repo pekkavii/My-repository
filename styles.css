@@ -83,18 +83,26 @@ html, body {
     border-radius: 5px;
     font-size: 14px;
     z-index: 1000;
+    text-align: left; /* Varmistaa tekstin vasemman reunan tasauksen */
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
 }
 
 .legend-box {
-    display: inline-block;
     width: 15px;
     height: 15px;
-    margin-right: 5px;
+    margin-right: 8px;
+    flex-shrink: 0; /* Estää värilaatikoita kutistumasta */
 }
 
 .green { background-color: green; }
 .orange { background-color: orange; }
 .red { background-color: red; }
+
 
 
 #construction-banner {
