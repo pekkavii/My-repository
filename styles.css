@@ -8,7 +8,7 @@ html, body {
     padding: 0;
     width: 100%;
     height: 100%;
-    overflow: hidden; /* Estää vierityksen, jos ei tarvita */
+    overflow-x: hidden; /* Pakottaa kaiken pysymään ruudun sisällä */
 }
 
 #map {
