@@ -20,7 +20,15 @@
     setTimeout(adjustMapSize, 500);
 </script>
 
+<script>
+document.getElementById("infoButton").addEventListener("click", function() {
+    document.getElementById("infoBox").style.display = "block";
+});
 
+document.getElementById("closeInfo").addEventListener("click", function() {
+    document.getElementById("infoBox").style.display = "none";
+});
+</script>
     
 <body>
     
@@ -59,7 +67,34 @@
     <div class="legend-item"><span class="legend-box red"></span> 100+ mSv</div>
 </div>
 
- 
+ <button id="infoButton">ℹ Info</button>
+
+<div id="infoBox">
+    <button id="closeInfo">&times;</button>
+    <h2>Ydinvoimalaonnettomuusmalli</h2>
+    <p>Tämä malli havainnollistaa ydinvoimalaonnettomuuden mahdollisia vaikutuksia tuulen ja INES-luokan perusteella.</p>
+    
+    <h3>INES-luokat</h3>
+    <p>INES (International Nuclear Event Scale) -luokat kuvaavat ydinvoimaonnettomuuksien vakavuutta asteikolla 1–7:</p>
+    <ul>
+        <li><b>3–4:</b> Vähäinen riski ympäristölle</li>
+        <li><b>5:</b> Paikallinen vakava vahinko</li>
+        <li><b>6:</b> Laajempi ympäristövaikutus</li>
+        <li><b>7:</b> Suurimittainen onnettomuus (esim. Tšernobyl, Fukushima)</li>
+    </ul>
+
+    <h3>Säteilyannokset</h3>
+    <p>Altistuminen säteilylle voi aiheuttaa terveysvaikutuksia:</p>
+    <ul>
+        <li><b>1–10 mSv:</b> Ei merkittäviä terveyshaittoja</li>
+        <li><b>10–100 mSv:</b> Pieni lisäriski syövälle</li>
+        <li><b>100+ mSv:</b> Kasvava riski vakaville vaikutuksille</li>
+    </ul>
+
+    <h3>Tärkeää</h3>
+    <p><b>Tämä malli on havainnollistava.</b> Todellisessa onnettomuustilanteessa tulee aina noudattaa <b>viranomaisten ohjeita.</b></p>
+</div>
+
 
 <div id="map"></div>
 
