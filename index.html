@@ -20,15 +20,6 @@
     setTimeout(adjustMapSize, 500);
 </script>
 
-<script>
-document.getElementById("infoButton").addEventListener("click", function() {
-    document.getElementById("infoBox").style.display = "block";
-});
-
-document.getElementById("closeInfo").addEventListener("click", function() {
-    document.getElementById("infoBox").style.display = "none";
-});
-</script>
     
 <body>
     
@@ -102,7 +93,15 @@ document.getElementById("closeInfo").addEventListener("click", function() {
     <script src="https://rawgit.com/gregallensworth/Leaflet.Ellipse/master/leaflet.ellipse.js"></script>
     <script src="script.js"></script>
 
+<script>
+document.getElementById("infoButton").addEventListener("click", function() {
+    document.getElementById("infoBox").style.display = "block";
+});
 
+document.getElementById("closeInfo").addEventListener("click", function() {
+    document.getElementById("infoBox").style.display = "none";
+});
+</script>
     
 </body>
 </html>
