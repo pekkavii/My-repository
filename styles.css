@@ -46,6 +46,7 @@ html, body {
     font-size: 20px; /* Voit säätää kokoa sopivaksi */
     margin-bottom: 10px; /* Lisää hieman tilaa otsikon alle */
     text-align: center; /* Keskittää otsikon */
+    word-wrap: break-word;
 }
 
 /*
