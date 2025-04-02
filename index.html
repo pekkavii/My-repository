@@ -8,6 +8,20 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <link rel="icon" href="data:,">
 </head>
+
+<script>
+    function adjustMapSize() {
+        document.getElementById("map").style.width = window.innerWidth + "px";
+    }
+
+    document.addEventListener("DOMContentLoaded", adjustMapSize);
+    window.addEventListener("resize", adjustMapSize);
+
+    setTimeout(adjustMapSize, 500);
+</script>
+
+
+    
 <body>
     
 <div id="construction-banner">🚧 This site is under construction 🚧</div>
@@ -45,14 +59,7 @@
     <script src="https://rawgit.com/gregallensworth/Leaflet.Ellipse/master/leaflet.ellipse.js"></script>
     <script src="script.js"></script>
 
-<script>
-function adjustMapSize() {
-    document.getElementById("map").style.width = window.innerWidth + "px";
-}
 
-window.addEventListener("resize", adjustMapSize);
-window.addEventListener("load", adjustMapSize);
-</script>
     
 </body>
 </html>
