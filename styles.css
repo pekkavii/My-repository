@@ -103,6 +103,57 @@ html, body {
 .orange { background-color: orange; }
 .red { background-color: red; }
 
+#infoButton {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+#infoBox {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    max-width: 400px;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 2000;
+    display: none;
+}
+
+#infoBox h2 {
+    margin-top: 0;
+    font-size: 20px;
+}
+
+#infoBox ul {
+    padding-left: 20px;
+}
+
+#infoBox p, #infoBox ul {
+    font-size: 14px;
+    text-align: left;
+}
+
+#closeInfo {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+}
 
 
 #construction-banner {
