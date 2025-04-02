@@ -44,5 +44,15 @@
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script src="https://rawgit.com/gregallensworth/Leaflet.Ellipse/master/leaflet.ellipse.js"></script>
     <script src="script.js"></script>
+
+<script>
+function adjustMapSize() {
+    document.getElementById("map").style.width = window.innerWidth + "px";
+}
+
+window.addEventListener("resize", adjustMapSize);
+window.addEventListener("load", adjustMapSize);
+</script>
+    
 </body>
 </html>
