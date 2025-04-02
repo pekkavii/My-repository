@@ -8,16 +8,16 @@ html, body {
     padding: 0;
     width: 100%;
     height: 100%;
-    overflow-x: hidden; /* Poistaa horisontaalisen vierityksen */
+    overflow-x: hidden; /* Poistetaan mahdollinen vaakavieritys */
 }
 
 #map {
     position: absolute;
     top: 0;
     left: 0;
-    width: 100vw; /* Varmistaa koko leveyden */
-    height: 100vh; /* Varmistaa koko korkeuden */
-    max-width: 100%; /* Estää ylileveyden */
+    width: 100vw; /* Käytä näkymän leveyttä */
+    height: 100vh; /* Käytä näkymän korkeutta */
+    max-width: 100%;
 }
 
 
