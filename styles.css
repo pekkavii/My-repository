@@ -8,18 +8,18 @@ html, body {
     padding: 0;
     width: 100%;
     height: 100%;
-    overflow-x: hidden; /* Pakottaa kaiken pysymään ruudun sisällä */
+    overflow-x: hidden; /* Poistaa horisontaalisen vierityksen */
 }
 
 #map {
     position: absolute;
     top: 0;
     left: 0;
-    width: 100%; /* Käytä prosentteja vw:n sijaan */
-    height: 100vh;
-    max-width: 100vw; /* Estää ylivuodon */
-    overflow: hidden;
+    width: 100vw; /* Varmistaa koko leveyden */
+    height: 100vh; /* Varmistaa koko korkeuden */
+    max-width: 100%; /* Estää ylileveyden */
 }
+
 
 #controls {
     position: absolute;
