@@ -53,13 +53,15 @@ html, body {
     word-wrap: break-word;
 }
 
-/*
-#controls select, #controls input {
-    padding: 5px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+ .weather-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
-*/
+
 
 #simulateButton {
     background-color: #007bff; /* Sininen tausta */
