@@ -20,6 +20,10 @@ html, body {
     max-width: 100%;
 }
 
+#controls label {
+  width: 100%;
+  box-sizing: border-box;
+}
 
 #controls {
     position: absolute;
