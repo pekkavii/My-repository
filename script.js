@@ -40,6 +40,12 @@ fetch('power_plants.json')
 
             selectedLat = lat;
             selectedLon = lon;
+
+            // Jos automaattinen säähaku on valittuna, haetaan säätiedot uudelle voimalalle
+            if (document.getElementById("useCurrentWeather").checked) {
+                  fetchWeather();
+            }
+
         });
     })
     .catch(error => console.error("Voimaloiden lataaminen epäonnistui:", error));
