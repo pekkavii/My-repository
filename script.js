@@ -44,19 +44,6 @@ fetch('power_plants.json')
     })
     .catch(error => console.error("Voimaloiden lataaminen epäonnistui:", error));
 
-fetch("https://api.open-meteo.com/v1/forecast?latitude=60.3775&longitude=26.355&current_weather=true")
-  .then(res => res.json())
-  .then(data => {
-    const windDeg = data.current_weather.winddirection;
-    const windSpeed = data.current_weather.windspeed;
-    document.getElementById("windDirection").value = windDeg;
-    document.getElementById("windSpeed").value = windSpeed;
-  })
-  .catch(err => {
-    console.error("Virhe säätiedoissa:", err);
-    alert("Säätietoja ei voitu hakea");
-  });
-
 
 
 let map = L.map('map').setView([60.3775, 26.3550], 7); // Loviisan sijainti oletuksena
