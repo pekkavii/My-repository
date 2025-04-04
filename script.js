@@ -142,6 +142,45 @@ function drawEllipse(lat, lon, semiMajor, semiMinor, rotation, color) {
     }).addTo(map);
 }
 
+document.getElementById("useCurrentWeather").addEventListener("change", function() {
+    if (this.checked) {
+        fetchWeather();
+    }
+});
+
+document.getElementById("windDirection").addEventListener("input", function() {
+    document.getElementById("useCurrentWeather").checked = false;
+});
+
+document.getElementById("windSpeed").addEventListener("input", function() {
+    document.getElementById("useCurrentWeather").checked = false;
+});
+
+function fetchWeather() {
+    const lat = 60.3775; // Loviisan koordinaatit, myöhemmin voi muuttaa dynaamiseksi
+    const lon = 26.355;
+
+    fetch(`https://api.met.no/weatherapi/locationforecast/2.0/compact?lat=${lat}&lon=${lon}`, {
+        headers: { "User-Agent": "YourAppName/1.0" } // Met.no vaatii User-Agentin
+    })
+    .then(response => response.json())
+    .then(data => {
+        const details = data.properties.timeseries[0].data.instant.details;
+        const windSpeed = details.wind_speed; // m/s
+        const windDirection = details.wind_from_direction; // asteina
+
+        document.getElementById("windSpeed").value = windSpeed.toFixed(1);
+        document.getElementById("windDirection").value = Math.round(windDirection);
+    })
+    .catch(error => {
+        console.error("Säätietojen haku epäonnistui:", error);
+        alert("Säätietoja ei voitu hakea.");
+        document.getElementById("useCurrentWeather").checked = false;
+    });
+}
+
+
+
 document.getElementById("simulateButton").addEventListener("click", function() {
     if (selectedLat === undefined || selectedLon === undefined) {
         console.error("Voimalaa ei ole valittu!");
