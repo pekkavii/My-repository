@@ -159,8 +159,6 @@ document.getElementById("windSpeed").addEventListener("input", function() {
 });
 
 
-
-
 document.getElementById("simulateButton").addEventListener("click", function() {
     if (selectedLat === undefined || selectedLon === undefined) {
         console.error("Voimalaa ei ole valittu!");
@@ -168,3 +166,30 @@ document.getElementById("simulateButton").addEventListener("click", function() {
     }
     simulate(selectedLat, selectedLon);
 });
+
+function fetchWeather() {
+    if (typeof selectedLat === 'undefined' || typeof selectedLon === 'undefined') {
+        alert("Valitse ensin voimala!");
+        document.getElementById("useCurrentWeather").checked = false;
+        return;
+    }
+
+    const url = `https://api.open-meteo.com/v1/forecast?latitude=${selectedLat}&longitude=${selectedLon}&current_weather=true`;
+
+    fetch(url)
+        .then(res => res.json())
+        .then(data => {
+            if (data && data.current_weather) {
+                document.getElementById("windDirection").value = data.current_weather.winddirection;
+                document.getElementById("windSpeed").value = data.current_weather.windspeed;
+            } else {
+                throw new Error("Säätietoja ei löytynyt");
+            }
+        })
+        .catch(err => {
+            console.error("Virhe säätiedoissa:", err);
+            alert("Säätietoja ei voitu hakea");
+            document.getElementById("useCurrentWeather").checked = false;
+        });
+}
+
