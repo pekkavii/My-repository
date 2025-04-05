@@ -166,10 +166,9 @@ document.getElementById("windSpeed").addEventListener("input", function() {
     document.getElementById("useCurrentWeather").checked = false;
 });
 
-
 document.getElementById("simulateButton").addEventListener("click", function() {
     if (selectedLat === undefined || selectedLon === undefined) {
-        console.error("Voimalaa ei ole valittu!");
+        alert("Valitse ensin voimala!");
         return;
     }
     simulate(selectedLat, selectedLon);
