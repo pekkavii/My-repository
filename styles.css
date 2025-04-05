@@ -196,7 +196,7 @@ html, body {
 
 @media (max-width: 600px) {
   #controls {
-    width: 90vw; /* vie lähes koko ruudun leveyden */
+    width: 70vw; /* vie lähes koko ruudun leveyden */
     right: 5vw; /* vähän tyhjää oikealle */
     top: 10px; /* vähemmän marginaalia ylhäältä */
     padding: 15px;
