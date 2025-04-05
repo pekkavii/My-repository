@@ -37,14 +37,21 @@ html, body {
     z-index: 1000; /* Pitää laatikon kartan päällä */
 }
 
-#controls label, 
 #controls select, 
-#controls input, 
+#controls input[type="number"], 
 #controls button {
-    display: block; /* Asettaa jokaisen elementin omalle rivilleen */
-    margin-bottom: 10px; /* Lisää tilaa elementtien väliin */
-    width: 100%; /* Saa syötekentät täyttämään laatikon */
+    display: block;
+    margin-bottom: 10px;
+    width: 100%;
 }
+
+/* Jätetään label pois tai tehdään siitä inline erikseen */
+#controls label {
+    display: inline-block;
+    width: auto;
+    margin-bottom: 5px;
+}
+
 
 #controls h1 {
     font-size: 20px; /* Voit säätää kokoa sopivaksi */
