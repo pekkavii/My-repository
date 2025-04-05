@@ -75,8 +75,10 @@ function simulate(lat, lon) {
         return;
     }
     
-
 let windDirection = parseFloat(document.getElementById("windDirection").value);
+if (!isNaN(windDirection)) {
+    windDirection = (windDirection + 180) % 360; // Käännetään suunta
+}
 if (isNaN(windDirection)) {
     windDirection = 90; // Oletusarvo
 }
