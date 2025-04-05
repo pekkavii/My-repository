@@ -53,13 +53,21 @@ html, body {
     word-wrap: break-word;
 }
 
- .weather-checkbox {
+
+.weather-container {
   display: flex;
   align-items: center;
   gap: 0.5em;
+  margin-bottom: 10px;
+}
+
+.weather-container input[type="checkbox"] {
+  flex-shrink: 0;
+}
+
+.weather-container label {
+  margin: 0;
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 
