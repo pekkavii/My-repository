@@ -11,7 +11,7 @@ fetch('power_plants.json')
             select.appendChild(option);
         });
 
-        select.addEventListener("change", function () {
+select.addEventListener("change", function () {
     let selectedOption = select.options[select.selectedIndex];
 
     // Jos tyhjä tai ei valittu
