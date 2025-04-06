@@ -43,6 +43,10 @@ select.addEventListener("change", function () {
     if (marker) {
         map.removeLayer(marker);
     }
+    
+// Poistetaan vanhat pilvet aina kun valinta muuttuu
+plumeLayers.forEach(layer => map.removeLayer(layer));
+plumeLayers = [];
 
     marker = L.marker([lat, lon]).addTo(map)
         .bindPopup(`
