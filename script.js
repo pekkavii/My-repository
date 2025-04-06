@@ -75,6 +75,9 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 }).addTo(map);
 
 let marker;
+let selectedLat = undefined;
+let selectedLon = undefined;
+
 let plumeLayers = []; // Taulukko pilville
 
 function simulate(lat, lon) {
