@@ -203,7 +203,6 @@ document.getElementById("simulateButton").addEventListener("click", function() {
         return;
      }
     
-    simulate(selectedLat, selectedLon);
 });
 
 function fetchWeather() {
