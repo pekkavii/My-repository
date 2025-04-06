@@ -204,7 +204,7 @@ function fetchWeather() {
         return;
     }
 
-    const url = `https://api.open-meteo.com/v1/forecast?latitude=${selectedLat}&longitude=${selectedLon}&current_weather=true`;
+    const url = `https://api.open-meteo.com/v1/forecast?latitude=${selectedLat}&longitude=${selectedLon}&current_weather=true&windspeed_unit=ms`;
 
     fetch(url)
         .then(res => res.json())
@@ -222,4 +222,5 @@ function fetchWeather() {
             document.getElementById("useCurrentWeather").checked = false;
         });
 }
+
 
