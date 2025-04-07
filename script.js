@@ -84,7 +84,7 @@ let selectedLon = undefined;
 
 let plumeLayers = []; // Taulukko pilville
 
-function simulate(lat, lon) {
+function simulateEllipse(lat, lon) {
 
     let ines = parseInt(document.getElementById("ines").value);
 
@@ -175,6 +175,56 @@ function drawEllipse(lat, lon, semiMajor, semiMinor, rotation, color) {
     }).addTo(map);
 }
 
+function simulateGaussian(lat, lon) {
+    const Q = 1e14; // Päästön voimakkuus Bq/s (hypoteettinen)
+    const H = 30;   // Päästön korkeus metreinä
+    const windSpeed = parseFloat(document.getElementById("windSpeed").value) || 5;
+    const windDirection = (parseFloat(document.getElementById("windDirection").value) + 180) % 360;
+
+    // Tyhjennetään aiemmat pilvet
+    plumeLayers.forEach(layer => map.removeLayer(layer));
+    plumeLayers = [];
+
+    const rad = windDirection * Math.PI / 180;
+
+    for (let x = 500; x <= 10000; x += 500) {
+        const σy = 0.08 * x * Math.pow(1 + 0.0001 * x, -0.5); // Briggsin approksimaatio
+        const σz = 0.06 * x * Math.pow(1 + 0.0015 * x, -0.5);
+
+        const y = 0; // tuulen suunnassa, max pitoisuus
+        const z = 1.5; // havainnointikorkeus (m)
+
+        const exp1 = Math.exp(-Math.pow(y / σy, 2) / 2);
+        const exp2 = Math.exp(-Math.pow((z - H) / σz, 2) / 2);
+        const exp3 = Math.exp(-Math.pow((z + H) / σz, 2) / 2);
+
+        const C = (Q / (2 * Math.PI * windSpeed * σy * σz)) * exp1 * (exp2 + exp3); // Bq/m³
+
+        // Normalisoidaan väriä varten
+        const norm = Math.min(1, C / 1e9); // 1e9 Bq/m³ = kirkkaan punainen
+        const color = `rgba(255, 0, 0, ${norm})`;
+
+        const dx = (x / 1000) * Math.cos(rad);
+        const dy = (x / 1000) * Math.sin(rad);
+
+        const pointLat = lat + (dy / 111);
+        const pointLon = lon + (dx / (111 * Math.cos(lat * Math.PI / 180)));
+
+        const marker = L.circleMarker([pointLat, pointLon], {
+            radius: 6,
+            fillColor: color,
+            color: '#000',
+            weight: 0.5,
+            opacity: 0.6,
+            fillOpacity: 0.7
+        }).addTo(map);
+
+        marker.bindPopup(`Etäisyys: ${x / 1000} km<br>Pitoisuus: ${C.toExponential(2)} Bq/m³`);
+        plumeLayers.push(marker);
+    }
+}
+
+
 document.getElementById("useCurrentWeather").addEventListener("change", function() {
     if (this.checked) {
         fetchWeather();
@@ -196,7 +246,7 @@ document.getElementById("simulateButton").addEventListener("click", function() {
     }
     const selectedModel = document.querySelector('input[name="model"]:checked').value;
 if (selectedModel === "ellipse") {
-    simulate(selectedLat, selectedLon);
+    simulateEllipse(selectedLat, selectedLon);
 } else if (selectedModel === "gaussian") {
     simulateGaussian(selectedLat, selectedLon);
 }    
