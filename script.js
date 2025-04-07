@@ -185,7 +185,8 @@ function simulateGaussian(lat, lon) {
     plumeLayers.forEach(layer => map.removeLayer(layer));
     plumeLayers = [];
 
-    const rad = windDirection * Math.PI / 180;
+    const adjustedDirection = (270 - windDirection + 360) % 360;
+    const rad = adjustedDirection * Math.PI / 180;
 
     for (let x = 500; x <= 10000; x += 500) {
         const σy = 0.08 * x * Math.pow(1 + 0.0001 * x, -0.5); // Briggsin approksimaatio
