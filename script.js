@@ -194,7 +194,12 @@ document.getElementById("simulateButton").addEventListener("click", function() {
         alert("Valitse ensin voimala!");
         return;
     }
+    const selectedModel = document.querySelector('input[name="model"]:checked').value;
+if (selectedModel === "ellipse") {
     simulate(selectedLat, selectedLon);
+} else if (selectedModel === "gaussian") {
+    simulateGaussian(selectedLat, selectedLon);
+}    
 });
 
 function fetchWeather() {
