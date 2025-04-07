@@ -185,7 +185,7 @@ function simulateGaussian(lat, lon) {
     plumeLayers.forEach(layer => map.removeLayer(layer));
     plumeLayers = [];
 
-    const adjustedDirection = (windDirection + 180) % 360;
+    const adjustedDirection = (90 - windDirection + 360) % 360;
     const rad = adjustedDirection * Math.PI / 180;
 
     for (let x = 500; x <= 10000; x += 500) {
