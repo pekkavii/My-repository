@@ -175,24 +175,57 @@ function drawEllipse(lat, lon, semiMajor, semiMinor, rotation, color) {
     }).addTo(map);
 }
 
+
 function simulateGaussian(lat, lon) {
     const Q = 1e14; // Päästön voimakkuus Bq/s (hypoteettinen)
-    const H = 30;   // Päästön korkeus metreinä
     const windSpeed = parseFloat(document.getElementById("windSpeed").value) || 5;
     const windDirection = (parseFloat(document.getElementById("windDirection").value) + 180) % 360;
+
+    const useAuto = document.getElementById("useWeatherBasedValues").checked;
+    const H = parseFloat(document.getElementById("stackHeight").value) || 100;
+    const stability = document.getElementById("stabilityClass").value || "D";
 
     // Tyhjennetään aiemmat pilvet
     plumeLayers.forEach(layer => map.removeLayer(layer));
     plumeLayers = [];
 
-    const adjustedDirection = (90 - windDirection + 360) % 360;
+    const adjustedDirection = (270 - windDirection + 360) % 360;
     const rad = adjustedDirection * Math.PI / 180;
 
-    for (let x = 500; x <= 100000; x += 500) {
-        const σy = 0.08 * x * Math.pow(1 + 0.0001 * x, -0.5); // Briggsin approksimaatio
-        const σz = 0.06 * x * Math.pow(1 + 0.0015 * x, -0.5);
+    for (let x = 500; x <= 100000; x += 500) { // 500 m - 100 km
+        // Briggsin kaavat stabiilisuusluokan mukaan
+        let σy, σz;
+        switch (stability) {
+            case "A":
+                σy = 0.22 * x * Math.pow(1 + 0.0001 * x, -0.5);
+                σz = 0.20 * x;
+                break;
+            case "B":
+                σy = 0.16 * x * Math.pow(1 + 0.0001 * x, -0.5);
+                σz = 0.12 * x;
+                break;
+            case "C":
+                σy = 0.11 * x * Math.pow(1 + 0.0001 * x, -0.5);
+                σz = 0.08 * x * Math.pow(1 + 0.0015 * x, -0.5);
+                break;
+            case "D":
+                σy = 0.08 * x * Math.pow(1 + 0.0001 * x, -0.5);
+                σz = 0.06 * x * Math.pow(1 + 0.0015 * x, -0.5);
+                break;
+            case "E":
+                σy = 0.06 * x * Math.pow(1 + 0.0001 * x, -0.5);
+                σz = 0.03 * x * Math.pow(1 + 0.0015 * x, -0.5);
+                break;
+            case "F":
+                σy = 0.04 * x * Math.pow(1 + 0.0001 * x, -0.5);
+                σz = 0.016 * x * Math.pow(1 + 0.0015 * x, -0.5);
+                break;
+            default:
+                σy = 0.08 * x * Math.pow(1 + 0.0001 * x, -0.5);
+                σz = 0.06 * x * Math.pow(1 + 0.0015 * x, -0.5);
+        }
 
-        const y = 0; // tuulen suunnassa, max pitoisuus
+        const y = 0; // tuulen suunnassa, maksimi
         const z = 1.5; // havainnointikorkeus (m)
 
         const exp1 = Math.exp(-Math.pow(y / σy, 2) / 2);
@@ -201,8 +234,8 @@ function simulateGaussian(lat, lon) {
 
         const C = (Q / (2 * Math.PI * windSpeed * σy * σz)) * exp1 * (exp2 + exp3); // Bq/m³
 
-        // Normalisoidaan väriä varten
-        const norm = Math.min(1, C / 1e9); // 1e9 Bq/m³ = kirkkaan punainen
+        // Normalisoidaan väri
+        const norm = Math.min(1, C / 1e9); // suhteellinen punaisuus
         const color = `rgba(255, 0, 0, ${norm})`;
 
         const dx = (x / 1000) * Math.cos(rad);
