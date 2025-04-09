@@ -260,18 +260,38 @@ function fetchWeather() {
         return;
     }
 
-    const url = `https://api.open-meteo.com/v1/forecast?latitude=${selectedLat}&longitude=${selectedLon}&current_weather=true&windspeed_unit=ms`;
+const url = `https://api.open-meteo.com/v1/forecast?latitude=${selectedLat}&longitude=${selectedLon}&current_weather=true&cloudcover=true&temperature_2m=true&windspeed_unit=ms`;
 
-    fetch(url)
-        .then(res => res.json())
-        .then(data => {
-            if (data && data.current_weather) {
-                document.getElementById("windDirection").value = data.current_weather.winddirection;
-                document.getElementById("windSpeed").value = data.current_weather.windspeed;
-            } else {
-                throw new Error("Säätietoja ei löytynyt");
-            }
-        })
+fetch(url)
+  .then(res => res.json())
+  .then(data => {
+    if (data && data.current_weather) {
+      const weather = data.current_weather;
+      document.getElementById("windDirection").value = weather.winddirection;
+      document.getElementById("windSpeed").value = weather.windspeed;
+
+      if (document.getElementById("useWeatherBasedValues").checked) {
+        const temp = weather.temperature_2m;
+        const clouds = weather.cloudcover;
+        const speed = weather.windspeed;
+
+        // Yksinkertainen arviointi Pasquill-luokasta
+        let pasquill = "D";
+        if (clouds < 25) {
+          if (speed < 2) pasquill = "A";
+          else if (speed < 3) pasquill = "B";
+          else pasquill = "C";
+        } else if (clouds > 75) {
+          if (speed < 2) pasquill = "E";
+          else pasquill = "D";
+        }
+
+        document.getElementById("stabilityClass").value = pasquill;
+        document.getElementById("stackHeight").value = 100; // oletus
+      }
+    }
+  })
+
         .catch(err => {
             console.error("Virhe säätiedoissa:", err);
             alert("Säätietoja ei voitu hakea");
