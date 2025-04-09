@@ -51,9 +51,10 @@
 
 
 <label>
-  <input type="checkbox" id="useWeatherBasedValues">
-  Käytä sääperusteisia arvoja
-</label><br>
+  <input type="checkbox" id="useWeatherBasedValues" checked>
+  Käytä sääperusteisia oletusarvoja (Pasquill-luokka ja päästökorkeus)
+</label>
+
 
 <label for="stackHeight">Päästökorkeus (m):</label>
 <input type="number" id="stackHeight" value="100"><br>
@@ -67,8 +68,7 @@
   <option value="E">E</option>
   <option value="F">F (vakaa)</option>
 </select><br>
-
-
+    
     
 <label><input type="radio" name="model" value="ellipse" checked> Yksinkertainen ellipsimalli</label>
 <label><input type="radio" name="model" value="gaussian"> Gaussian Plume -malli</label>
