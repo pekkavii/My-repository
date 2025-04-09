@@ -49,11 +49,27 @@
 <label>Tuulen nopeus (m/s):</label>
 <input type="number" id="windSpeed" min="0" max="20" value="5">
 
-<div class="weather-container">
-  <input type="checkbox" id="useCurrentWeather">
-  <label for="useCurrentWeather">Käytä nykyistä säätä</label>
-</div>
 
+<label>
+  <input type="checkbox" id="useWeatherBasedValues">
+  Käytä sääperusteisia arvoja
+</label><br>
+
+<label for="stackHeight">Päästökorkeus (m):</label>
+<input type="number" id="stackHeight" value="100"><br>
+
+<label for="stabilityClass">Stabiilisuusluokka (A–F):</label>
+<select id="stabilityClass">
+  <option value="A">A (hyvin epävakaa)</option>
+  <option value="B">B</option>
+  <option value="C">C</option>
+  <option value="D" selected>D (neutraali)</option>
+  <option value="E">E</option>
+  <option value="F">F (vakaa)</option>
+</select><br>
+
+
+    
 <label><input type="radio" name="model" value="ellipse" checked> Yksinkertainen ellipsimalli</label>
 <label><input type="radio" name="model" value="gaussian"> Gaussian Plume -malli</label>
 
