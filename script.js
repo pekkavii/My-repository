@@ -267,11 +267,11 @@ document.getElementById("useCurrentWeather").addEventListener("change", function
 });
 
 document.getElementById("windDirection").addEventListener("input", function() {
-    document.getElementById("useCurrentWeather").checked = false;
+    document.getElementById("useWeatherBasedValues").checked = false;
 });
 
 document.getElementById("windSpeed").addEventListener("input", function() {
-    document.getElementById("useCurrentWeather").checked = false;
+    document.getElementById("useWeatherBasedValues").checked = false;
 });
 
 document.getElementById("simulateButton").addEventListener("click", function() {
