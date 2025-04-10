@@ -294,6 +294,7 @@ function fetchWeather() {
     }
 
     const url = `https://api.open-meteo.com/v1/forecast?latitude=${selectedLat}&longitude=${selectedLon}&current_weather=true&hourly=cloudcover&windspeed_unit=ms`;
+    console.log("Fetching weather from:", url);
 
     fetch(url)
         .then(res => res.json())
@@ -307,8 +308,8 @@ function fetchWeather() {
                     // Etsitään current_weatherin aika hourly-dataa varten
                     const currentTime = weather.time;
                     const hourlyTimes = data.hourly.time;
-                    const cloudIndex = hourlyTimes.indexOf(currentTime);
-
+                    const cloudIndex = hourlyTimes.findIndex(t => t.startsWith(currentTime));
+         
                     let clouds = 50; // oletus, jos ei löydy
                     if (cloudIndex !== -1) {
                         clouds = data.hourly.cloudcover[cloudIndex];
