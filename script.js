@@ -278,6 +278,7 @@ document.getElementById("windSpeed").addEventListener("input", function() {
 });
 
 document.getElementById("simulateButton").addEventListener("click", function() {
+    alert("Simuloi nappia painettiin!");
     if (selectedLat === undefined || selectedLon === undefined) {
         alert("Valitse ensin voimala!");
         return;
