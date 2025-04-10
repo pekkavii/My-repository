@@ -73,6 +73,7 @@ plumeLayers = [];
 
 
 let map = L.map('map').setView([60.3775, 26.3550], 7); // Loviisan sijainti oletuksena
+document.getElementById("useWeatherBasedValues").checked = false;
 
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; OpenStreetMap contributors'
