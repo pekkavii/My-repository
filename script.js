@@ -268,10 +268,13 @@ document.getElementById("useCurrentWeather").addEventListener("change", function
 
 document.getElementById("windDirection").addEventListener("input", function() {
     document.getElementById("useWeatherBasedValues").checked = false;
+    console.log("Manuaalinen muokkaus: sääperusteinen valinta pois päältä");
+
 });
 
 document.getElementById("windSpeed").addEventListener("input", function() {
     document.getElementById("useWeatherBasedValues").checked = false;
+    console.log("Manuaalinen muokkaus: sääperusteinen valinta pois päältä");
 });
 
 document.getElementById("simulateButton").addEventListener("click", function() {
