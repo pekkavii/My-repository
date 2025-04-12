@@ -297,8 +297,8 @@ function fetchWeather() {
         document.getElementById("useCurrentWeather").checked = false;
         return;
     }
-
-    const url = `https://api.open-meteo.com/v1/forecast?latitude=${selectedLat}&longitude=${selectedLon}&current_weather=true&hourly=cloudcover&windspeed_unit=ms`;
+https://api.open-meteo.com/v1/forecast?latitude=60&longitude=21&current=is_day,cloud_cover,wind_speed_10m,wind_direction_10m,rain&timezone=auto&wind_speed_unit=ms
+    const url = `https://api.open-meteo.com/v1/forecast?latitude=${selectedLat}&longitude=${selectedLon}&current=is_day,cloudcover,wind_speed_10m,wind_direction_10m,rain&timezone=auto&wind_speed_unit=ms`;
     console.log("Fetching weather from:", url);
 
     fetch(url)
