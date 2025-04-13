@@ -1,12 +1,12 @@
 document.addEventListener("DOMContentLoaded", function () {
-    // Nyt varmistetaan että DOM on ladattu
+    let select = document.getElementById("powerPlantSelection");
+    let marker;
+    let selectedLat, selectedLon;
+    let plumeLayers = [];
 
     fetch('power_plants.json')
         .then(response => response.json())
         .then(data => {
-            let select = document.getElementById("powerPlantSelection");
-            console.log("select:", select);
-
             data.forEach(plant => {
                 let option = document.createElement("option");
                 option.value = `${plant.lat},${plant.lon}`;
@@ -14,73 +14,78 @@ document.addEventListener("DOMContentLoaded", function () {
                 option.dataset.details = JSON.stringify(plant);
                 select.appendChild(option);
             });
-            
+
             select.addEventListener("change", function () {
-            let selectedOption = select.options[select.selectedIndex];
-
-            // Jos tyhjä tai ei valittu
+                let selectedOption = select.options[select.selectedIndex];
                 if (!selectedOption.value) {
-                selectedLat = undefined;
-                selectedLon = undefined;
+                    selectedLat = undefined;
+                    selectedLon = undefined;
+                    if (marker) map.removeLayer(marker);
+                    plumeLayers.forEach(layer => map.removeLayer(layer));
+                    plumeLayers = [];
+                    return;
+                }
 
-            // Poistetaan merkki ja pilvet
-            if (marker) {
-                map.removeLayer(marker);
-                marker = null;
-            }
-            plumeLayers.forEach(layer => map.removeLayer(layer));
-            plumeLayers = [];
+                let plant = JSON.parse(selectedOption.dataset.details);
+                let lat = parseFloat(plant.lat);
+                let lon = parseFloat(plant.lon);
 
-            return;
-        }
+                if (isNaN(lat) || isNaN(lon)) {
+                    console.error("Virhe: lat tai lon on NaN!", lat, lon);
+                    return;
+                }
 
-    let plant = JSON.parse(selectedOption.dataset.details);
+                if (marker) map.removeLayer(marker);
+                plumeLayers.forEach(layer => map.removeLayer(layer));
+                plumeLayers = [];
 
-    let lat = parseFloat(plant.lat);
-    let lon = parseFloat(plant.lon);
+                marker = L.marker([lat, lon]).addTo(map)
+                    .bindPopup(`
+                        <b>${plant.name}</b><br>
+                        <b>Maa:</b> ${plant.country}<br>
+                        <b>Reaktori:</b> ${plant.reactor_type}<br>
+                        <b>Sähköteho:</b> ${plant.electrical_power_MW} MW
+                    `).openPopup();
 
-    if (isNaN(lat) || isNaN(lon)) {
-        console.error("Virhe: lat tai lon on NaN!", plant.lat, plant.lon);
-        return;
-    }
+                map.setView([lat, lon], 7);
+                selectedLat = lat;
+                selectedLon = lon;
 
-    if (marker) {
-        map.removeLayer(marker);
-    }
-    
-    // Poistetaan vanhat pilvet aina kun valinta muuttuu
-    plumeLayers.forEach(layer => map.removeLayer(layer));
-    plumeLayers = [];
-
-    marker = L.marker([lat, lon]).addTo(map)
-        .bindPopup(`
-            <b>${plant.name}</b><br>
-            <b>Maa:</b> ${plant.country}<br>
-            <b>Reaktori:</b> ${plant.reactor_type}<br>
-            <b>Sähköteho:</b> ${plant.electrical_power_MW} MW
-        `)
-        .openPopup();
-
-    map.setView([lat, lon], 7);
-
-    selectedLat = lat;
-    selectedLon = lon;
-
-    if (document.getElementById("useCurrentWeather").checked) {
-        fetchWeather();
-    }
+                if (document.getElementById("useCurrentWeather").checked) {
+                    fetchWeather();
+                }
             });
         })
         .catch(error => console.error("Voimaloiden lataaminen epäonnistui:", error));
-});
 
+    // Event listenerit DOM:n latauduttua
+    document.getElementById("useCurrentWeather").addEventListener("change", function () {
+        if (this.checked) fetchWeather();
+    });
 
-let map = L.map('map').setView([60.3775, 26.3550], 7); // Loviisan sijainti oletuksena
-document.getElementById("useWeatherBasedValues").checked = false;
+    document.getElementById("windDirection").addEventListener("input", function () {
+        document.getElementById("useWeatherBasedValues").checked = false;
+    });
 
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; OpenStreetMap contributors'
-}).addTo(map);
+    document.getElementById("windSpeed").addEventListener("input", function () {
+        document.getElementById("useWeatherBasedValues").checked = false;
+    });
+
+    document.getElementById("simulateButton").addEventListener("click", function () {
+        if (selectedLat === undefined || selectedLon === undefined) {
+            alert("Valitse ensin voimala!");
+            return;
+        }
+        const selectedModel = document.querySelector('input[name="model"]:checked').value;
+        if (selectedModel === "ellipse") simulateEllipse(selectedLat, selectedLon);
+        else if (selectedModel === "gaussian") simulateGaussian(selectedLat, selectedLon);
+    });
+
+    // Kartta
+    const map = L.map('map').setView([60.3775, 26.3550], 7);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
 
 let marker;
 let selectedLat = undefined;
@@ -263,82 +268,50 @@ function simulateGaussian(lat, lon) {
 }
 
 
-document.getElementById("useCurrentWeather").addEventListener("change", function() {
-    if (this.checked) {
-        fetchWeather();
-    }
-});
-
-document.getElementById("windDirection").addEventListener("input", function() {
-    document.getElementById("useWeatherBasedValues").checked = false;
-    console.log("Manuaalinen muokkaus: sääperusteinen valinta pois päältä");
-
-});
-
-document.getElementById("windSpeed").addEventListener("input", function() {
-    document.getElementById("useWeatherBasedValues").checked = false;
-    console.log("Manuaalinen muokkaus: sääperusteinen valinta pois päältä");
-});
-
-document.getElementById("simulateButton").addEventListener("click", function() {
-    alert("Simuloi nappia painettiin!");
-    if (selectedLat === undefined || selectedLon === undefined) {
-        alert("Valitse ensin voimala!");
-        return;
-    }
-    const selectedModel = document.querySelector('input[name="model"]:checked').value;
-if (selectedModel === "ellipse") {
-    simulateEllipse(selectedLat, selectedLon);
-} else if (selectedModel === "gaussian") {
-    simulateGaussian(selectedLat, selectedLon);
-}    
-});
-
-function fetchWeather() {
-    if (typeof selectedLat === 'undefined' || typeof selectedLon === 'undefined') {
-        alert("Valitse ensin voimala!");
-        document.getElementById("useCurrentWeather").checked = false;
-        return;
-    }
-
-    const url = `https://api.open-meteo.com/v1/forecast?latitude=${selectedLat}&longitude=${selectedLon}&current=is_day,cloud_cover,wind_speed_10m,wind_direction_10m,rain&timezone=auto&wind_speed_unit=ms`;
-    console.log("Fetching weather from:", url);
-
-    fetch(url)
-        .then(res => res.json())
-        .then(data => {
-            if (data && data.current_weather) {
-                const weather = data.current_weather;
-
-                document.getElementById("windDirection_10m").value = weather.winddirection;
-                document.getElementById("windSpeed_10m").value = weather.windspeed;
-                document.getElementById("cloud_cover").value = weather.clouds;
-
-                // Arvioidaan Pasquill-luokka
-                const clouds = weather.cloud_cover;
-                const speed = weather.windspeed;
-                let pasquill = "D";
-
-                if (clouds < 25) {
-                    if (speed < 2) pasquill = "A";
-                    else if (speed < 3) pasquill = "B";
-                    else pasquill = "C";
-                } else if (clouds > 75) {
-                    if (speed < 2) pasquill = "E";
-                    else pasquill = "D";
-                }
-
-                document.getElementById("stabilityClass").value = pasquill;
-                document.getElementById("stackHeight").value = 100; // oletus
-            }
-        })
-        .catch(err => {
-            console.error("Virhe säätiedoissa:", err);
-            alert("Säätietoja ei voitu hakea");
+    function fetchWeather() {
+        if (typeof selectedLat === 'undefined' || typeof selectedLon === 'undefined') {
+            alert("Valitse ensin voimala!");
             document.getElementById("useCurrentWeather").checked = false;
-        });
-}
+            return;
+        }
 
+        const url = `https://api.open-meteo.com/v1/forecast?latitude=${selectedLat}&longitude=${selectedLon}&current=is_day,cloud_cover,wind_speed_10m,wind_direction_10m,rain&timezone=auto&wind_speed_unit=ms`;
+        fetch(url)
+            .then(res => res.json())
+            .then(data => {
+                if (data && data.current_weather) {
+                    const weather = data.current_weather;
+
+                    document.getElementById("windDirection").value = weather.winddirection;
+                    document.getElementById("windSpeed").value = weather.windspeed;
+                    document.getElementById("cloud_cover").value = weather.cloud_cover;
+
+                    let pasquill = "D";
+                    const clouds = weather.cloud_cover;
+                    const speed = weather.windspeed;
+
+                    if (clouds < 25) {
+                        if (speed < 2) pasquill = "A";
+                        else if (speed < 3) pasquill = "B";
+                        else pasquill = "C";
+                    } else if (clouds > 75) {
+                        if (speed < 2) pasquill = "E";
+                        else pasquill = "D";
+                    }
+
+                    document.getElementById("stabilityClass").value = pasquill;
+                    document.getElementById("stackHeight").value = 100;
+                }
+            })
+            .catch(err => {
+                console.error("Virhe säätiedoissa:", err);
+                alert("Säätietoja ei voitu hakea");
+                document.getElementById("useCurrentWeather").checked = false;
+            });
+    }
+
+    // simulateEllipse ja simulateGaussian pysyvät ennallaan — niitä ei muutettu
+});
 
 
 
