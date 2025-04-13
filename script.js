@@ -1,4 +1,11 @@
 document.addEventListener("DOMContentLoaded", function () {
+    // Määrittele kartta ensin!
+    const map = L.map('map').setView([60.3775, 26.3550], 7);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    // Nyt turvallista määritellä nämä
     let select = document.getElementById("powerPlantSelection");
     let marker;
     let selectedLat, selectedLon;
@@ -82,10 +89,10 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     // Kartta
-    const map = L.map('map').setView([60.3775, 26.3550], 7);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; OpenStreetMap contributors'
-    }).addTo(map);
+   // const map = L.map('map').setView([60.3775, 26.3550], 7);
+//    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+ //       attribution: '&copy; OpenStreetMap contributors'
+  //  }).addTo(map);
 
 let marker;
 let selectedLat = undefined;
