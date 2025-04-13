@@ -5,6 +5,7 @@ document.addEventListener("DOMContentLoaded", function () {
         .then(response => response.json())
         .then(data => {
             let select = document.getElementById("powerPlantSelection");
+            console.log("select:", select);
 
             data.forEach(plant => {
                 let option = document.createElement("option");
@@ -308,27 +309,27 @@ function fetchWeather() {
         .then(data => {
             if (data && data.current_weather) {
                 const weather = data.current_weather;
+
                 document.getElementById("windDirection_10m").value = weather.winddirection;
                 document.getElementById("windSpeed_10m").value = weather.windspeed;
                 document.getElementById("cloud_cover").value = weather.clouds;
-        
-                    // Arvioidaan Pasquill-luokka
+
+                // Arvioidaan Pasquill-luokka
                 const clouds = weather.cloud_cover;
+                const speed = weather.windspeed;
+                let pasquill = "D";
 
-                    const speed = weather.windspeed;
-                    let pasquill = "D";
-                    if (clouds < 25) {
-                        if (speed < 2) pasquill = "A";
-                        else if (speed < 3) pasquill = "B";
-                        else pasquill = "C";
-                    } else if (clouds > 75) {
-                        if (speed < 2) pasquill = "E";
-                        else pasquill = "D";
-                    }
-
-                    document.getElementById("stabilityClass").value = pasquill;
-                    document.getElementById("stackHeight").value = 100; // oletus
+                if (clouds < 25) {
+                    if (speed < 2) pasquill = "A";
+                    else if (speed < 3) pasquill = "B";
+                    else pasquill = "C";
+                } else if (clouds > 75) {
+                    if (speed < 2) pasquill = "E";
+                    else pasquill = "D";
                 }
+
+                document.getElementById("stabilityClass").value = pasquill;
+                document.getElementById("stackHeight").value = 100; // oletus
             }
         })
         .catch(err => {
