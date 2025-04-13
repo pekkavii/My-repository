@@ -313,6 +313,8 @@ function fetchWeather() {
                 document.getElementById("cloud_cover").value = weather.clouds;
         
                     // Arvioidaan Pasquill-luokka
+                const clouds = weather.cloud_cover;
+
                     const speed = weather.windspeed;
                     let pasquill = "D";
                     if (clouds < 25) {
