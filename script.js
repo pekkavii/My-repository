@@ -66,10 +66,21 @@ document.addEventListener("DOMContentLoaded", function () {
         .catch(error => console.error("Voimaloiden lataaminen epäonnistui:", error));
 
     // Event listenerit DOM:n latauduttua
-    document.getElementById("useCurrentWeather").addEventListener("change", function () {
-        if (this.checked) fetchWeather();
-    });
 
+document.getElementById("useCurrentWeather").addEventListener("change", function () {
+    if (this.checked) {
+        console.log("Checkbox klikattu");
+        if (selectedLat == null || selectedLon == null) {
+            alert("Valitse ensin voimala ennen säätietojen hakua!");
+            this.checked = false;
+        } else {
+            fetchWeather();
+        }
+    }
+});
+
+
+    
     document.getElementById("windDirection").addEventListener("input", function () {
         document.getElementById("useWeatherBasedValues").checked = false;
     });
