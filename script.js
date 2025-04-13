@@ -297,8 +297,8 @@ function fetchWeather() {
         document.getElementById("useCurrentWeather").checked = false;
         return;
     }
-https://api.open-meteo.com/v1/forecast?latitude=60&longitude=21&current=is_day,cloud_cover,wind_speed_10m,wind_direction_10m,rain&timezone=auto&wind_speed_unit=ms
-    const url = `https://api.open-meteo.com/v1/forecast?latitude=${selectedLat}&longitude=${selectedLon}&current=is_day,cloudcover,wind_speed_10m,wind_direction_10m,rain&timezone=auto&wind_speed_unit=ms`;
+
+    const url = `https://api.open-meteo.com/v1/forecast?latitude=${selectedLat}&longitude=${selectedLon}&current=is_day,cloud_cover,wind_speed_10m,wind_direction_10m,rain&timezone=auto&wind_speed_unit=ms`;
     console.log("Fetching weather from:", url);
 
     fetch(url)
@@ -306,20 +306,10 @@ https://api.open-meteo.com/v1/forecast?latitude=60&longitude=21&current=is_day,c
         .then(data => {
             if (data && data.current_weather) {
                 const weather = data.current_weather;
-                document.getElementById("windDirection").value = weather.winddirection;
-                document.getElementById("windSpeed").value = weather.windspeed;
-
-                if (document.getElementById("useWeatherBasedValues").checked) {
-                    // Etsitään current_weatherin aika hourly-dataa varten
-                    const currentTime = weather.time;
-                    const hourlyTimes = data.hourly.time;
-                    const cloudIndex = hourlyTimes.findIndex(t => t.startsWith(currentTime));
-         
-                    let clouds = 50; // oletus, jos ei löydy
-                    if (cloudIndex !== -1) {
-                        clouds = data.hourly.cloudcover[cloudIndex];
-                    }
-
+                document.getElementById("windDirection_10m").value = weather.winddirection;
+                document.getElementById("windSpeed_10m").value = weather.windspeed;
+                document.getElementById("cloud_cover").value = weather.clouds;
+        
                     // Arvioidaan Pasquill-luokka
                     const speed = weather.windspeed;
                     let pasquill = "D";
