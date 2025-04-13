@@ -311,7 +311,4 @@ function simulateGaussian(lat, lon) {
     }
 
     // simulateEllipse ja simulateGaussian pysyvät ennallaan — niitä ei muutettu
-});
-
-
-
+//});
