@@ -1,34 +1,37 @@
-fetch('power_plants.json')
-    .then(response => response.json())
-    .then(data => {
-        let select = document.getElementById("powerPlantSelection");
+document.addEventListener("DOMContentLoaded", function () {
+    // Nyt varmistetaan että DOM on ladattu
 
-        data.forEach(plant => {
-            let option = document.createElement("option");
-            option.value = `${plant.lat},${plant.lon}`;
-            option.textContent = `${plant.name} (${plant.country})`;
-            option.dataset.details = JSON.stringify(plant);
-            select.appendChild(option);
-        });
+    fetch('power_plants.json')
+        .then(response => response.json())
+        .then(data => {
+            let select = document.getElementById("powerPlantSelection");
 
-select.addEventListener("change", function () {
-    let selectedOption = select.options[select.selectedIndex];
+            data.forEach(plant => {
+                let option = document.createElement("option");
+                option.value = `${plant.lat},${plant.lon}`;
+                option.textContent = `${plant.name} (${plant.country})`;
+                option.dataset.details = JSON.stringify(plant);
+                select.appendChild(option);
+            });
+            
+            select.addEventListener("change", function () {
+            let selectedOption = select.options[select.selectedIndex];
 
-    // Jos tyhjä tai ei valittu
-    if (!selectedOption.value) {
-        selectedLat = undefined;
-        selectedLon = undefined;
+            // Jos tyhjä tai ei valittu
+                if (!selectedOption.value) {
+                selectedLat = undefined;
+                selectedLon = undefined;
 
-        // Poistetaan merkki ja pilvet
-        if (marker) {
-            map.removeLayer(marker);
-            marker = null;
+            // Poistetaan merkki ja pilvet
+            if (marker) {
+                map.removeLayer(marker);
+                marker = null;
+            }
+            plumeLayers.forEach(layer => map.removeLayer(layer));
+            plumeLayers = [];
+
+            return;
         }
-        plumeLayers.forEach(layer => map.removeLayer(layer));
-        plumeLayers = [];
-
-        return;
-    }
 
     let plant = JSON.parse(selectedOption.dataset.details);
 
@@ -44,9 +47,9 @@ select.addEventListener("change", function () {
         map.removeLayer(marker);
     }
     
-// Poistetaan vanhat pilvet aina kun valinta muuttuu
-plumeLayers.forEach(layer => map.removeLayer(layer));
-plumeLayers = [];
+    // Poistetaan vanhat pilvet aina kun valinta muuttuu
+    plumeLayers.forEach(layer => map.removeLayer(layer));
+    plumeLayers = [];
 
     marker = L.marker([lat, lon]).addTo(map)
         .bindPopup(`
@@ -65,11 +68,10 @@ plumeLayers = [];
     if (document.getElementById("useCurrentWeather").checked) {
         fetchWeather();
     }
+            });
+        })
+        .catch(error => console.error("Voimaloiden lataaminen epäonnistui:", error));
 });
-
-    })
-    .catch(error => console.error("Voimaloiden lataaminen epäonnistui:", error));
-
 
 
 let map = L.map('map').setView([60.3775, 26.3550], 7); // Loviisan sijainti oletuksena
