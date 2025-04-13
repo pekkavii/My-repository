@@ -94,11 +94,6 @@ document.addEventListener("DOMContentLoaded", function () {
  //       attribution: '&copy; OpenStreetMap contributors'
   //  }).addTo(map);
 
-let marker;
-let selectedLat = undefined;
-let selectedLon = undefined;
-
-let plumeLayers = []; // Taulukko pilville
 
 function simulateEllipse(lat, lon) {
 
