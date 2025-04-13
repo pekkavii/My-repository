@@ -270,6 +270,7 @@ function simulateGaussian(lat, lon) {
 }
 
     function fetchWeather() {
+        alert("Fetchweather alkaa");
     if (selectedLat == null || selectedLon == null) {
         alert("Valitse ensin voimala ennen säätietojen hakua!");
         document.getElementById("useCurrentWeather").checked = false;
