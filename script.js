@@ -269,13 +269,12 @@ function simulateGaussian(lat, lon) {
     }
 }
 
-
     function fetchWeather() {
-        if (typeof selectedLat === 'undefined' || typeof selectedLon === 'undefined') {
-            alert("Valitse ensin voimala!");
-            document.getElementById("useCurrentWeather").checked = false;
-            return;
-        }
+    if (selectedLat == null || selectedLon == null) {
+        alert("Valitse ensin voimala ennen säätietojen hakua!");
+        document.getElementById("useCurrentWeather").checked = false;
+        return;
+    }
 
         const url = `https://api.open-meteo.com/v1/forecast?latitude=${selectedLat}&longitude=${selectedLon}&current=is_day,cloud_cover,wind_speed_10m,wind_direction_10m,rain&timezone=auto&wind_speed_unit=ms`;
         fetch(url)
