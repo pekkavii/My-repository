@@ -58,7 +58,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 selectedLat = lat;
                 selectedLon = lon;
 
-                if (document.getElementById("useCurrentWeather").checked) {
+                if (document.getElementById("useWeatherBasedValues").checked) {
                     fetchWeather();
                 }
             });
@@ -68,7 +68,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // Event listenerit DOM:n latauduttua
            alert("event listenerit");
 
-document.getElementById("useCurrentWeather").addEventListener("change", function () {
+document.getElementById("useWeatherBasedValues").addEventListener("change", function () {
     if (this.checked) {
         alert("checkbox klikattu");
         console.log("Checkbox klikattu");
