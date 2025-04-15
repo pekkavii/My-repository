@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", function () {
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; OpenStreetMap contributors'
     }).addTo(map);
-
+       alert("määrittelyt");
     // Nyt turvallista määritellä nämä
     let select = document.getElementById("powerPlantSelection");
     let marker;
@@ -66,6 +66,7 @@ document.addEventListener("DOMContentLoaded", function () {
         .catch(error => console.error("Voimaloiden lataaminen epäonnistui:", error));
 
     // Event listenerit DOM:n latauduttua
+           alert("event listenerit");
 
 document.getElementById("useCurrentWeather").addEventListener("change", function () {
     if (this.checked) {
@@ -107,6 +108,7 @@ document.getElementById("useCurrentWeather").addEventListener("change", function
 
 
 function simulateEllipse(lat, lon) {
+           alert("simulateellipse");
 
     let ines = parseInt(document.getElementById("ines").value);
 
@@ -199,6 +201,10 @@ function drawEllipse(lat, lon, semiMajor, semiMinor, rotation, color) {
 
 
 function simulateGaussian(lat, lon) {
+
+    
+       alert("simulateGaussian alkaa");
+
     const Q = 1e14; // Päästön voimakkuus Bq/s (hypoteettinen)
     const windSpeed = parseFloat(document.getElementById("windSpeed").value) || 5;
     const windDirection = (parseFloat(document.getElementById("windDirection").value) + 180) % 360;
