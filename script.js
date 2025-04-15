@@ -70,6 +70,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 document.getElementById("useCurrentWeather").addEventListener("change", function () {
     if (this.checked) {
+        alert("checkbox klikattu");
         console.log("Checkbox klikattu");
         if (selectedLat == null || selectedLon == null) {
             alert("Valitse ensin voimala ennen säätietojen hakua!");
@@ -91,6 +92,7 @@ document.getElementById("useCurrentWeather").addEventListener("change", function
     });
 
     document.getElementById("simulateButton").addEventListener("click", function () {
+        alert("simulate button");
         if (selectedLat === undefined || selectedLon === undefined) {
             alert("Valitse ensin voimala!");
             return;
