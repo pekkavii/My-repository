@@ -288,11 +288,15 @@ function simulateGaussian(lat, lon) {
     }
 }
 
-    function fetchWeather() {
-        alert("Fetchweather alkaa");
+function fetchWeather() {
+
+    const spinner = document.getElementById("loadingSpinner");
+    spinner.style.display = "block"; // Näytä spinneri
+
     if (selectedLat == null || selectedLon == null) {
         alert("Valitse ensin voimala ennen säätietojen hakua!");
         document.getElementById("useCurrentWeather").checked = false;
+        spinner.style.display = "none"; // Piilota spinneri
         return;
     }
 
@@ -300,6 +304,8 @@ function simulateGaussian(lat, lon) {
         fetch(url)
             .then(res => res.json())
             .then(data => {
+                spinner.style.display = "none"; // Piilota spinneri
+                
                 if (data && data.current_weather) {
                     const weather = data.current_weather;
 
@@ -328,6 +334,7 @@ function simulateGaussian(lat, lon) {
                 console.error("Virhe säätiedoissa:", err);
                 alert("Säätietoja ei voitu hakea");
                 document.getElementById("useCurrentWeather").checked = false;
+                spinner.style.display = "none"; // Piilota spinneri
             });
     }
 
