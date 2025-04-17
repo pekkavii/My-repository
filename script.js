@@ -306,8 +306,8 @@ function fetchWeather() {
             .then(data => {
                 spinner.style.display = "none"; // Piilota spinneri
                 
-                if (data && data.current_weather) {
-                    const weather = data.current_weather;
+                if (data && data.current) {
+                    const weather = data.current;
 
                     document.getElementById("windDirection").value = weather.winddirection;
                     document.getElementById("windSpeed").value = weather.windspeed;
