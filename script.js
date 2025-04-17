@@ -333,7 +333,7 @@ function fetchWeather() {
             .catch(err => {
                 console.error("Virhe säätiedoissa:", err);
                 alert("Säätietoja ei voitu hakea");
-                document.getElementById("useCurrentWeather").checked = false;
+                document.getElementById("useWeatherBasedValues").checked = false;
                 spinner.style.display = "none"; // Piilota spinneri
             });
     }
