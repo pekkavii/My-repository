@@ -209,7 +209,7 @@ function simulateGaussian(lat, lon) {
 
     const Q = 1e14; // Päästön voimakkuus Bq/s (hypoteettinen)
     const windSpeed = parseFloat(document.getElementById("windSpeed").value) || 5;
-    const windDirection = (parseFloat(document.getElementById("windDirection").value) + 180) % 360;
+    const windDirection = (parseFloat(document.getElementById("windDirection").value));
 
     const useAuto = document.getElementById("useWeatherBasedValues").checked;
     const H = parseFloat(document.getElementById("stackHeight").value) || 100;
