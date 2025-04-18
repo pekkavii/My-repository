@@ -311,13 +311,13 @@ function fetchWeather() {
                 if (data && data.current) {
                     const weather = data.current;
 
-                    document.getElementById("windDirection").value = weather.winddirection;
-                    document.getElementById("windSpeed").value = weather.windspeed;
+                    document.getElementById("windDirection").value = weather.wind_direction_10m;
+                    document.getElementById("windSpeed").value = weather.wind_speed_10m;
                     document.getElementById("cloud_cover").value = weather.cloud_cover;
 
                     let pasquill = "D";
                     const clouds = weather.cloud_cover;
-                    const speed = weather.windspeed;
+                    const speed = weather.wind_speed_10m;
 
                     if (clouds < 25) {
                         if (speed < 2) pasquill = "A";
