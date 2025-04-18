@@ -327,7 +327,7 @@ function fetchWeather() {
                         if (speed < 2) pasquill = "E";
                         else pasquill = "D";
                     }
-
+                      alert("pasquil!",pasquill);
                     document.getElementById("stabilityClass").value = pasquill;
                     document.getElementById("stackHeight").value = 100;
                 }
