@@ -306,6 +306,7 @@ function fetchWeather() {
         fetch(url)
             .then(res => res.json())
             .then(data => {
+                console.log("Haettu säädata:", data); // Tärkeä!
                 spinner.style.display = "none"; // Piilota spinneri
                 
                 if (data && data.current) {
