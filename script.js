@@ -316,8 +316,10 @@ alert("Haetaan säädatoja openmeteosta");
                     
                     document.getElementById("windDirection").value = weather.wind_direction_10m;
                     document.getElementById("windSpeed").value = weather.wind_speed_10m;
-                    document.getElementById("cloud_cover").value = weather.cloud_cover;
+  //                  document.getElementById("cloud_cover").value = weather.cloud_cover;
+                    document.getElementById("cloud_cover").value = 5;
 
+ 
                     let pasquill = "D";
                     const clouds = weather.cloud_cover;
                     const speed = weather.wind_speed_10m;
