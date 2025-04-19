@@ -299,7 +299,7 @@ function fetchWeather() {
         spinner.style.display = "none"; // Piilota spinneri
         return;
     }
-
+// open-meteon sivulta haettu url-malli
 //https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.41&current=wind_speed_10m,wind_direction_10m,cloud_cover,is_day,rain&wind_speed_unit=ms
     
         const url = `https://api.open-meteo.com/v1/forecast?latitude=${selectedLat}&longitude=${selectedLon}&current=wind_speed_10m,wind_direction_10m,cloud_cover,is_day,rain&wind_speed_unit=ms`;
@@ -311,6 +311,8 @@ function fetchWeather() {
                 if (data && data.current) {
                     const weather = data.current;
 
+alert("Haetaan säädatoja openmeteosta");
+                    
                     document.getElementById("windDirection").value = weather.wind_direction_10m;
                     document.getElementById("windSpeed").value = weather.wind_speed_10m;
                     document.getElementById("cloud_cover").value = weather.cloud_cover;
@@ -327,7 +329,7 @@ function fetchWeather() {
                         if (speed < 2) pasquill = "E";
                         else pasquill = "D";
                     }
-                      alert("pasquil!",pasquill);
+                      
                     document.getElementById("stabilityClass").value = pasquill;
                     document.getElementById("stackHeight").value = 100;
                 }
