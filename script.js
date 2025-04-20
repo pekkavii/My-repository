@@ -302,8 +302,9 @@ function fetchWeather() {
 // open-meteon sivulta haettu url-malli
 //https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.41&current=wind_speed_10m,wind_direction_10m,cloud_cover,is_day,rain&wind_speed_unit=ms
     
-        const url = `https://api.open-meteo.com/v1/forecast?latitude=${selectedLat}&longitude=${selectedLon}&current=wind_speed_10m,wind_direction_10m,cloud_cover,is_day,rain&wind_speed_unit=ms`;
-        fetch(url)
+        const url = `https://api.open-meteo.com/v1/forecast?latitude=$ {selectedLat}&longitude=${selectedLon}&current=wind_speed_10m,wind_direction_10m,cloud_cover,is_day,rain&wind_speed_unit=ms`;
+console.log("URL!", url);
+    fetch(url)
             .then(res => res.json())
             .then(data => {
                 console.log("Haettu säädata:", data); // Tärkeä!
@@ -318,7 +319,7 @@ alert("Haetaan säädatoja openmeteosta");
                     document.getElementById("windSpeed").value = weather.wind_speed_10m;
   //                  document.getElementById("cloud_cover").value = weather.cloud_cover;
                     document.getElementById("cloud_cover").value = 5;
-
+console.log("winddir, windspeed, cloudcover!", windDirection,windspeed,cloud_cover);
  
                     let pasquill = "D";
                     const clouds = weather.cloud_cover;
