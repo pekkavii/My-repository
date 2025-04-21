@@ -60,6 +60,18 @@ html, body {
     word-wrap: break-word;
 }
 
+#controls.collapsed {
+    height: auto;
+    overflow: hidden;
+}
+
+#controls.collapsed > *:not(#toggleControls) {
+    display: none;
+}
+
+#toggleControls {
+    margin-bottom: 10px;
+}
 
 .weather-container {
   display: flex;
