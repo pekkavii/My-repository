@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", function () {
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; OpenStreetMap contributors'
     }).addTo(map);
-       alert("määrittelyt");
+    
     // Nyt turvallista määritellä nämä
     let select = document.getElementById("powerPlantSelection");
     let marker;
@@ -65,8 +65,7 @@ document.addEventListener("DOMContentLoaded", function () {
         })
         .catch(error => console.error("Voimaloiden lataaminen epäonnistui:", error));
 
-    // Event listenerit DOM:n latauduttua
-           alert("event listenerit");
+// Event listenerit DOM:n latauduttua
 
 document.getElementById("useWeatherBasedValues").addEventListener("change", function () {
     if (this.checked) {
@@ -110,7 +109,6 @@ document.getElementById("useWeatherBasedValues").addEventListener("change", func
 
 
 function simulateEllipse(lat, lon) {
-           alert("simulateellipse");
 
     let ines = parseInt(document.getElementById("ines").value);
 
@@ -203,9 +201,6 @@ function drawEllipse(lat, lon, semiMajor, semiMinor, rotation, color) {
 
 
 function simulateGaussian(lat, lon) {
-
-    
-       alert("simulateGaussian alkaa");
 
     const Q = 1e14; // Päästön voimakkuus Bq/s (hypoteettinen)
     const windSpeed = parseFloat(document.getElementById("windSpeed").value) || 5;
@@ -312,9 +307,7 @@ console.log("URL!", url);
                 
                 if (data && data.current) {
                     const weather = data.current;
-
-alert("Haetaan säädatoja openmeteosta");
-                    
+                    console.log("Haetaan säädatoja openmeteosta");
                     document.getElementById("windDirection").value = weather.wind_direction_10m;
                     document.getElementById("windSpeed").value = weather.wind_speed_10m;
   //                  document.getElementById("cloud_cover").value = weather.cloud_cover;
