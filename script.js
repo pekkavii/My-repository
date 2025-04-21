@@ -67,7 +67,18 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // Event listenerit DOM:n latauduttua
 
-document.getElementById("useWeatherBasedValues").addEventListener("change", function () {
+    document.getElementById("toggleControls").addEventListener("click", () => {
+    const controls = document.getElementById("controls");
+    controls.classList.toggle("collapsed");
+
+    const toggleBtn = document.getElementById("toggleControls");
+    toggleBtn.textContent = controls.classList.contains("collapsed") 
+        ? "Näytä ohjaimet" 
+        : "Piilota ohjaimet";
+});
+
+    
+    document.getElementById("useWeatherBasedValues").addEventListener("change", function () {  
     if (this.checked) {
 
         console.log("Checkbox klikattu");
