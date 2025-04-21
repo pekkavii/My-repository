@@ -318,7 +318,7 @@ alert("Haetaan säädatoja openmeteosta");
                     document.getElementById("windDirection").value = weather.wind_direction_10m;
                     document.getElementById("windSpeed").value = weather.wind_speed_10m;
   //                  document.getElementById("cloud_cover").value = weather.cloud_cover;
-                    document.getElementById("cloud_cover").value = 5;
+
 console.log("winddir, windspeed, cloudcover!", windDirection,windspeed,cloud_cover);
  console.log("Haettu säädata223:", data); // Tärkeä!
                     let pasquill = "D";
