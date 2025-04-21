@@ -90,6 +90,11 @@ document.getElementById("useWeatherBasedValues").addEventListener("change", func
         document.getElementById("useWeatherBasedValues").checked = false;
     });
 
+    document.getElementById("stabilityClass").addEventListener("change", () => {
+         document.getElementById("useWeatherBasedValues").checked = false;
+    });
+
+
     document.getElementById("simulateButton").addEventListener("click", function () {
     
         if (selectedLat === undefined || selectedLon === undefined) {
