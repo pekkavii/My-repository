@@ -25,6 +25,17 @@ html, body {
   box-sizing: border-box;
 }
 
+
+/* Yleinen tyylipäivitys ohjauspaneelille */
+#controls {
+    background-color: #f8f9fa;
+    padding: 16px;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 380px;
+    z-index: 1000;
+}
+/*
 #controls {
     position: absolute;
     top: 50px; /* Siirtää laatikon alemmas*/
@@ -36,7 +47,7 @@ html, body {
     border-radius: 5px;
     z-index: 1000; /* Pitää laatikon kartan päällä */
 }
-
+*/
 #controls select, 
 #controls input[type="number"], 
 #controls button {
