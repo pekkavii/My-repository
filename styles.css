@@ -27,6 +27,7 @@ html, body {
 
 
 /* Yleinen tyylipäivitys ohjauspaneelille */
+/* Yleinen tyylipäivitys ohjauspaneelille */
 #controls {
     background-color: #f8f9fa;
     padding: 16px;
@@ -35,7 +36,37 @@ html, body {
     max-width: 380px;
     z-index: 1000;
 }
-/*
+
+/* Piilotettu tila */
+#controls.collapsed {
+    height: auto;
+    overflow: hidden;
+    padding: 10px;
+}
+
+/* Piilota kaikki paitsi toggle-nappi */
+#controls.collapsed > *:not(#toggleControls) {
+    display: none;
+}
+
+/* Toggle-napin ulkoasu */
+.toggle-btn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    margin-bottom: 8px;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.toggle-btn:hover {
+    background-color: #0056b3;
+}
+
+/* */
 #controls {
     position: absolute;
     top: 50px; /* Siirtää laatikon alemmas*/
@@ -47,7 +78,7 @@ html, body {
     border-radius: 5px;
     z-index: 1000; /* Pitää laatikon kartan päällä */
 }
-*/
+
 #controls select, 
 #controls input[type="number"], 
 #controls button {
