@@ -10,6 +10,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let marker;
     let selectedLat, selectedLon;
     let plumeLayers = [];
+    let customMarker = null;
 
     fetch('power_plants.json')
         .then(response => response.json())
