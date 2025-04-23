@@ -78,48 +78,6 @@ document.addEventListener("DOMContentLoaded", function () {
 });
   
             
-            
-            ///////(
-            select.addEventListener("change", function () {
-                let selectedOption = select.options[select.selectedIndex];
-                if (!selectedOption.value) {
-                    selectedLat = undefined;
-                    selectedLon = undefined;
-                    if (marker) map.removeLayer(marker);
-                    plumeLayers.forEach(layer => map.removeLayer(layer));
-                    plumeLayers = [];
-                    return;
-                }
-
-                let plant = JSON.parse(selectedOption.dataset.details);
-                let lat = parseFloat(plant.lat);
-                let lon = parseFloat(plant.lon);
-
-                if (isNaN(lat) || isNaN(lon)) {
-                    console.error("Virhe: lat tai lon on NaN!", lat, lon);
-                    return;
-                }
-
-                if (marker) map.removeLayer(marker);
-                plumeLayers.forEach(layer => map.removeLayer(layer));
-                plumeLayers = [];
-
-                marker = L.marker([lat, lon]).addTo(map)
-                    .bindPopup(`
-                        <b>${plant.name}</b><br>
-                        <b>Maa:</b> ${plant.country}<br>
-                        <b>Reaktori:</b> ${plant.reactor_type}<br>
-                        <b>Sähköteho:</b> ${plant.electrical_power_MW} MW
-                    `).openPopup();
-
-                map.setView([lat, lon], 7);
-                selectedLat = lat;
-                selectedLon = lon;
-
-                if (document.getElementById("useWeatherBasedValues").checked) {
-                    fetchWeather();
-                }
-            });//////////
         })
         .catch(error => console.error("Voimaloiden lataaminen epäonnistui:", error));
 
