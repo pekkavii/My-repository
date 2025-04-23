@@ -23,6 +23,63 @@ document.addEventListener("DOMContentLoaded", function () {
                 select.appendChild(option);
             });
 
+    select.addEventListener("change", function () {
+    let selectedOption = select.options[select.selectedIndex];
+
+    if (!selectedOption.value) {
+        selectedLat = undefined;
+        selectedLon = undefined;
+        if (marker) map.removeLayer(marker);
+        plumeLayers.forEach(layer => map.removeLayer(layer));
+        plumeLayers = [];
+        return;
+    }
+
+    if (selectedOption.value === "custom") {
+        alert("Tuplaklikkaa kartalta vapaavalintainen voimalan paikka.");
+        if (marker) map.removeLayer(marker);
+        if (customMarker) map.removeLayer(customMarker);
+        plumeLayers.forEach(layer => map.removeLayer(layer));
+        plumeLayers = [];
+        enableMapDoubleClick();
+        return;
+    }
+
+    // Normaalien voimaloiden käsittely
+    let plant = JSON.parse(selectedOption.dataset.details);
+    let lat = parseFloat(plant.lat);
+    let lon = parseFloat(plant.lon);
+
+    if (isNaN(lat) || isNaN(lon)) {
+        console.error("Virhe: lat tai lon on NaN!", lat, lon);
+        return;
+    }
+
+    if (marker) map.removeLayer(marker);
+    if (customMarker) map.removeLayer(customMarker);
+    plumeLayers.forEach(layer => map.removeLayer(layer));
+    plumeLayers = [];
+
+    marker = L.marker([lat, lon]).addTo(map)
+        .bindPopup(`
+            <b>${plant.name}</b><br>
+            <b>Maa:</b> ${plant.country}<br>
+            <b>Reaktori:</b> ${plant.reactor_type}<br>
+            <b>Sähköteho:</b> ${plant.electrical_power_MW} MW
+        `).openPopup();
+
+    map.setView([lat, lon], 7);
+    selectedLat = lat;
+    selectedLon = lon;
+
+    if (document.getElementById("useWeatherBasedValues").checked) {
+        fetchWeather();
+    }
+});
+  
+            
+            
+            ///////(
             select.addEventListener("change", function () {
                 let selectedOption = select.options[select.selectedIndex];
                 if (!selectedOption.value) {
@@ -62,7 +119,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 if (document.getElementById("useWeatherBasedValues").checked) {
                     fetchWeather();
                 }
-            });
+            });//////////
         })
         .catch(error => console.error("Voimaloiden lataaminen epäonnistui:", error));
 
@@ -357,4 +414,21 @@ console.log("winddir, windspeed, cloudcover!", windDirection,windSpeed,weather.c
     }
 
     // simulateEllipse ja simulateGaussian pysyvät ennallaan — niitä ei muutettu
+    function enableMapDoubleClick() {
+    map.once("dblclick", function (e) {
+        const { lat, lng } = e.latlng;
+
+        if (customMarker) {
+            customMarker.setLatLng([lat, lng]);
+        } else {
+            customMarker = L.marker([lat, lng], { draggable: false }).addTo(map);
+        }
+
+        selectedLat = lat;
+        selectedLon = lng;
+
+        alert(`Voimalan paikka asetettu: ${lat.toFixed(4)}, ${lng.toFixed(4)}.\nVoit nyt suorittaa mallinnuksen.`);
+    });
+}
+
 });
