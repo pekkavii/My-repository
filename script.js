@@ -26,6 +26,16 @@ document.addEventListener("DOMContentLoaded", function () {
     select.addEventListener("change", function () {
     let selectedOption = select.options[select.selectedIndex];
 
+if (selectedOption.text === "Valitse voimalan paikka") {
+    if (marker) map.removeLayer(marker);
+    plumeLayers.forEach(layer => map.removeLayer(layer));
+    plumeLayers = [];
+    selectedLat = null;
+    selectedLon = null;
+    alert("Tuplaklikkaa kartalta vapaavalintainen voimalan paikka.");
+    return;
+}
+        
     if (!selectedOption.value) {
         selectedLat = undefined;
         selectedLon = undefined;
