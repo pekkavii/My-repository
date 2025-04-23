@@ -26,7 +26,7 @@ document.addEventListener("DOMContentLoaded", function () {
     select.addEventListener("change", function () {
     let selectedOption = select.options[select.selectedIndex];
 
-if (selectedOption.text === "Valitse voimalan paikka") {
+if (selectedOption.text === "Valitse voimalan paikka kartalta") {
     if (marker) map.removeLayer(marker);
     plumeLayers.forEach(layer => map.removeLayer(layer));
     plumeLayers = [];
