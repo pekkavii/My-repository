@@ -397,6 +397,28 @@ console.log("winddir, windspeed, cloudcover!", windDirection,windSpeed,weather.c
 
         alert(`Voimalan paikka asetettu: ${lat.toFixed(4)}, ${lng.toFixed(4)}.\nVoit nyt suorittaa mallinnuksen.`);
     });
+
+map.on("dblclick", function (e) {
+    const selectedOption = select.options[select.selectedIndex];
+    if (selectedOption.text !== "Valitse voimalan paikka") return;
+
+    selectedLat = e.latlng.lat;
+    selectedLon = e.latlng.lng;
+
+    if (marker) map.removeLayer(marker);
+    marker = L.marker([selectedLat, selectedLon], { icon: L.icon({
+        iconUrl: 'https://maps.google.com/mapfiles/ms/icons/blue-dot.png',
+        iconSize: [32, 32],
+        iconAnchor: [16, 32]
+    }) }).addTo(map).bindPopup("Vapaavalintainen voimalan paikka").openPopup();
+
+    console.log("Uusi sijainti asetettu:", selectedLat, selectedLon);
+});
+
+
+        
+
+
 }
 
 });
