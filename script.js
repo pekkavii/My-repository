@@ -11,6 +11,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let selectedLat, selectedLon;
     let plumeLayers = [];
     let customMarker = null;
+    let isCustomActive = false;
 
     fetch('power_plants.json')
         .then(response => response.json())
@@ -36,15 +37,19 @@ document.addEventListener("DOMContentLoaded", function () {
         return;
     }
 
-    if (selectedOption.value === "custom") {
-        alert("Tuplaklikkaa kartalta vapaavalintainen voimalan paikka.");
-        if (marker) map.removeLayer(marker);
-        if (customMarker) map.removeLayer(customMarker);
-        plumeLayers.forEach(layer => map.removeLayer(layer));
-        plumeLayers = [];
-        enableMapDoubleClick();
-        return;
-    }
+if (selectedOption.value === "custom") {
+    alert("Tuplaklikkaa kartalta vapaavalintainen voimalan paikka.");
+    if (marker) map.removeLayer(marker);
+    if (customMarker) map.removeLayer(customMarker);
+    plumeLayers.forEach(layer => map.removeLayer(layer));
+    plumeLayers = [];
+
+    enableMapDoubleClick();
+    return;
+} else {
+    disableMapDoubleClick(); // Estä kuuntelija, jos valinta ei ole "custom"
+}
+
 
     // Normaalien voimaloiden käsittely
     let plant = JSON.parse(selectedOption.dataset.details);
@@ -373,21 +378,35 @@ console.log("winddir, windspeed, cloudcover!", windDirection,windSpeed,weather.c
     }
 
     // simulateEllipse ja simulateGaussian pysyvät ennallaan — niitä ei muutettu
-    function enableMapDoubleClick() {
-    map.once("dblclick", function (e) {
-        const { lat, lng } = e.latlng;
+function enableMapDoubleClick() {
+    if (isCustomActive) return; // Estetään tuplakuuntelijat
 
-        if (customMarker) {
-            customMarker.setLatLng([lat, lng]);
-        } else {
-            customMarker = L.marker([lat, lng], { draggable: false }).addTo(map);
-        }
+    isCustomActive = true;
 
-        selectedLat = lat;
-        selectedLon = lng;
+    map.on("dblclick", handleCustomLocation);
+}
 
-        alert(`Voimalan paikka asetettu: ${lat.toFixed(4)}, ${lng.toFixed(4)}.\nVoit nyt suorittaa mallinnuksen.`);
-    });
+function disableMapDoubleClick() {
+    isCustomActive = false;
+    map.off("dblclick", handleCustomLocation);
+}
+
+function handleCustomLocation(e) {
+    const { lat, lng } = e.latlng;
+
+    if (customMarker) {
+        customMarker.setLatLng([lat, lng]);
+    } else {
+        customMarker = L.marker([lat, lng]).addTo(map);
     }
+
+    selectedLat = lat;
+    selectedLon = lng;
+
+    map.setView([lat, lng], 7);
+    alert(`Voimalan paikka asetettu: ${lat.toFixed(4)}, ${lng.toFixed(4)}.\nVoit nyt suorittaa mallinnuksen.`);
+}
+
+
 
 });
