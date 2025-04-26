@@ -237,7 +237,107 @@ function drawEllipse(lat, lon, semiMajor, semiMinor, rotation, color) {
     }).addTo(map);
 }
 
+function simulateGaussian(lat, lon) {
 
+    const Q = 1e14; // Päästön voimakkuus Bq/s (hypoteettinen)
+    const windSpeed = parseFloat(document.getElementById("windSpeed").value) || 5;
+    const windDirection = (parseFloat(document.getElementById("windDirection").value));
+    const H = parseFloat(document.getElementById("stackHeight").value) || 100;
+    const stability = document.getElementById("stabilityClass").value || "D";
+
+    // Hengitystilavuus ja I-131 annosmuunnoskerroin
+    const breathingRate = 1.2 / 3600; // m³/s (1.2 m³/h)
+    const doseConversionFactor = 2.2e-8; // Sv/Bq (I-131 aikuisella, ICRP-tyyppi)
+
+    const numOffsets = 9; // Montako pistettä sivulle (esim. 9 -> -4σy...0...+4σy)
+
+    plumeLayers.forEach(layer => map.removeLayer(layer));
+    plumeLayers = [];
+
+    const adjustedDirection = (270 - windDirection + 360) % 360;
+    const rad = adjustedDirection * Math.PI / 180;
+
+    for (let x = 500; x <= 100000; x += 1000) {
+
+        let σy, σz;
+        switch (stability) {
+            case "A":
+                σy = 0.22 * x * Math.pow(1 + 0.0001 * x, -0.5);
+                σz = 0.20 * x;
+                break;
+            case "B":
+                σy = 0.16 * x * Math.pow(1 + 0.0001 * x, -0.5);
+                σz = 0.12 * x;
+                break;
+            case "C":
+                σy = 0.11 * x * Math.pow(1 + 0.0001 * x, -0.5);
+                σz = 0.08 * x * Math.pow(1 + 0.0015 * x, -0.5);
+                break;
+            case "D":
+                σy = 0.08 * x * Math.pow(1 + 0.0001 * x, -0.5);
+                σz = 0.06 * x * Math.pow(1 + 0.0015 * x, -0.5);
+                break;
+            case "E":
+                σy = 0.06 * x * Math.pow(1 + 0.0001 * x, -0.5);
+                σz = 0.03 * x * Math.pow(1 + 0.0015 * x, -0.5);
+                break;
+            case "F":
+                σy = 0.04 * x * Math.pow(1 + 0.0001 * x, -0.5);
+                σz = 0.016 * x * Math.pow(1 + 0.0015 * x, -0.5);
+                break;
+            default:
+                σy = 0.08 * x * Math.pow(1 + 0.0001 * x, -0.5);
+                σz = 0.06 * x * Math.pow(1 + 0.0015 * x, -0.5);
+        }
+
+        for (let i = -(Math.floor(numOffsets/2)); i <= Math.floor(numOffsets/2); i++) {
+            const y = i * σy / (numOffsets/2); // jakaa -σy...+σy
+
+            const z = 1.5; // mittauskorkeus m
+
+            const exp1 = Math.exp(-Math.pow(y / σy, 2) / 2);
+            const exp2 = Math.exp(-Math.pow((z - H) / σz, 2) / 2);
+            const exp3 = Math.exp(-Math.pow((z + H) / σz, 2) / 2);
+
+            const C = (Q / (2 * Math.PI * windSpeed * σy * σz)) * exp1 * (exp2 + exp3); // Bq/m³
+
+            // Annosnopeus (Sv/h)
+            const doseRate_Sv_per_h = C * breathingRate * doseConversionFactor * 3600; // kerrotaan sekunneista tunneiksi
+
+            const norm = Math.min(1, C / 1e9); 
+            const color = `rgba(255, 0, 0, ${norm})`;
+
+            const dx = (x / 1000) * Math.cos(rad) - (y / 1000) * Math.sin(rad);
+            const dy = (x / 1000) * Math.sin(rad) + (y / 1000) * Math.cos(rad);
+
+            const pointLat = lat + (dy / 111);
+            const pointLon = lon + (dx / (111 * Math.cos(lat * Math.PI / 180)));
+
+            const marker = L.circleMarker([pointLat, pointLon], {
+                radius: 5,
+                fillColor: color,
+                color: '#000',
+                weight: 0.5,
+                opacity: 0.6,
+                fillOpacity: 0.7
+            }).addTo(map);
+
+            marker.bindPopup(
+                `Etäisyys: ${(x/1000).toFixed(1)} km<br>
+                Poikkeama: ${Math.round(y)} m<br>
+                Pitoisuus: ${C.toExponential(2)} Bq/m³<br>
+                Annosnopeus: ${(doseRate_Sv_per_h * 1e6).toFixed(2)} µSv/h`
+            );
+
+            plumeLayers.push(marker);
+        }
+    }
+}
+
+
+
+    
+/*
 function simulateGaussian(lat, lon) {
 
     const Q = 1e14; // Päästön voimakkuus Bq/s (hypoteettinen)
@@ -319,7 +419,7 @@ function simulateGaussian(lat, lon) {
         marker.bindPopup(`Etäisyys: ${x / 1000} km<br>Pitoisuus: ${C.toExponential(2)} Bq/m³`);
         plumeLayers.push(marker);
     }
-}
+}*/
 
 function fetchWeather() {
 
