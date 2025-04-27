@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
     // Määrittele kartta ensin!
-    const map = L.map('map').setView([60.3775, 26.3550], 7);
+    const map = L.map('map').setView([60.3714, 26.3469], 7);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; OpenStreetMap contributors'
     }).addTo(map);
@@ -138,12 +138,6 @@ if (selectedOption.value === "custom") {
         if (selectedModel === "ellipse") simulateEllipse(selectedLat, selectedLon);
         else if (selectedModel === "gaussian") simulateGaussian(selectedLat, selectedLon);
     });
-
-    // Kartta
-   // const map = L.map('map').setView([60.3775, 26.3550], 7);
-//    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
- //       attribution: '&copy; OpenStreetMap contributors'
-  //  }).addTo(map);
 
 
 function simulateEllipse(lat, lon) {
