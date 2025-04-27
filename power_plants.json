@@ -4,8 +4,8 @@
         "country": "Suomi", 
         "reactor_type": "VVER-440", 
         "electrical_power_MW": 1010, 
-        "lat": 60.3775, 
-        "lon": 26.355 
+        "lat": 60.3714, 
+        "lon": 26.3469 
     },
     {
         "name": "Olkiluodon ydinvoimalaitos",
