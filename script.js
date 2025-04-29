@@ -231,6 +231,8 @@ function drawEllipse(lat, lon, semiMajor, semiMinor, rotation, color) {
     }).addTo(map);
 }
 
+    
+/*
 function simulateGaussian(lat, lon) {
 
     const Q = 1e14; // Päästön voimakkuus Bq/s (hypoteettinen)
@@ -327,93 +329,62 @@ function simulateGaussian(lat, lon) {
         }
     }
 }
+*/
 
+function simulateGaussian(lat = selectedLat, lon = selectedLon) {
+    if (!lat || !lon) {
+        alert("Valitse ensin voimala tai paikka kartalta.");
+        return;
+    }
 
+    // INES-luokan mukainen päästö (TBq -> Bq)
+    let ines = parseInt(document.getElementById("ines").value);
+    let Q_TBq = Math.pow(10, ines - 4) * 10;
+    let Q = Q_TBq * 1e12; // Bq
 
-    
-/*
-function simulateGaussian(lat, lon) {
+    let windSpeed = parseFloat(document.getElementById("windSpeed").value);
+    if (windSpeed <= 0) {
+        alert("Tuulen nopeuden on oltava suurempi kuin 0.");
+        return;
+    }
 
-    const Q = 1e14; // Päästön voimakkuus Bq/s (hypoteettinen)
-    const windSpeed = parseFloat(document.getElementById("windSpeed").value) || 5;
-    const windDirection = (parseFloat(document.getElementById("windDirection").value));
+    // Skaalauskerroin: C × 140 m³ × 2.2e-8 Sv/Bq = C × 3.08e-6 Sv
+    const doseFactor = 140 * 2.2e-8;
 
-    const useAuto = document.getElementById("useWeatherBasedValues").checked;
-    const H = parseFloat(document.getElementById("stackHeight").value) || 100;
-    const stability = document.getElementById("stabilityClass").value || "D";
-
-    // Tyhjennetään aiemmat pilvet
+    // Tyhjennetään vanhat säteilykerrokset kartalta
     plumeLayers.forEach(layer => map.removeLayer(layer));
     plumeLayers = [];
 
-    const adjustedDirection = (270 - windDirection + 360) % 360;
-    const rad = adjustedDirection * Math.PI / 180;
+    // Luodaan testipisteitä tuulen suuntaan – myöhemmin voit käyttää oikeaa mallia tähän
+    for (let i = 1; i <= 5; i++) {
+        let distance_km = i * 10;
+        let distance_m = distance_km * 1000;
 
-    for (let x = 500; x <= 100000; x += 500) { // 500 m - 100 km
-        // Briggsin kaavat stabiilisuusluokan mukaan
-        let σy, σz;
-        switch (stability) {
-            case "A":
-                σy = 0.22 * x * Math.pow(1 + 0.0001 * x, -0.5);
-                σz = 0.20 * x;
-                break;
-            case "B":
-                σy = 0.16 * x * Math.pow(1 + 0.0001 * x, -0.5);
-                σz = 0.12 * x;
-                break;
-            case "C":
-                σy = 0.11 * x * Math.pow(1 + 0.0001 * x, -0.5);
-                σz = 0.08 * x * Math.pow(1 + 0.0015 * x, -0.5);
-                break;
-            case "D":
-                σy = 0.08 * x * Math.pow(1 + 0.0001 * x, -0.5);
-                σz = 0.06 * x * Math.pow(1 + 0.0015 * x, -0.5);
-                break;
-            case "E":
-                σy = 0.06 * x * Math.pow(1 + 0.0001 * x, -0.5);
-                σz = 0.03 * x * Math.pow(1 + 0.0015 * x, -0.5);
-                break;
-            case "F":
-                σy = 0.04 * x * Math.pow(1 + 0.0001 * x, -0.5);
-                σz = 0.016 * x * Math.pow(1 + 0.0015 * x, -0.5);
-                break;
-            default:
-                σy = 0.08 * x * Math.pow(1 + 0.0001 * x, -0.5);
-                σz = 0.06 * x * Math.pow(1 + 0.0015 * x, -0.5);
-        }
+        // Yksinkertainen laimenemismalli: pitoisuus ~ 1/r^2
+        let C = Q / (4 * Math.PI * Math.pow(distance_m, 2));
+        let dose = C * doseFactor; // Sv
 
-        const y = 0; // tuulen suunnassa, maksimi
-        const z = 1.5; // havainnointikorkeus (m)
+        // Määritä väri annoksen mukaan
+        let color = "green";
+        if (dose > 1) color = "black";
+        else if (dose > 0.1) color = "red";
+        else if (dose > 0.01) color = "orange";
 
-        const exp1 = Math.exp(-Math.pow(y / σy, 2) / 2);
-        const exp2 = Math.exp(-Math.pow((z - H) / σz, 2) / 2);
-        const exp3 = Math.exp(-Math.pow((z + H) / σz, 2) / 2);
+        // Lasketaan uusi sijainti – tässä kiinteästi itään päin
+        let latOffset = 0;
+        let lonOffset = i * 0.1;
 
-        const C = (Q / (2 * Math.PI * windSpeed * σy * σz)) * exp1 * (exp2 + exp3); // Bq/m³
-
-        // Normalisoidaan väri
-        const norm = Math.min(1, C / 1e9); // suhteellinen punaisuus
-        const color = `rgba(255, 0, 0, ${norm})`;
-
-        const dx = (x / 1000) * Math.cos(rad);
-        const dy = (x / 1000) * Math.sin(rad);
-
-        const pointLat = lat + (dy / 111);
-        const pointLon = lon + (dx / (111 * Math.cos(lat * Math.PI / 180)));
-
-        const marker = L.circleMarker([pointLat, pointLon], {
-            radius: 6,
-            fillColor: color,
-            color: '#000',
-            weight: 0.5,
-            opacity: 0.6,
-            fillOpacity: 0.7
+        let circle = L.circle([lat + latOffset, lon + lonOffset], {
+            radius: 5000,
+            color: color,
+            fillOpacity: 0.5
         }).addTo(map);
-
-        marker.bindPopup(`Etäisyys: ${x / 1000} km<br>Pitoisuus: ${C.toExponential(2)} Bq/m³`);
-        plumeLayers.push(marker);
+        circle.bindPopup(`Viikkoannos: ${(dose * 1000).toFixed(2)} mSv`);
+        plumeLayers.push(circle);
     }
-}*/
+}
+
+    
 
 function fetchWeather() {
 
