@@ -330,7 +330,7 @@ function simulateGaussian(lat, lon) {
     }
 }
 */
-
+/*
 function simulateGaussian(lat = selectedLat, lon = selectedLon) {
     if (!lat || !lon) {
         alert("Valitse ensin voimala tai paikka kartalta.");
@@ -383,9 +383,73 @@ function simulateGaussian(lat = selectedLat, lon = selectedLon) {
         plumeLayers.push(circle);
     }
 }
+*/
+    
+function simulateGaussian() {
+    if (!selectedReactor || !windData) {
+        alert("Valitse ydinvoimala ja varmista tuulitiedot.");
+        return;
+    }
+
+    const centerLat = selectedReactor.lat;
+    const centerLon = selectedReactor.lon;
+    const windDirection = windData.direction; // asteina, 0 = pohjoinen
+    const windSpeed = windData.speed; // m/s
+
+    const inesClass = parseInt(document.getElementById("ines").value);
+    const activityTBq = 10 ** (inesClass + 1); // INES 4 = 10 TBq, 5 = 100 TBq, jne.
+    const decayConstant = 0.0862; // I-131 puoliintumisaika 8 päivää => λ = ln(2)/8 ≈ 0.0862
+
+    const totalHours = 24 * 7; // viikon kesto
+    const scale = 1e-6; // skaalaus vakio, jotta mSv-luku pysyy realistisena (säädettävissä)
+
+    const maxDistanceKm = 200;
+    const stepKm = 5;
+
+    for (let d = 0; d <= maxDistanceKm; d += stepKm) {
+        for (let offset = -d / 3; offset <= d / 3; offset += stepKm) {
+            // Muunnetaan siirtymä lat/lon-koordinaateiksi
+            const angleRad = (windDirection * Math.PI) / 180;
+            const dx = d * Math.cos(angleRad) - offset * Math.sin(angleRad);
+            const dy = d * Math.sin(angleRad) + offset * Math.cos(angleRad);
+
+            const deltaLat = dy / 110.574; // km -> astetta
+            const deltaLon = dx / (111.320 * Math.cos(centerLat * Math.PI / 180));
+
+            const lat = centerLat + deltaLat;
+            const lon = centerLon + deltaLon;
+
+            // Gaussinen pitoisuus (vakioita yksinkertaistettu), yksikkönä Bq/m³
+            const sigmaY = 0.1 * d + 10; // sivusuuntainen diffuusio
+            const sigmaZ = 0.05 * d + 5; // pystysuuntainen diffuusio
+
+            const groundConcentration = (activityTBq * 1e12) / (Math.PI * sigmaY * sigmaZ * windSpeed) *
+                Math.exp(-0.5 * (offset * offset) / (sigmaY * sigmaY));
+
+            // Muutetaan pitoisuus viikkoannokseksi mSv (skaalattu ja vaimennettu)
+            const dose_mSv = groundConcentration * scale * totalHours * Math.exp(-decayConstant * 7);
+
+            let color = "";
+            if (dose_mSv > 1000) color = "black";
+            else if (dose_mSv > 100) color = "red";
+            else if (dose_mSv > 10) color = "orange";
+            else if (dose_mSv > 1) color = "green";
+
+            if (color) {
+                const circle = L.circleMarker([lat, lon], {
+                    radius: 4,
+                    fillColor: color,
+                    color: color,
+                    weight: 1,
+                    fillOpacity: 0.5
+                }).addTo(map);
+                drawnItems.push(circle);
+            }
+        }
+    }
+}
 
     
-
 function fetchWeather() {
 
     const spinner = document.getElementById("loadingSpinner");
