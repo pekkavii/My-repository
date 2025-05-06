@@ -330,7 +330,7 @@ function simulateGaussian(lat, lon) {
     }
 }
 */
-/*
+
 function simulateGaussian(lat = selectedLat, lon = selectedLon) {
     if (!lat || !lon) {
         alert("Valitse ensin voimala tai paikka kartalta.");
@@ -382,79 +382,9 @@ function simulateGaussian(lat = selectedLat, lon = selectedLon) {
         circle.bindPopup(`Viikkoannos: ${(dose * 1000).toFixed(2)} mSv`);
         plumeLayers.push(circle);
     }
-}
-*/
+} 
 
-let plumeLayers = [];
 
-function simulateGaussian(lat = selectedLat, lon = selectedLon) {
-  // Poistetaan aiemmat Gauss-pilven kerrokset
-  plumeLayers.forEach(layer => map.removeLayer(layer));
-  plumeLayers = [];
-
-  const windSpeed = parseFloat(document.getElementById("windSpeed").value);
-  const windDirection = parseFloat(document.getElementById("windDirection").value);
-  const inesLevel = parseInt(document.getElementById("inesLevel").value);
-
-  if (isNaN(windSpeed) || isNaN(windDirection) || isNaN(inesLevel)) {
-    alert("Täytä kaikki kentät oikein!");
-    return;
-  }
-
-  const releaseAmounts = {
-    7: 10000e12,
-    6: 1000e12,
-    5: 100e12,
-    4: 10e12
-  };
-
-  const Q = releaseAmounts[inesLevel] / (7 * 24 * 3600); // Bq/s (jaettu viikon ajalle)
-  const H = 100; // päästökorkeus (m)
-  const u = windSpeed;
-
-  const sigma_y = x => 0.08 * x / Math.pow(1 + 0.0001 * x, 0.5);
-  const sigma_z = x => 0.06 * x / Math.pow(1 + 0.0015 * x, 0.5);
-
-  const step = 5; // km
-  const maxDistance = 200; // km
-  const numSteps = Math.floor(maxDistance / step);
-
-  for (let i = 1; i <= numSteps; i++) {
-    const x = i * step * 1000; // m
-    const sy = sigma_y(x);
-    const sz = sigma_z(x);
-    const C = (Q / (2 * Math.PI * u * sy * sz)) * Math.exp(-H * H / (2 * sz * sz)); // Bq/m³
-    const doseRate = C * 2.2e-8; // Sv/h
-    const weeklyDose = doseRate * 24 * 7; // Sv
-
-    const radius = i * step * 1000;
-    const angle = (270 - windDirection) * Math.PI / 180;
-    const dx = radius * Math.cos(angle);
-    const dy = radius * Math.sin(angle);
-
-    const earthRadius = 6371000;
-    const newLat = lat + (dy / earthRadius) * (180 / Math.PI);
-    const newLon = lon + (dx / (earthRadius * Math.cos(lat * Math.PI / 180))) * (180 / Math.PI);
-
-    let color = "green";
-    if (weeklyDose >= 0.001 && weeklyDose < 0.01) color = "green";
-    else if (weeklyDose >= 0.01 && weeklyDose < 0.1) color = "orange";
-    else if (weeklyDose >= 0.1 && weeklyDose < 1) color = "red";
-    else if (weeklyDose >= 1) color = "black";
-
-    const circle = L.circle([newLat, newLon], {
-      radius: 2000,
-      color: color,
-      fillOpacity: 0.4,
-      stroke: false
-    }).addTo(map);
-
-    plumeLayers.push(circle);
-  }
-}
-
-    
-    
 function fetchWeather() {
 
     const spinner = document.getElementById("loadingSpinner");
