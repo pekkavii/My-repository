@@ -330,7 +330,7 @@ function simulateGaussian(lat, lon) {
                 `Etäisyys: ${(x/1000).toFixed(1)} km<br>
                 Poikkeama: ${Math.round(y)} m<br>
                 Pitoisuus: ${C.toExponential(2)} Bq/m³<br>
-                Annosnopeus: ${(doseRate_Sv_per_week * 1e3).toFixed(2)} mSv`
+                Annos viikossa: ${(doseRate_Sv_per_week * 1e3).toFixed(2)} mSv`
             );
 
             plumeLayers.push(marker);
