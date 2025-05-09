@@ -235,7 +235,13 @@ function drawEllipse(lat, lon, semiMajor, semiMinor, rotation, color) {
 
 function simulateGaussian(lat, lon) {
 
-    const Q = 1e14; // Päästön voimakkuus Bq/s (hypoteettinen)
+    // INES-luokan mukainen päästö (TBq -> Bq)
+    let ines = parseInt(document.getElementById("ines").value);
+    let Q_TBq = Math.pow(10, ines - 4) * 10;
+    let Q_tot = Q_TBq * 1e12; // Bq
+    let Q = Q_tot / 7 / 24 / 3600; // Bq/s viikon ajan
+    
+//    const Q = 1e14; // Päästön voimakkuus Bq/s (hypoteettinen)
     const windSpeed = parseFloat(document.getElementById("windSpeed").value) || 5;
     const windDirection = (parseFloat(document.getElementById("windDirection").value));
     const H = parseFloat(document.getElementById("stackHeight").value) || 100;
