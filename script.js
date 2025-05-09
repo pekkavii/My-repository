@@ -306,7 +306,7 @@ function simulateGaussian(lat, lon) {
             // Annosnopeus (Sv/h)
 //            const doseRate_Sv_per_h = C * breathingRate * doseConversionFactor * 3600; // kerrotaan sekunneista tunneiksi
         // Annos viikossa
-        const doseRate_Sv_per_h = C * breathingRate * doseConversionFactor * 3600 * 24 * 7; // kerrotaan sekunneista viikoksi
+        const doseRate_Sv_per_week = C * breathingRate * doseConversionFactor * 3600 * 24 * 7; // kerrotaan sekunneista viikoksi
 
             const norm = Math.min(1, C / 1e9); 
             const color = `rgba(255, 0, 0, ${norm})`;
@@ -330,7 +330,7 @@ function simulateGaussian(lat, lon) {
                 `Etäisyys: ${(x/1000).toFixed(1)} km<br>
                 Poikkeama: ${Math.round(y)} m<br>
                 Pitoisuus: ${C.toExponential(2)} Bq/m³<br>
-                Annosnopeus: ${(doseRate_Sv_per_h * 1e6).toFixed(2)} µSv/h`
+                Annosnopeus: ${(doseRate_Sv_per_week * 1e3).toFixed(2)} mSv`
             );
 
             plumeLayers.push(marker);
