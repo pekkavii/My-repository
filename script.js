@@ -304,7 +304,9 @@ function simulateGaussian(lat, lon) {
             const C = (Q / (2 * Math.PI * windSpeed * σy * σz)) * exp1 * (exp2 + exp3); // Bq/m³
 
             // Annosnopeus (Sv/h)
-            const doseRate_Sv_per_h = C * breathingRate * doseConversionFactor * 3600; // kerrotaan sekunneista tunneiksi
+//            const doseRate_Sv_per_h = C * breathingRate * doseConversionFactor * 3600; // kerrotaan sekunneista tunneiksi
+        // Annos viikossa
+        const doseRate_Sv_per_h = C * breathingRate * doseConversionFactor * 3600 * 24 * 7; // kerrotaan sekunneista viikoksi
 
             const norm = Math.min(1, C / 1e9); 
             const color = `rgba(255, 0, 0, ${norm})`;
