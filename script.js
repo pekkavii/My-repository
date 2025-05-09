@@ -232,7 +232,7 @@ function drawEllipse(lat, lon, semiMajor, semiMinor, rotation, color) {
 }
 
     
-/*
+
 function simulateGaussian(lat, lon) {
 
     const Q = 1e14; // Päästön voimakkuus Bq/s (hypoteettinen)
@@ -329,8 +329,8 @@ function simulateGaussian(lat, lon) {
         }
     }
 }
-*/
 
+/*
 function simulateGaussian(lat = selectedLat, lon = selectedLon) {
     if (!lat || !lon) {
         alert("Valitse ensin voimala tai paikka kartalta.");
@@ -383,7 +383,7 @@ function simulateGaussian(lat = selectedLat, lon = selectedLon) {
         plumeLayers.push(circle);
     }
 } 
-
+*/
 
 function fetchWeather() {
 
