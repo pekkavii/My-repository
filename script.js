@@ -308,8 +308,8 @@ function simulateGaussian(lat, lon) {
         // Annos viikossa
         const doseRate_Sv_per_week = C * breathingRate * doseConversionFactor * 3600 * 24 * 7; // kerrotaan sekunneista viikoksi
 
-            const norm = Math.min(1, C / 1e9); 
-            const color = `rgba(255, 0, 0, ${norm})`;
+//          const norm = Math.min(1, C / 1e9); 
+//          const color = `rgba(255, 0, 0, ${norm})`;
 
             const dx = (x / 1000) * Math.cos(rad) - (y / 1000) * Math.sin(rad);
             const dy = (x / 1000) * Math.sin(rad) + (y / 1000) * Math.cos(rad);
@@ -317,10 +317,16 @@ function simulateGaussian(lat, lon) {
             const pointLat = lat + (dy / 111);
             const pointLon = lon + (dx / (111 * Math.cos(lat * Math.PI / 180)));
 
+        // Määritä väri annoksen mukaan
+        let color = "green";
+        if (doseRate_Sv_per_week > 1) color = "black";
+        else if (doseRate_Sv_per_week > 0.1) color = "red";
+        else if (doseRate_Sv_per_week > 0.01) color = "orange";
+            
             const marker = L.circleMarker([pointLat, pointLon], {
                 radius: 5,
                 fillColor: color,
-                color: '#000',
+                color: color,
                 weight: 0.5,
                 opacity: 0.6,
                 fillOpacity: 0.7
