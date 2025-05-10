@@ -153,6 +153,7 @@ html, body {
     flex-shrink: 0; /* Estää värilaatikoita kutistumasta */
 }
 
+.blue { background-color: blue; }
 .green { background-color: green; }
 .orange { background-color: orange; }
 .red { background-color: red; }
