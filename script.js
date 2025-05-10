@@ -325,7 +325,7 @@ function simulateGaussian(lat, lon) {
         else if (doseRate_Sv_per_week > 0.001) color = "green";
  
             const marker = L.circle([pointLat, pointLon], {
-                radius: 2500,
+                radius: 500,
                 fillColor: color,
                 color: color,
                 weight: 0.5,
