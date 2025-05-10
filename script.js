@@ -318,18 +318,19 @@ function simulateGaussian(lat, lon) {
             const pointLon = lon + (dx / (111 * Math.cos(lat * Math.PI / 180)));
 
         // Määritä väri annoksen mukaan
-        let color = "green";
+        let color = "blue";
         if (doseRate_Sv_per_week > 1) color = "black";
         else if (doseRate_Sv_per_week > 0.1) color = "red";
         else if (doseRate_Sv_per_week > 0.01) color = "orange";
-            
+        else if (doseRate_Sv_per_week > 0.001) color = "green";
+ 
             const marker = L.circleMarker([pointLat, pointLon], {
                 radius: 5,
                 fillColor: color,
                 color: color,
                 weight: 0.5,
                 opacity: 0.6,
-                fillOpacity: 0.7
+                fillOpacity: 0.3
             }).addTo(map);
 
             marker.bindPopup(
