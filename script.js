@@ -251,7 +251,7 @@ function simulateGaussian(lat, lon) {
     const breathingRate = 1.2 / 3600; // m³/s (1.2 m³/h)
     const doseConversionFactor = 2.2e-8; // Sv/Bq (I-131 aikuisella, ICRP-tyyppi)
 
-    const numOffsets = 21; // Montako pistettä sivulle (esim. 9 -> -4σy...0...+4σy)
+    const numOffsets = 11; // Montako pistettä sivulle (esim. 9 -> -4σy...0...+4σy)
 
     plumeLayers.forEach(layer => map.removeLayer(layer));
     plumeLayers = [];
