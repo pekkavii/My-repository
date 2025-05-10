@@ -293,7 +293,11 @@ function simulateGaussian(lat, lon) {
         }
 
         for (let i = -(Math.floor(numOffsets/2)); i <= Math.floor(numOffsets/2); i++) {
-            const y = i * σy / (numOffsets/2); // jakaa -σy...+σy
+  
+            const spreadFactor = 3; // laajenna piirtokaistaa
+            const y = i * σy * spreadFactor / (numOffsets / 2);
+       
+//            const y = i * σy / (numOffsets/2); // jakaa -σy...+σy
 
             const z = 1.5; // mittauskorkeus m
 
