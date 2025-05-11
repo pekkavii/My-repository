@@ -311,6 +311,7 @@ function simulateGaussian(lat, lon) {
 //            const doseRate_Sv_per_h = C * breathingRate * doseConversionFactor * 3600; // kerrotaan sekunneista tunneiksi
         // Annos viikossa
         const doseRate_Sv_per_week = C * breathingRate * doseConversionFactor * 3600 * 24 * 7; // kerrotaan sekunneista viikoksi
+        if (doseRate_Sv_per_week * 1e3 < 1) continue; // ohita jos alle 1 mSv
 
 //          const norm = Math.min(1, C / 1e9); 
 //          const color = `rgba(255, 0, 0, ${norm})`;
