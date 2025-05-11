@@ -259,7 +259,7 @@ function simulateGaussian(lat, lon) {
     const adjustedDirection = (270 - windDirection + 360) % 360;
     const rad = adjustedDirection * Math.PI / 180;
 
-    for (let x = 500; x <= 200000; x += 1000) {
+    for (let x = 500; x <= 500000; x += 1000) {
 
         let σy, σz;
         switch (stability) {
@@ -294,7 +294,7 @@ function simulateGaussian(lat, lon) {
 
         for (let i = -(Math.floor(numOffsets/2)); i <= Math.floor(numOffsets/2); i++) {
   
-            const spreadFactor = 3; // laajenna piirtokaistaa
+            const spreadFactor = 4; // laajenna piirtokaistaa
             const y = i * σy * spreadFactor / (numOffsets / 2);
        
 //            const y = i * σy / (numOffsets/2); // jakaa -σy...+σy
