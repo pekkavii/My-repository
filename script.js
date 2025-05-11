@@ -238,7 +238,7 @@ function simulateGaussian(lat, lon) {
     // INES-luokan mukainen päästö (TBq -> Bq)
     let ines = parseInt(document.getElementById("ines").value);
     let Q_TBq = Math.pow(10, ines - 4) * 10;
-    let Q_tot = Q_TBq * 1e12; // Bq
+    let Q_tot = Q_TBq * 5 * 1e12; // Bq, IAEAn mukaa INES 7 on tens of thousands TBq, valitaan 50 000
     let Q = Q_tot / 7 / 24 / 3600; // Bq/s viikon ajan
     
 //    const Q = 1e14; // Päästön voimakkuus Bq/s (hypoteettinen)
