@@ -328,7 +328,20 @@ function simulateGaussian(lat, lon) {
         else if (doseRate_Sv_per_week > 0.1) color = "red";
         else if (doseRate_Sv_per_week > 0.01) color = "orange";
         else if (doseRate_Sv_per_week > 0.001) color = "green";
- 
+
+const cellSizeDegLat = 0.002; // ≈ 220 m
+const cellSizeDegLon = 0.002 / Math.cos(lat * Math.PI / 180);
+
+const rect = L.rectangle([
+    [pointLat - cellSizeDegLat / 2, pointLon - cellSizeDegLon / 2],
+    [pointLat + cellSizeDegLat / 2, pointLon + cellSizeDegLon / 2]
+], {
+    color: color,
+    fillOpacity: 0.5,
+    weight: 0
+}).addTo(map);
+
+ /*           
             const marker = L.circle([pointLat, pointLon], {
                 radius: 500,
                 fillColor: color,
@@ -337,7 +350,7 @@ function simulateGaussian(lat, lon) {
                 opacity: 0.6,
                 fillOpacity: 0.3
             }).addTo(map);
-
+*/
             marker.bindPopup(
                 `Etäisyys: ${(x/1000).toFixed(1)} km<br>
                 Poikkeama: ${Math.round(y)} m<br>
