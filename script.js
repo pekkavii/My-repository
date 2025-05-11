@@ -329,17 +329,18 @@ function simulateGaussian(lat, lon) {
         else if (doseRate_Sv_per_week > 0.01) color = "orange";
         else if (doseRate_Sv_per_week > 0.001) color = "green";
 
-const cellSizeDegLat = 0.002; // ≈ 220 m
-const cellSizeDegLon = 0.002 / Math.cos(lat * Math.PI / 180);
+const dose = doseRate_Sv_per_week * 1000; // mSv
+const radius = Math.max(2, Math.min(6, dose * 2)); // skaalaa säde annoksen mukaan
+const opacity = Math.min(0.7, dose / 10); // läpinäkyvyys annoksen mukaan
 
-const rect = L.rectangle([
-    [pointLat - cellSizeDegLat / 2, pointLon - cellSizeDegLon / 2],
-    [pointLat + cellSizeDegLat / 2, pointLon + cellSizeDegLon / 2]
-], {
+L.circleMarker([lat, lon], {
+    radius: radius,
+    fillColor: color,
     color: color,
-    fillOpacity: 0.5,
-    weight: 0
+    weight: 0,
+    fillOpacity: opacity
 }).addTo(map);
+
 
  /*           
             const marker = L.circle([pointLat, pointLon], {
