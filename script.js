@@ -333,7 +333,7 @@ const dose = doseRate_Sv_per_week * 1000; // mSv
 const radius = Math.max(2, Math.min(6, dose * 2)); // skaalaa säde annoksen mukaan
 const opacity = Math.min(0.7, dose / 10); // läpinäkyvyys annoksen mukaan
 
-L.circleMarker([lat, lon], {
+L.circleMarker([pointLat, pointLon], {
     radius: radius,
     fillColor: color,
     color: color,
