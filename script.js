@@ -350,6 +350,112 @@ function simulateGaussian(lat, lon) {
     }
 }
 
+
+let animationLayers = [];
+let animationTimer = null;
+let currentFrame = 0;
+const maxFrames = 24; // esim. 24 tuntia
+const animationDelay = 500; // millisekunteina per ruutu
+
+function generateAnimationLayers(lat, lon) {
+    animationLayers.forEach(layer => map.removeLayer(layer));
+    animationLayers = [];
+
+    // Perustiedot
+    let ines = parseInt(document.getElementById("ines").value);
+    let Q_TBq = Math.pow(10, ines - 4) * 10;
+    let Q_tot = Q_TBq * 1e12; // Bq
+    let Q = Q_tot / 7 / 24 / 3600; // Bq/s viikon ajan
+
+    const windSpeed = parseFloat(document.getElementById("windSpeed").value) || 5;
+    const windDirection = (parseFloat(document.getElementById("windDirection").value));
+    const H = parseFloat(document.getElementById("stackHeight").value) || 100;
+    const stability = document.getElementById("stabilityClass").value || "D";
+
+    const breathingRate = 1.2 / 3600;
+    const doseConversionFactor = 2.2e-8;
+
+    const numOffsets = 15;
+    const spreadFactor = 3;
+    const adjustedDirection = (270 - windDirection + 360) % 360;
+    const rad = adjustedDirection * Math.PI / 180;
+
+    for (let hour = 1; hour <= maxFrames; hour++) {
+        const frameGroup = L.layerGroup();
+
+        for (let x = 500; x <= 100000; x += 2000) {
+            let σy, σz;
+            switch (stability) {
+                case "A": σy = 0.22 * x * Math.pow(1 + 0.0001 * x, -0.5); σz = 0.20 * x; break;
+                case "B": σy = 0.16 * x * Math.pow(1 + 0.0001 * x, -0.5); σz = 0.12 * x; break;
+                case "C": σy = 0.11 * x * Math.pow(1 + 0.0001 * x, -0.5); σz = 0.08 * x * Math.pow(1 + 0.0015 * x, -0.5); break;
+                case "D": σy = 0.08 * x * Math.pow(1 + 0.0001 * x, -0.5); σz = 0.06 * x * Math.pow(1 + 0.0015 * x, -0.5); break;
+                case "E": σy = 0.06 * x * Math.pow(1 + 0.0001 * x, -0.5); σz = 0.03 * x * Math.pow(1 + 0.0015 * x, -0.5); break;
+                case "F": σy = 0.04 * x * Math.pow(1 + 0.0001 * x, -0.5); σz = 0.016 * x * Math.pow(1 + 0.0015 * x, -0.5); break;
+                default:  σy = 0.08 * x * Math.pow(1 + 0.0001 * x, -0.5); σz = 0.06 * x * Math.pow(1 + 0.0015 * x, -0.5);
+            }
+
+            for (let i = -(Math.floor(numOffsets/2)); i <= Math.floor(numOffsets/2); i++) {
+                const y = i * σy * spreadFactor / (numOffsets / 2);
+                const z = 1.5;
+                const exp1 = Math.exp(-Math.pow(y / σy, 2) / 2);
+                const exp2 = Math.exp(-Math.pow((z - H) / σz, 2) / 2);
+                const exp3 = Math.exp(-Math.pow((z + H) / σz, 2) / 2);
+                const C = (Q / (2 * Math.PI * windSpeed * σy * σz)) * exp1 * (exp2 + exp3);
+
+                const dose = C * breathingRate * doseConversionFactor * 3600 * hour; // kumuloitu tähän tuntiin
+
+                if (dose * 1000 < 1) continue;
+
+                const dx = (x / 1000) * Math.cos(rad) - (y / 1000) * Math.sin(rad);
+                const dy = (x / 1000) * Math.sin(rad) + (y / 1000) * Math.cos(rad);
+                const pointLat = lat + (dy / 111);
+                const pointLon = lon + (dx / (111 * Math.cos(lat * Math.PI / 180)));
+
+                let color = dose > 1 ? "black" : dose > 0.1 ? "red" : dose > 0.01 ? "orange" : "green";
+
+                const circle = L.circle([pointLat, pointLon], {
+                    radius: 400,
+                    fillColor: color,
+                    color: color,
+                    weight: 0,
+                    fillOpacity: 0.4
+                });
+
+                frameGroup.addLayer(circle);
+            }
+        }
+
+        animationLayers.push(frameGroup);
+    }
+
+    alert("Animaatiokerrokset luotu. Paina 'Toista animaatio'.");
+}
+    
+function playAnimation() {
+    if (animationLayers.length === 0) {
+        alert("Luo animaatio ensin.");
+        return;
+    }
+
+    if (animationTimer) clearInterval(animationTimer);
+    animationLayers.forEach(layer => map.removeLayer(layer));
+    currentFrame = 0;
+
+    animationTimer = setInterval(() => {
+        if (currentFrame > 0) {
+            map.removeLayer(animationLayers[currentFrame - 1]);
+        }
+
+        if (currentFrame < animationLayers.length) {
+            map.addLayer(animationLayers[currentFrame]);
+            currentFrame++;
+        } else {
+            clearInterval(animationTimer);
+        }
+    }, animationDelay);
+}
+
 /*
 function simulateGaussian(lat = selectedLat, lon = selectedLon) {
     if (!lat || !lon) {
