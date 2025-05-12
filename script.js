@@ -358,6 +358,12 @@ const maxFrames = 24; // esim. 24 tuntia
 const animationDelay = 500; // millisekunteina per ruutu
 
 function generateAnimationLayers(lat, lon) {
+
+   if (!lat || !lon) {
+        alert("Valitse ensin voimala tai paikka kartalta.");
+        return;
+    }
+    
     animationLayers.forEach(layer => map.removeLayer(layer));
     animationLayers = [];
 
