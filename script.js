@@ -139,6 +139,15 @@ if (selectedOption.value === "custom") {
         else if (selectedModel === "gaussian") simulateGaussian(selectedLat, selectedLon);
     });
 
+  document.getElementById("generateAnimationButton").addEventListener("click", () => {
+    if (selectedLat && selectedLon) {
+        generateAnimationLayers(selectedLat, selectedLon);
+    } else {
+        alert("Valitse ensin voimala.");
+    }
+  });
+
+    
 
 function simulateEllipse(lat, lon) {
 
