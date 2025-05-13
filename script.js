@@ -139,14 +139,20 @@ if (selectedOption.value === "custom") {
         else if (selectedModel === "gaussian") simulateGaussian(selectedLat, selectedLon);
     });
 
-  document.getElementById("generateAnimationButton").addEventListener("click", () => {
+  document.getElementById("generateAnimationLayersButton").addEventListener("click", () => {
     if (selectedLat && selectedLon) {
         generateAnimationLayers(selectedLat, selectedLon);
     } else {
         alert("Valitse ensin voimala.");
     }
   });
-
+  document.getElementById("playAnimationButton").addEventListener("click", () => {
+    if (selectedLat && selectedLon) {
+        playAnimation();
+    } else {
+        alert("Valitse ensin voimala.");
+    }
+  });
     
 
 function simulateEllipse(lat, lon) {
