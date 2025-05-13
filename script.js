@@ -1,3 +1,6 @@
+let selectedLat;
+let selectedLon;
+
 document.addEventListener("DOMContentLoaded", function () {
     // Määrittele kartta ensin!
     const map = L.map('map').setView([60.3714, 26.3469], 7);
@@ -8,7 +11,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // Nyt turvallista määritellä nämä
     let select = document.getElementById("powerPlantSelection");
     let marker;
-    let selectedLat, selectedLon;
+ //   let selectedLat, selectedLon;
     let plumeLayers = [];
     let customMarker = null;
     let isCustomActive = false;
