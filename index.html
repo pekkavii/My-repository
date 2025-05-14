@@ -82,6 +82,14 @@
 <button id="generateAnimationLayersButton">Luo animaatio</button>
 <button id="playAnimationButton">Toista animaatio</button>
 
+<div id="animationControls">
+    <button onclick="resetAnimation()">⏮</button>
+    <button onclick="toggleAnimation()">▶️ / ⏸️</button>
+    <button onclick="jumpToEnd()">⏭</button>
+    <span id="animationStatus">0 / 24 h</span>
+    <input type="range" id="animationSlider" min="0" max="23" value="0" style="width: 200px;" oninput="seekAnimation(this.value)">
+</div>    
+
 <div id="loadingSpinner" style="display:none;">Haetaan säätietoja...</div>
     
 </div>
