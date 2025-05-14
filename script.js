@@ -483,6 +483,70 @@ function playAnimation() {
     }, animationDelay);
 }
 
+
+let isPlaying = false;
+
+function updateAnimationUI() {
+    const status = document.getElementById("animationStatus");
+    const slider = document.getElementById("animationSlider");
+    status.textContent = `${currentFrame} / ${maxFrames} h`;
+    slider.value = currentFrame;
+}
+
+function showFrame(frame) {
+    animationLayers.forEach(layer => map.removeLayer(layer));
+    if (frame >= 0 && frame < animationLayers.length) {
+        map.addLayer(animationLayers[frame]);
+    }
+    currentFrame = frame;
+    updateAnimationUI();
+}
+
+function playStep() {
+    if (!isPlaying) return;
+    if (currentFrame < animationLayers.length - 1) {
+        showFrame(currentFrame + 1);
+    } else {
+        isPlaying = false;
+        clearInterval(animationTimer);
+    }
+}
+
+function toggleAnimation() {
+    if (animationLayers.length === 0) {
+        alert("Luo animaatio ensin.");
+        return;
+    }
+
+    if (isPlaying) {
+        clearInterval(animationTimer);
+        isPlaying = false;
+    } else {
+        isPlaying = true;
+        animationTimer = setInterval(playStep, animationDelay);
+    }
+}
+
+function resetAnimation() {
+    clearInterval(animationTimer);
+    isPlaying = false;
+    showFrame(0);
+}
+
+function jumpToEnd() {
+    clearInterval(animationTimer);
+    isPlaying = false;
+    showFrame(animationLayers.length - 1);
+}
+
+function seekAnimation(value) {
+    clearInterval(animationTimer);
+    isPlaying = false;
+    showFrame(parseInt(value));
+}
+
+    
+
 /*
 function simulateGaussian(lat = selectedLat, lon = selectedLon) {
     if (!lat || !lon) {
