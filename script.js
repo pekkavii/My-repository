@@ -381,7 +381,10 @@ function generateAnimationLayers(lat, lon) {
         alert("Valitse ensin voimala tai paikka kartalta.");
         return;
     }
-    
+    // Poista aiemmat simulaatiopiirrokset
+    plumeLayers.forEach(layer => map.removeLayer(layer));
+    plumeLayers = [];
+
     animationLayers.forEach(layer => map.removeLayer(layer));
     animationLayers = [];
 
