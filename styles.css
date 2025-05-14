@@ -247,4 +247,17 @@ html, body {
     font-size: 14px;
     padding: 8px 16px;
   }
+
+#animationControls {
+    margin-top: 10px;
+    padding: 6px;
+    background: #f8f8f8;
+    border: 1px solid #ccc;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: sans-serif;
+}
+    
+    
 }
