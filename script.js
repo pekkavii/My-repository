@@ -157,7 +157,7 @@ if (selectedOption.value === "custom") {
     }
   });
  
-    document.getElementById("playAnimationButton").addEventListener("click", () => {
+    document.getElementById("resetAnimationButton").addEventListener("click", () => {
     if (selectedLat && selectedLon) {
         updateAnimationUI();
     } else {
@@ -165,13 +165,30 @@ if (selectedOption.value === "custom") {
     }
     });  
 
-    document.getElementById("playAnimationButton").addEventListener("click", () => {
+    document.getElementById("toggleAnimationButton").addEventListener("click", () => {
     if (selectedLat && selectedLon) {
-        updateAnimationUI();
+        toggleAnimationUI();
     } else {
         alert("Valitse ensin voimala.");
     }
     });  
+
+    document.getElementById("jumpToEndButton").addEventListener("click", () => {
+    if (selectedLat && selectedLon) {
+        toggleAnimationUI();
+    } else {
+        alert("Valitse ensin voimala.");
+    }
+    });  
+  /*  
+<div id="animationControls">
+    <button id="resetAnimationButton">⏮</button>
+    <button id="toggleAnimationButton">▶️ / ⏸️</button>
+    <button id="jumpToEndButton">⏭</button>
+    <span id="animationStatus">0 / 24 h</span>
+    <input type="range" id="animationSlider" min="0" max="23" value="0" style="width: 200px;" oninput="seekAnimation(this.value)">
+</div>
+  */  
 
 function simulateEllipse(lat, lon) {
 
