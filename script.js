@@ -163,7 +163,15 @@ if (selectedOption.value === "custom") {
     } else {
         alert("Valitse ensin voimala.");
     }
-  });  
+    });  
+
+    document.getElementById("playAnimationButton").addEventListener("click", () => {
+    if (selectedLat && selectedLon) {
+        updateAnimationUI();
+    } else {
+        alert("Valitse ensin voimala.");
+    }
+    });  
 
 function simulateEllipse(lat, lon) {
 
