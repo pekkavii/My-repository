@@ -180,15 +180,12 @@ if (selectedOption.value === "custom") {
         alert("Valitse ensin voimala.");
     }
     });  
-  /*  
-<div id="animationControls">
-    <button id="resetAnimationButton">⏮</button>
-    <button id="toggleAnimationButton">▶️ / ⏸️</button>
-    <button id="jumpToEndButton">⏭</button>
-    <span id="animationStatus">0 / 24 h</span>
-    <input type="range" id="animationSlider" min="0" max="23" value="0" style="width: 200px;" oninput="seekAnimation(this.value)">
-</div>
-  */  
+    
+window.toggleAnimation = toggleAnimation;
+window.resetAnimation = resetAnimation;
+window.jumpToEnd = jumpToEnd;
+window.seekAnimation = seekAnimation;
+
 
 function simulateEllipse(lat, lon) {
 
