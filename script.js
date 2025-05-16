@@ -180,11 +180,6 @@ if (selectedOption.value === "custom") {
         alert("Valitse ensin voimala.");
     }
     });  
-    
-window.toggleAnimation = toggleAnimation;
-window.resetAnimation = resetAnimation;
-window.jumpToEnd = jumpToEnd;
-window.seekAnimation = seekAnimation;
 
 
 function simulateEllipse(lat, lon) {
