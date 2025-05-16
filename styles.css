@@ -128,6 +128,20 @@ html, body {
     background-color: #0056b3; /* Tummentaa painiketta hoverin aikana */
 }
 
+#animationControls {
+    margin: 10px auto;
+    padding: 6px 12px;
+    background: #f8f8f8;
+    border: 1px solid #ccc;
+    width: fit-content;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: sans-serif;
+    justify-content: center;
+}
+
+
 #legend {
     position: absolute;
     bottom: 10px;
@@ -248,16 +262,6 @@ html, body {
     padding: 8px 16px;
   }
 
-#animationControls {
-    margin-top: 10px;
-    padding: 6px;
-    background: #f8f8f8;
-    border: 1px solid #ccc;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-family: sans-serif;
-}
     
     
 }
