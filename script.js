@@ -27,10 +27,24 @@ document.addEventListener("DOMContentLoaded", function () {
                 select.appendChild(option);
             });
 
+     function clearAnimation() {
+         animationLayers.forEach(layer => map.removeLayer(layer));
+         animationLayers = [];
+         currentFrame = 0;
+         isPlaying = false;
+         clearInterval(animationTimer);
+
+         const slider = document.getElementById("animationSlider");
+         const status = document.getElementById("animationStatus");
+
+         if (slider) slider.value = 0;
+         if (status) status.textContent = "0 / 0 h";
+     }
+           
     select.addEventListener("change", function () {
     let selectedOption = select.options[select.selectedIndex];
-
-        
+    clearAnimation();
+     
     if (!selectedOption.value) {
         selectedLat = undefined;
         selectedLon = undefined;
@@ -120,15 +134,18 @@ if (selectedOption.value === "custom") {
     
     document.getElementById("windDirection").addEventListener("input", function () {
         document.getElementById("useWeatherBasedValues").checked = false;
+        clearAnimation();
     });
 
     document.getElementById("windSpeed").addEventListener("input", function () {
         document.getElementById("useWeatherBasedValues").checked = false;
+        clearAnimation();
     });
 
     document.getElementById("stabilityClass").addEventListener("change", () => {
          document.getElementById("useWeatherBasedValues").checked = false;
-    });
+         clearAnimation();
+   });
 
 
     document.getElementById("simulateButton").addEventListener("click", function () {
