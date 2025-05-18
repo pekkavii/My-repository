@@ -727,7 +727,7 @@ function handleCustomLocation(e) {
     alert(`Voimalan paikka asetettu: ${lat.toFixed(4)}, ${lng.toFixed(4)}.\nVoit nyt suorittaa mallinnuksen.`);
 }
 
-     function clearAnimation() {
+/*     function clearAnimation() {
          animationLayers.forEach(layer => map.removeLayer(layer));
          animationLayers = [];
          currentFrame = 0;
@@ -739,7 +739,26 @@ function handleCustomLocation(e) {
 
          if (slider) slider.value = 0;
          if (status) status.textContent = "0 / 0 h";
-     }
-    
+     }    
+*/
+function clearAnimation() {
+    animationLayers.forEach(layer => map.removeLayer(layer));
+    animationLayers = [];
+    currentFrame = 0;
+    isPlaying = false;
+    clearInterval(animationTimer);
 
+    const slider = document.getElementById("animationSlider");
+    const status = document.getElementById("animationStatus");
+    const controls = document.getElementById("animationControls");
+
+    if (slider) slider.value = 0;
+    if (status) status.textContent = "0 / 0 h";
+    if (controls) controls.style.display = "none"; // Piilota laatikko
+}
+
+
+
+
+    
 });
