@@ -752,11 +752,11 @@ function clearAnimation() {
 
     const slider = document.getElementById("animationSlider");
     const status = document.getElementById("animationStatus");
-    const controls = document.getElementById("animationControls");
+//    const controls = document.getElementById("animationControls");
 
     if (slider) slider.value = 0;
     if (status) status.textContent = "0 / 0 h";
-    if (controls) controls.style.display = "none"; // Piilota laatikko
+//    if (controls) controls.style.display = "none"; // Piilota laatikko
 }
 
 
