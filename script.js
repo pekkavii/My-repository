@@ -152,6 +152,8 @@ if (selectedOption.value === "custom") {
         else if (selectedModel === "gaussian") simulateGaussian(selectedLat, selectedLon);
     });
 
+document.getElementById("animationControls").style.display = "flex";
+    
 document.getElementById("resetAnimationButton").addEventListener("click", resetAnimation);
 document.getElementById("toggleAnimationButton").addEventListener("click", toggleAnimation);
 document.getElementById("jumpToEndButton").addEventListener("click", jumpToEnd);
