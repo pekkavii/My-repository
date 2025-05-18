@@ -26,21 +26,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 option.dataset.details = JSON.stringify(plant);
                 select.appendChild(option);
             });
-
-     function clearAnimation() {
-         animationLayers.forEach(layer => map.removeLayer(layer));
-         animationLayers = [];
-         currentFrame = 0;
-         isPlaying = false;
-         clearInterval(animationTimer);
-
-         const slider = document.getElementById("animationSlider");
-         const status = document.getElementById("animationStatus");
-
-         if (slider) slider.value = 0;
-         if (status) status.textContent = "0 / 0 h";
-     }
-           
+       
     select.addEventListener("change", function () {
     let selectedOption = select.options[select.selectedIndex];
     clearAnimation();
@@ -741,6 +727,19 @@ function handleCustomLocation(e) {
     alert(`Voimalan paikka asetettu: ${lat.toFixed(4)}, ${lng.toFixed(4)}.\nVoit nyt suorittaa mallinnuksen.`);
 }
 
+     function clearAnimation() {
+         animationLayers.forEach(layer => map.removeLayer(layer));
+         animationLayers = [];
+         currentFrame = 0;
+         isPlaying = false;
+         clearInterval(animationTimer);
 
+         const slider = document.getElementById("animationSlider");
+         const status = document.getElementById("animationStatus");
+
+         if (slider) slider.value = 0;
+         if (status) status.textContent = "0 / 0 h";
+     }
+    
 
 });
