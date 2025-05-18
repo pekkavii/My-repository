@@ -147,7 +147,14 @@ if (selectedOption.value === "custom") {
          clearAnimation();
    });
 
+    document.getElementById("stackHeight").addEventListener("input", function () {
+          clearAnimation();
+     });
 
+     document.getElementById("ines").addEventListener("change", function () {
+          clearAnimation();
+     });
+    
     document.getElementById("simulateButton").addEventListener("click", function () {
     
         if (selectedLat === undefined || selectedLon === undefined) {
