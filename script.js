@@ -140,6 +140,30 @@ if (selectedOption.value === "custom") {
      document.getElementById("ines").addEventListener("change", function () {
           clearAnimation();
      });
+
+
+// Viitteet elementteihin
+const controls = document.getElementById('animationControls');
+const simulateBtn = document.getElementById('simulateButton');
+
+// Kuunnellaan radiopainikkeen valintamuutoksia
+document.querySelectorAll('input[name="malli"]').forEach(function(radio) {
+  radio.addEventListener('change', function() {
+    if (this.value === 'Animaatio' && this.checked) {
+      // Animaatio valittu: näytetään ohjauspaneeli, estetään Simuloi
+      controls.style.display = 'block';
+      simulateBtn.disabled = true;
+    } else {
+      // Muu malli valittu: piilotetaan paneeli, otetaan Simuloi käyttöön
+      controls.style.display = 'none';
+      simulateBtn.disabled = false;
+    }
+  });
+});
+
+
+
+
     
     document.getElementById("simulateButton").addEventListener("click", function () {
     
