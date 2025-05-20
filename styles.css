@@ -145,7 +145,10 @@ html, body {
     gap: 10px;
     font-family: sans-serif;
     justify-content: center;
+
+    display: none; /* Oletuksena piilotettu */
 }
+
 
 #legend {
     position: absolute;
