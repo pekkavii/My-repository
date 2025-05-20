@@ -149,7 +149,7 @@ const simulateBtn = document.getElementById('simulateButton');
 // Kuunnellaan radiopainikkeen valintamuutoksia
 document.querySelectorAll('input[name="malli"]').forEach(function(radio) {
   radio.addEventListener('change', function() {
-    if (this.value === 'Animaatio' && this.checked) {
+    if (this.value === 'animaatio' && this.checked) {
       // Animaatio valittu: näytetään ohjauspaneeli, estetään Simuloi
       controls.style.display = 'block';
       simulateBtn.disabled = true;
