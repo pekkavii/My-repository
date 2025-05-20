@@ -148,8 +148,10 @@ if (selectedOption.value === "custom") {
             return;
         }
         const selectedModel = document.querySelector('input[name="model"]:checked').value;
-        if (selectedModel === "ellipse") simulateEllipse(selectedLat, selectedLon);
-        else if (selectedModel === "gaussian") simulateGaussian(selectedLat, selectedLon);
+// Poistettu toistaiseksi ellipsimalli        
+//        if (selectedModel === "ellipse") simulateEllipse(selectedLat, selectedLon);
+//        else 
+        if (selectedModel === "gaussian") simulateGaussian(selectedLat, selectedLon);
     });
 
 //document.getElementById("animationControls").style.display = "flex";
