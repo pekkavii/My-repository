@@ -142,24 +142,6 @@ if (selectedOption.value === "custom") {
      });
 
 
-// Viitteet elementteihin
-const controls = document.getElementById('animationControls');
-const simulateBtn = document.getElementById('simulateButton');
-
-// Kuunnellaan radiopainikkeen valintamuutoksia
-document.querySelectorAll('input[name="malli"]').forEach(function(radio) {
-  radio.addEventListener('change', function() {
-    if (this.value === 'animaatio' && this.checked) {
-      // Animaatio valittu: näytetään ohjauspaneeli, estetään Simuloi
-      controls.style.display = 'block';
-      simulateBtn.disabled = true;
-    } else {
-      // Muu malli valittu: piilotetaan paneeli, otetaan Simuloi käyttöön
-      controls.style.display = 'none';
-      simulateBtn.disabled = false;
-    }
-  });
-});
 
 
 
