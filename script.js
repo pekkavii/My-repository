@@ -15,6 +15,9 @@ document.addEventListener("DOMContentLoaded", function () {
     let plumeLayers = [];
     let customMarker = null;
     let isCustomActive = false;
+    // Turhien animaatioiden laskennan minimointi
+    let animationLayersGenerated = false;
+    let paramsChanged = false;
 
     fetch('power_plants.json')
         .then(response => response.json())
@@ -111,6 +114,8 @@ if (selectedOption.value === "custom") {
             alert("Valitse ensin voimala ennen säätietojen hakua!");
             this.checked = false;
         } else {
+            paramsChanged = true;
+            animationLayersGenerated = false;
             fetchWeather();
         }
     }
@@ -120,24 +125,34 @@ if (selectedOption.value === "custom") {
     
     document.getElementById("windDirection").addEventListener("input", function () {
         document.getElementById("useWeatherBasedValues").checked = false;
+        paramsChanged = true;
+        animationLayersGenerated = false;
         clearAnimation();
     });
 
     document.getElementById("windSpeed").addEventListener("input", function () {
         document.getElementById("useWeatherBasedValues").checked = false;
+        paramsChanged = true;
+        animationLayersGenerated = false;
         clearAnimation();
     });
 
     document.getElementById("stabilityClass").addEventListener("change", () => {
          document.getElementById("useWeatherBasedValues").checked = false;
+         paramsChanged = true;
+         animationLayersGenerated = false;  
          clearAnimation();
    });
 
     document.getElementById("stackHeight").addEventListener("input", function () {
-          clearAnimation();
+        paramsChanged = true;
+        animationLayersGenerated = false;
+        clearAnimation();
      });
 
      document.getElementById("ines").addEventListener("change", function () {
+          paramsChanged = true;
+          animationLayersGenerated = false;
           clearAnimation();
      });
 
