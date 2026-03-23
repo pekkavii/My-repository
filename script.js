@@ -436,7 +436,7 @@ function simulateGaussian(lat, lon) {
 let animationLayers = [];
 let animationTimer = null;
 let currentFrame = 0;
-const maxFrames = 24; // esim. 24 tuntia
+const maxFrames = 48; // esim. 24 tuntia
 const animationDelay = 500; // millisekunteina per ruutu
 
 function generateAnimationLayers(lat, lon) {
