@@ -173,13 +173,6 @@ document.getElementById("toggleAnimationButton").addEventListener("click", toggl
 document.getElementById("jumpToEndButton").addEventListener("click", jumpToEnd);
 
     
-  document.getElementById("generateAnimationLayersButton").addEventListener("click", () => {
-    if (selectedLat && selectedLon) {
-        generateAnimationLayers(selectedLat, selectedLon);
-    } else {
-        alert("Valitse ensin voimala.");
-    }
-  });
   document.getElementById("playAnimationButton").addEventListener("click", () => {
     if (selectedLat && selectedLon) {
         playAnimation();
@@ -502,20 +495,22 @@ function generateAnimationLayers(lat, lon) {
         animationLayers.push(frameGroup);
     }
 
-    alert("Animaatiokerrokset luotu. Paina 'Toista animaatio'.");
+
 }
     
 function playAnimation() {
-    if (animationLayers.length === 0) {
-        alert("Luo animaatio ensin.");
+    if (!selectedLat || !selectedLon) {
+        alert("Valitse ensin voimala.");
         return;
     }
 
+    // Always regenerate layers so they reflect current parameters
+    generateAnimationLayers(selectedLat, selectedLon);
+
     if (animationTimer) clearInterval(animationTimer);
-    animationLayers.forEach(layer => map.removeLayer(layer));
     currentFrame = 0;
 
-    // FIX 1: Show every frame including the last one, keep last frame visible
+    // Show every frame including the last one, keep last frame visible
     animationTimer = setInterval(() => {
         if (currentFrame >= animationLayers.length) {
             clearInterval(animationTimer);
@@ -561,9 +556,14 @@ function playStep() {
 }
 
 function toggleAnimation() {
-    if (animationLayers.length === 0) {
-        alert("Luo animaatio ensin.");
+    if (!selectedLat || !selectedLon) {
+        alert("Valitse ensin voimala.");
         return;
+    }
+
+    // If no layers yet, generate them first
+    if (animationLayers.length === 0) {
+        generateAnimationLayers(selectedLat, selectedLon);
     }
 
     if (isPlaying) {
