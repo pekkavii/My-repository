@@ -172,30 +172,15 @@ document.getElementById("toggleAnimationButton").addEventListener("click", toggl
 document.getElementById("jumpToEndButton").addEventListener("click", jumpToEnd);
 
     
-  
-    document.getElementById("resetAnimationButton").addEventListener("click", () => {
+  document.getElementById("playAnimationButton").addEventListener("click", () => {
     if (selectedLat && selectedLon) {
-        updateAnimationUI();
+        playAnimation();
     } else {
         alert("Valitse ensin voimala.");
     }
-    });  
+  });
+ 
 
-    document.getElementById("toggleAnimationButton").addEventListener("click", () => {
-    if (selectedLat && selectedLon) {
-        toggleAnimationUI();
-    } else {
-        alert("Valitse ensin voimala.");
-    }
-    });  
-
-    document.getElementById("jumpToEndButton").addEventListener("click", () => {
-    if (selectedLat && selectedLon) {
-        toggleAnimationUI();
-    } else {
-        alert("Valitse ensin voimala.");
-    }
-    });  
 
 
 function simulateEllipse(lat, lon) {
