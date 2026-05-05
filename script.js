@@ -163,8 +163,7 @@ if (selectedOption.value === "custom") {
             alert("Valitse ensin voimala!");
             return;
         }
-        const selectedModel = document.querySelector('input[name="model"]:checked').value;
-        if (selectedModel === "gaussian") simulateGaussian(selectedLat, selectedLon);
+        simulateGaussian(selectedLat, selectedLon);
     });
 
     
