@@ -172,14 +172,7 @@ document.getElementById("toggleAnimationButton").addEventListener("click", toggl
 document.getElementById("jumpToEndButton").addEventListener("click", jumpToEnd);
 
     
-  document.getElementById("playAnimationButton").addEventListener("click", () => {
-    if (selectedLat && selectedLon) {
-        playAnimation();
-    } else {
-        alert("Valitse ensin voimala.");
-    }
-  });
- 
+  
     document.getElementById("resetAnimationButton").addEventListener("click", () => {
     if (selectedLat && selectedLon) {
         updateAnimationUI();
