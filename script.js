@@ -452,11 +452,13 @@ function generateAnimationLayers(lat, lon) {
                 let color = dose > 1 ? "black" : dose > 0.1 ? "red" : dose > 0.01 ? "orange" : "green";
 
                 const circle = L.circle([pointLat, pointLon], {
-                    radius: 400,
+                    radius: 500,
                     fillColor: color,
                     color: color,
-                    weight: 0,
-                    fillOpacity: 0.4
+                    weight: 0.5,
+                    opacity: 0.6,
+                    fillOpacity: 0.3
+
                 });
 
                 frameGroup.addLayer(circle);
