@@ -455,8 +455,9 @@ function generateAnimationLayers(lat, lon) {
                     radius: 400,
                     fillColor: color,
                     color: color,
-                    weight: 0,
-                    fillOpacity: 0.4
+                    weight: 0.5,
+                    opacity: 0.6,
+                    fillOpacity: 0.3
                 });
 
                 frameGroup.addLayer(circle);
