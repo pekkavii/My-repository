@@ -285,7 +285,7 @@ function simulateGaussian(lat, lon) {
     const breathingRate = 1.2 / 3600; // m³/s (1.2 m³/h)
     const doseConversionFactor = 2.2e-8; // Sv/Bq (I-131 aikuisella, ICRP-tyyppi)
 
-    const numOffsets = 11; // Montako pistettä sivulle
+    const numOffsets = 15; // Montako pistettä sivulle
     const spreadFactor = 4; // laajenna piirtokaistaa
 
     plumeLayers.forEach(layer => map.removeLayer(layer));
@@ -413,7 +413,7 @@ function generateAnimationLayers(lat, lon) {
     const doseConversionFactor = 2.2e-8;
 
     const numOffsets = 15;
-    const spreadFactor = 3;
+    const spreadFactor = 4;
     const adjustedDirection = (270 - windDirection + 360) % 360;
     const rad = adjustedDirection * Math.PI / 180;
 
@@ -452,12 +452,11 @@ function generateAnimationLayers(lat, lon) {
                 let color = dose > 1 ? "black" : dose > 0.1 ? "red" : dose > 0.01 ? "orange" : "green";
 
                 const circle = L.circle([pointLat, pointLon], {
-                    radius: 500,
+                    radius: 400,
                     fillColor: color,
                     color: color,
-                    weight: 0.5,
-                    opacity: 0.6,
-                    fillOpacity: 0.3
+                    weight: 0,
+                    fillOpacity: 0.4
                 });
 
                 frameGroup.addLayer(circle);
