@@ -494,6 +494,7 @@ function playAnimation() {
         }
         map.addLayer(animationLayers[currentFrame]);
         currentFrame++;
+        updateAnimationUI();
     }, animationDelay);
 }
 
