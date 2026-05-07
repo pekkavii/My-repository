@@ -452,13 +452,11 @@ function generateAnimationLayers(lat, lon) {
                 let color = dose > 1 ? "black" : dose > 0.1 ? "red" : dose > 0.01 ? "orange" : "green";
 
                 const circle = L.circle([pointLat, pointLon], {
-                    radius: 500,
+                    radius: 400,
                     fillColor: color,
                     color: color,
-                    weight: 0.5,
-                    opacity: 0.6,
-                    fillOpacity: 0.3
-
+                    weight: 0,
+                    fillOpacity: 0.4
                 });
 
                 frameGroup.addLayer(circle);
@@ -493,8 +491,8 @@ function playAnimation() {
             map.removeLayer(animationLayers[currentFrame - 1]);
         }
         map.addLayer(animationLayers[currentFrame]);
+        updateAnimationUI(); // show before increment so display is 1-based (frame+1 below)
         currentFrame++;
-        updateAnimationUI();
     }, animationDelay);
 }
 
@@ -504,8 +502,8 @@ let isPlaying = false;
 function updateAnimationUI() {
     const status = document.getElementById("animationStatus");
     const slider = document.getElementById("animationSlider");
-    status.textContent = `${currentFrame} / ${maxFrames} h`;
-    slider.value = currentFrame;
+    status.textContent = `${currentFrame + 1} / ${maxFrames} h`;
+    slider.value = currentFrame + 1;
 }
 
 function showFrame(frame) {
