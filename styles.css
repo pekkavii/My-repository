@@ -8,15 +8,20 @@ html, body {
     padding: 0;
     width: 100%;
     height: 100%;
-    overflow-x: hidden; /* Poistetaan mahdollinen vaakavieritys */
+    overflow-x: hidden;
+    /* iOS Safari fix: use -webkit-fill-available for true full height */
+    min-height: 100vh;
+    min-height: -webkit-fill-available;
 }
 
 #map {
     position: absolute;
     top: 0;
     left: 0;
-    width: 100vw; /* Käytä näkymän leveyttä */
-    height: 100vh; /* Käytä näkymän korkeutta */
+    /* Fix: avoid 100vw which includes scrollbar on iOS and causes overflow */
+    width: 100%;
+    height: 100vh;
+    height: -webkit-fill-available;
     max-width: 100%;
 }
 
@@ -27,16 +32,18 @@ html, body {
 
 #controls {
     position: absolute;
-    top: 50px; /* Siirtää laatikon alemmas*/
+    top: 50px;
     right: 10px;
-    width: 50vw; /* Leveys 50% näytön leveydestä */
-    max-width: 380px; /* Maksimileveys, ettei laatikko veny liikaa */
-/*    background: rgba(255, 255, 255, 0.8); */
+    width: 50vw;
+    max-width: 380px;
+    /* Fix: ensure it never overflows the screen on narrow devices */
+    min-width: 0;
+    box-sizing: border-box;
     background-color: #f8f9fa;
     padding: 16px;
     border-radius: 12px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    z-index: 1000; /* Pitää laatikon kartan päällä */
+    z-index: 1000;
 }
 
 #controls select, 
@@ -45,35 +52,32 @@ html, body {
     display: block;
     margin-bottom: 10px;
     width: 100%;
+    box-sizing: border-box;
 }
 
-/* Jätetään label pois tai tehdään siitä inline erikseen */
 #controls label {
     display: inline-block;
     width: auto;
     margin-bottom: 5px;
 }
 
-
 #controls h1 {
-    font-size: 20px; /* Voit säätää kokoa sopivaksi */
-    margin-bottom: 10px; /* Lisää hieman tilaa otsikon alle */
-    text-align: center; /* Keskittää otsikon */
+    font-size: 20px;
+    margin-bottom: 10px;
+    text-align: center;
     word-wrap: break-word;
 }
 
 #controls.collapsed {
     height: auto;
     overflow: hidden;
-    padding: 10px
+    padding: 10px;
 }
 
-/* Piilota kaikki paitsi toggle-nappi */
 #controls.collapsed > *:not(#toggleControls) {
     display: none;
 }
 
-/* Toggle-napin ulkoasu */
 .toggle-btn {
     background-color: #007bff;
     color: white;
@@ -110,22 +114,22 @@ html, body {
   white-space: nowrap;
 }
 
-
 #simulateButton {
-    background-color: #007bff; /* Sininen tausta */
-    color: white; /* Valkoinen teksti */
+    background-color: #007bff;
+    color: white;
     font-size: 16px;
     font-weight: bold;
     padding: 10px 20px;
     border: none;
     border-radius: 5px;
-    cursor: pointer; /* Vaihtaa hiiren osoittimen kädeksi */
+    cursor: pointer;
     transition: background-color 0.3s;
     width: 100%;
+    box-sizing: border-box;
 }
 
 #simulateButton:hover {
-    background-color: #0056b3; /* Tummentaa painiketta hoverin aikana */
+    background-color: #0056b3;
 }
 
 #animationControls {
@@ -134,7 +138,9 @@ html, body {
     left: 50%;
     transform: translateX(-50%);
     z-index: 1001;
-
+    /* Fix: prevent overflow on narrow screens */
+    max-width: calc(100vw - 20px);
+    box-sizing: border-box;
     margin: 10px auto;
     padding: 6px 12px;
     background: #f8f8f8;
@@ -145,10 +151,14 @@ html, body {
     gap: 10px;
     font-family: sans-serif;
     justify-content: center;
-
-/*    display: none;  Oletuksena piilotettu */
+    flex-wrap: wrap;
 }
 
+/* Fix: slider should not overflow on small screens */
+#animationSlider {
+    max-width: calc(100vw - 200px);
+    min-width: 80px;
+}
 
 #legend {
     position: absolute;
@@ -159,7 +169,8 @@ html, body {
     border-radius: 5px;
     font-size: 14px;
     z-index: 1000;
-    text-align: left; /* Varmistaa tekstin vasemman reunan tasauksen */
+    text-align: left;
+    box-sizing: border-box;
 }
 
 .legend-item {
@@ -172,7 +183,7 @@ html, body {
     width: 15px;
     height: 15px;
     margin-right: 8px;
-    flex-shrink: 0; /* Estää värilaatikoita kutistumasta */
+    flex-shrink: 0;
 }
 
 .blue { background-color: blue; }
@@ -180,7 +191,6 @@ html, body {
 .orange { background-color: orange; }
 .red { background-color: red; }
 .black { background-color: black; }
-
 
 #infoButton {
     position: absolute;
@@ -196,22 +206,22 @@ html, body {
     z-index: 1000;
 }
 
-
 #infoBox {
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 80%; /* Mukautuu eri näyttökokoihin */
-    max-width: 400px; /* Rajoittaa leveyttä */
-    max-height: 70vh; /* Rajoittaa korkeutta */
-    overflow-y: auto; /* Lisää pystysuuntaisen vierityspalkin tarvittaessa */
+    width: 80%;
+    max-width: 400px;
+    max-height: 70vh;
+    overflow-y: auto;
     background: white;
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
     display: none;
     z-index: 1001;
+    box-sizing: border-box;
 }
 
 #infoBox h2 {
@@ -238,7 +248,6 @@ html, body {
     cursor: pointer;
 }
 
-
 #construction-banner {
     position: fixed;
     top: 0;
@@ -250,15 +259,18 @@ html, body {
     font-size: 18px;
     padding: 10px;
     z-index: 1000;
+    box-sizing: border-box;
 }
 
 @media (max-width: 600px) {
   #controls {
-    width: 70vw; /* vie lähes koko ruudun leveyden */
-    right: 5vw; /* vähän tyhjää oikealle */
-    top: 10px; /* vähemmän marginaalia ylhäältä */
-    padding: 15px;
+    width: calc(100vw - 20px); /* full width minus margins */
+    right: 10px;
+    left: 10px;
+    top: 50px;
+    padding: 12px;
     font-size: 14px;
+    max-width: none;
   }
 
   #controls h1 {
@@ -270,6 +282,20 @@ html, body {
     padding: 8px 16px;
   }
 
-    
-    
+  #animationControls {
+    bottom: 20px;
+    gap: 6px;
+    padding: 6px 8px;
+  }
+
+  #animationSlider {
+    width: 120px;
+    min-width: 60px;
+  }
+
+  #legend {
+    font-size: 12px;
+    padding: 6px;
+    bottom: 140px; /* move up above animation controls on mobile */
+  }
 }
