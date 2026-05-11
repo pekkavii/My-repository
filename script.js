@@ -45,7 +45,7 @@ document.addEventListener("DOMContentLoaded", function () {
 if (selectedOption.value === "custom") {
     alert("Tuplaklikkaa kartalta vapaavalintainen voimalan paikka.");
     if (marker) map.removeLayer(marker);
-    if (customMarker) map.removeLayer(customMarker);
+    if (customMarker) { map.removeLayer(customMarker); customMarker = null; }
     plumeLayers.forEach(layer => map.removeLayer(layer));
     plumeLayers = [];
 
@@ -67,7 +67,7 @@ if (selectedOption.value === "custom") {
     }
 
     if (marker) map.removeLayer(marker);
-    if (customMarker) map.removeLayer(customMarker);
+    if (customMarker) { map.removeLayer(customMarker); customMarker = null; }
     plumeLayers.forEach(layer => map.removeLayer(layer));
     plumeLayers = [];
 
