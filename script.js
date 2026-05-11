@@ -1,5 +1,6 @@
 let selectedLat;
 let selectedLon;
+let customMarker = null;
 
 document.addEventListener("DOMContentLoaded", function () {
     // Määrittele kartta ensin!
@@ -12,7 +13,6 @@ document.addEventListener("DOMContentLoaded", function () {
     let select = document.getElementById("powerPlantSelection");
     let marker;
     let plumeLayers = [];
-    let customMarker = null;
     let isCustomActive = false;
     // Turhien animaatioiden laskennan minimointi
     let animationLayersGenerated = false;
