@@ -592,17 +592,34 @@ function fetchWeather() {
                     document.getElementById("windDirection").value = weather.wind_direction_10m;
                     document.getElementById("windSpeed").value = weather.wind_speed_10m;
 
-                    let pasquill = "D";
                     const clouds = weather.cloud_cover;
                     const speed = weather.wind_speed_10m;
+                    const isDay = weather.is_day; // 1 = day, 0 = night
+                    let pasquill = "D"; // default neutral
 
-                    if (clouds < 25) {
-                        if (speed < 2) pasquill = "A";
-                        else if (speed < 3) pasquill = "B";
-                        else pasquill = "C";
-                    } else if (clouds > 75) {
-                        if (speed < 2) pasquill = "E";
-                        else pasquill = "D";
+                    if (isDay) {
+                        // Daytime: driven by solar heating vs wind
+                        if (clouds < 25) {
+                            if (speed < 2) pasquill = "A";
+                            else if (speed < 3) pasquill = "B";
+                            else if (speed < 5) pasquill = "C";
+                            else pasquill = "D";
+                        } else if (clouds < 75) {
+                            if (speed < 3) pasquill = "B";
+                            else if (speed < 5) pasquill = "C";
+                            else pasquill = "D";
+                        } else {
+                            pasquill = "D"; // overcast day -> neutral
+                        }
+                    } else {
+                        // Nighttime: driven by cloud cover (radiative cooling)
+                        if (clouds < 25) {
+                            pasquill = speed < 3 ? "F" : "E";
+                        } else if (clouds < 75) {
+                            pasquill = speed < 3 ? "E" : "D";
+                        } else {
+                            pasquill = "D"; // overcast night -> neutral
+                        }
                     }
                       
                     document.getElementById("stabilityClass").value = pasquill;
