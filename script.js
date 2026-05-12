@@ -297,14 +297,21 @@ function simulateGaussian(lat, lon) {
     for (let x = 500; x <= 500000; x += 1000) {
 
         let σy, σz;
+        // Mixing height cap: limits σz to physically realistic values.
+        // Above the mixing layer the Gaussian model is no longer valid.
+        // Unstable classes (A-B) have deeper mixing layers than stable ones (E-F).
+        const mixingHeight = (stability === "A" || stability === "B") ? 1500
+                           : stability === "C" ? 1200
+                           : stability === "D" ? 800
+                           : 500; // E, F: stable, shallow mixing layer
         switch (stability) {
             case "A":
                 σy = 0.22 * x * Math.pow(1 + 0.0001 * x, -0.5);
-                σz = 0.20 * x;
+                σz = 0.20 * x * Math.pow(1 + 0.0001 * x, -0.5); // dampening added
                 break;
             case "B":
                 σy = 0.16 * x * Math.pow(1 + 0.0001 * x, -0.5);
-                σz = 0.12 * x;
+                σz = 0.12 * x * Math.pow(1 + 0.0001 * x, -0.5); // dampening added
                 break;
             case "C":
                 σy = 0.11 * x * Math.pow(1 + 0.0001 * x, -0.5);
@@ -326,6 +333,7 @@ function simulateGaussian(lat, lon) {
                 σy = 0.08 * x * Math.pow(1 + 0.0001 * x, -0.5);
                 σz = 0.06 * x * Math.pow(1 + 0.0015 * x, -0.5);
         }
+        σz = Math.min(σz, mixingHeight); // cap at mixing layer height
 
         for (let i = -(Math.floor(numOffsets/2)); i <= Math.floor(numOffsets/2); i++) {
   
@@ -422,15 +430,20 @@ function generateAnimationLayers(lat, lon) {
 
         for (let x = 500; x <= 500000; x += 2000) {
             let σy, σz;
+            const mixingHeight = (stability === "A" || stability === "B") ? 1500
+                               : stability === "C" ? 1200
+                               : stability === "D" ? 800
+                               : 500; // E, F
             switch (stability) {
-                case "A": σy = 0.22 * x * Math.pow(1 + 0.0001 * x, -0.5); σz = 0.20 * x; break;
-                case "B": σy = 0.16 * x * Math.pow(1 + 0.0001 * x, -0.5); σz = 0.12 * x; break;
+                case "A": σy = 0.22 * x * Math.pow(1 + 0.0001 * x, -0.5); σz = 0.20 * x * Math.pow(1 + 0.0001 * x, -0.5); break;
+                case "B": σy = 0.16 * x * Math.pow(1 + 0.0001 * x, -0.5); σz = 0.12 * x * Math.pow(1 + 0.0001 * x, -0.5); break;
                 case "C": σy = 0.11 * x * Math.pow(1 + 0.0001 * x, -0.5); σz = 0.08 * x * Math.pow(1 + 0.0015 * x, -0.5); break;
                 case "D": σy = 0.08 * x * Math.pow(1 + 0.0001 * x, -0.5); σz = 0.06 * x * Math.pow(1 + 0.0015 * x, -0.5); break;
                 case "E": σy = 0.06 * x * Math.pow(1 + 0.0001 * x, -0.5); σz = 0.03 * x * Math.pow(1 + 0.0015 * x, -0.5); break;
                 case "F": σy = 0.04 * x * Math.pow(1 + 0.0001 * x, -0.5); σz = 0.016 * x * Math.pow(1 + 0.0015 * x, -0.5); break;
                 default:  σy = 0.08 * x * Math.pow(1 + 0.0001 * x, -0.5); σz = 0.06 * x * Math.pow(1 + 0.0015 * x, -0.5);
             }
+            σz = Math.min(σz, mixingHeight); // cap at mixing layer height
 
             for (let i = -(Math.floor(numOffsets/2)); i <= Math.floor(numOffsets/2); i++) {
                 const y = i * σy * spreadFactor / (numOffsets / 2);
