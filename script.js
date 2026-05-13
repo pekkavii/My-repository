@@ -21,12 +21,25 @@ document.addEventListener("DOMContentLoaded", function () {
     fetch('power_plants.json')
         .then(response => response.json())
         .then(data => {
+            // Group plants by country
+            const byCountry = {};
             data.forEach(plant => {
-                let option = document.createElement("option");
-                option.value = `${plant.lat},${plant.lon}`;
-                option.textContent = `${plant.name} (${plant.country})`;
-                option.dataset.details = JSON.stringify(plant);
-                select.appendChild(option);
+                if (!byCountry[plant.country]) byCountry[plant.country] = [];
+                byCountry[plant.country].push(plant);
+            });
+
+            // Sort countries alphabetically, add grouped options
+            Object.keys(byCountry).sort().forEach(country => {
+                const group = document.createElement("optgroup");
+                group.label = country;
+                byCountry[country].forEach(plant => {
+                    let option = document.createElement("option");
+                    option.value = `${plant.lat},${plant.lon}`;
+                    option.textContent = `${plant.name} (${plant.electrical_power_MW} MW)`;
+                    option.dataset.details = JSON.stringify(plant);
+                    group.appendChild(option);
+                });
+                select.appendChild(group);
             });
        
     select.addEventListener("change", function () {
