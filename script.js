@@ -381,10 +381,11 @@ function simulateGaussian(lat, lon) {
                 const pointLat = lat + (dy / 111);
                 const pointLon = lon + (dx / (111 * Math.cos(lat * Math.PI / 180)));
 
-                let color = "black";
-                if (doseRate_Sv_per_week <= 0.001) color = "green";
-                else if (doseRate_Sv_per_week <= 0.01) color = "orange";
-                else if (doseRate_Sv_per_week <= 0.1) color = "red";
+                let color = "green";
+                if (doseRate_Sv_per_week > 1)    color = "black";
+                else if (doseRate_Sv_per_week > 0.1)  color = "red";
+                else if (doseRate_Sv_per_week > 0.01) color = "orange";
+                // else: 1-10 mSv -> green
 
                 const circle = L.circle([pointLat, pointLon], {
                     radius: 500,
