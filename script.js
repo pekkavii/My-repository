@@ -304,6 +304,42 @@ function simulateGaussian(lat, lon) {
     plumeLayers.forEach(layer => map.removeLayer(layer));
     plumeLayers = [];
 
+    // --- Confidence cone background wedge ---
+    // Fills the entire ±30° fan so there are no empty gaps that could be
+    // misread as "safe" areas. The wedge is drawn before the dose circles
+    // so dose colours always appear on top.
+    (function drawConeBackground() {
+        const coneHalfAngle = 30; // degrees
+        const coneSteps = 30;     // polygon smoothness
+        const maxRangeKm = 500;
+
+        // Find the furthest x where any dose circle was drawn — approximate
+        // by using maxRange directly. We draw the wedge to max range.
+        const wedgePoints = [[lat, lon]]; // tip at source
+
+        for (let s = 0; s <= coneSteps; s++) {
+            const angleDeg = windDirection - coneHalfAngle + (s / coneSteps) * (2 * coneHalfAngle);
+            const adjustedDir = (270 - angleDeg + 360) % 360;
+            const rad = adjustedDir * Math.PI / 180;
+            const dx = maxRangeKm * Math.cos(rad);
+            const dy = maxRangeKm * Math.sin(rad);
+            const pLat = lat + (dy / 111);
+            const pLon = lon + (dx / (111 * Math.cos(lat * Math.PI / 180)));
+            wedgePoints.push([pLat, pLon]);
+        }
+        wedgePoints.push([lat, lon]); // close back to tip
+
+        const wedge = L.polygon(wedgePoints, {
+            color: "gray",
+            weight: 1,
+            opacity: 0.4,
+            fillColor: "yellow",
+            fillOpacity: 0.07  // very subtle — just enough to fill gaps
+        }).addTo(map);
+        wedge.bindPopup("Epävarmuuskartion alue (±30°):<br>Tuuli voi suuntautua tälle alueelle.<br>Säteilyannos riippuu todellisesta tuulen suunnasta.");
+        plumeLayers.push(wedge);
+    })();
+
     // Confidence cone: render centreline + ±15° and ±30° offset plumes.
     // Opacity decreases with angular offset to visualise wind direction uncertainty.
     // ±15°: probability ~60% of actual centreline being within this range
