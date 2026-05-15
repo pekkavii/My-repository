@@ -304,98 +304,110 @@ function simulateGaussian(lat, lon) {
     plumeLayers.forEach(layer => map.removeLayer(layer));
     plumeLayers = [];
 
-    const adjustedDirection = (270 - windDirection + 360) % 360;
-    const rad = adjustedDirection * Math.PI / 180;
+    // Confidence cone: render centreline + ±15° and ±30° offset plumes.
+    // Opacity decreases with angular offset to visualise wind direction uncertainty.
+    // ±15°: probability ~60% of actual centreline being within this range
+    // ±30°: probability ~90% — outer boundary of realistic uncertainty
+    const coneOffsets = [
+        { angleDeg:   0, opacity: 0.35 },  // centreline — full opacity
+        { angleDeg:  15, opacity: 0.20 },  // ±15° inner cone
+        { angleDeg: -15, opacity: 0.20 },
+        { angleDeg:  30, opacity: 0.08 },  // ±30° outer cone
+        { angleDeg: -30, opacity: 0.08 },
+    ];
 
-    for (let x = 500; x <= 500000; x += 1000) {
+    const mixingHeight = (stability === "A" || stability === "B") ? 1500
+                       : stability === "C" ? 1200
+                       : stability === "D" ? 800
+                       : 500;
 
-        let σy, σz;
-        // Mixing height cap: limits σz to physically realistic values.
-        // Above the mixing layer the Gaussian model is no longer valid.
-        // Unstable classes (A-B) have deeper mixing layers than stable ones (E-F).
-        const mixingHeight = (stability === "A" || stability === "B") ? 1500
-                           : stability === "C" ? 1200
-                           : stability === "D" ? 800
-                           : 500; // E, F: stable, shallow mixing layer
-        switch (stability) {
-            case "A":
-                σy = 0.22 * x * Math.pow(1 + 0.0001 * x, -0.5);
-                σz = 0.20 * x * Math.pow(1 + 0.0001 * x, -0.5); // dampening added
-                break;
-            case "B":
-                σy = 0.16 * x * Math.pow(1 + 0.0001 * x, -0.5);
-                σz = 0.12 * x * Math.pow(1 + 0.0001 * x, -0.5); // dampening added
-                break;
-            case "C":
-                σy = 0.11 * x * Math.pow(1 + 0.0001 * x, -0.5);
-                σz = 0.08 * x * Math.pow(1 + 0.0015 * x, -0.5);
-                break;
-            case "D":
-                σy = 0.08 * x * Math.pow(1 + 0.0001 * x, -0.5);
-                σz = 0.06 * x * Math.pow(1 + 0.0015 * x, -0.5);
-                break;
-            case "E":
-                σy = 0.06 * x * Math.pow(1 + 0.0001 * x, -0.5);
-                σz = 0.03 * x * Math.pow(1 + 0.0015 * x, -0.5);
-                break;
-            case "F":
-                σy = 0.04 * x * Math.pow(1 + 0.0001 * x, -0.5);
-                σz = 0.016 * x * Math.pow(1 + 0.0015 * x, -0.5);
-                break;
-            default:
-                σy = 0.08 * x * Math.pow(1 + 0.0001 * x, -0.5);
-                σz = 0.06 * x * Math.pow(1 + 0.0015 * x, -0.5);
+    coneOffsets.forEach(({ angleDeg, opacity }) => {
+
+        const offsetDirection = windDirection + angleDeg;
+        const adjustedDirection = (270 - offsetDirection + 360) % 360;
+        const rad = adjustedDirection * Math.PI / 180;
+
+        for (let x = 500; x <= 500000; x += 1000) {
+
+            let σy, σz;
+            switch (stability) {
+                case "A":
+                    σy = 0.22 * x * Math.pow(1 + 0.0001 * x, -0.5);
+                    σz = 0.20 * x * Math.pow(1 + 0.0001 * x, -0.5);
+                    break;
+                case "B":
+                    σy = 0.16 * x * Math.pow(1 + 0.0001 * x, -0.5);
+                    σz = 0.12 * x * Math.pow(1 + 0.0001 * x, -0.5);
+                    break;
+                case "C":
+                    σy = 0.11 * x * Math.pow(1 + 0.0001 * x, -0.5);
+                    σz = 0.08 * x * Math.pow(1 + 0.0015 * x, -0.5);
+                    break;
+                case "D":
+                    σy = 0.08 * x * Math.pow(1 + 0.0001 * x, -0.5);
+                    σz = 0.06 * x * Math.pow(1 + 0.0015 * x, -0.5);
+                    break;
+                case "E":
+                    σy = 0.06 * x * Math.pow(1 + 0.0001 * x, -0.5);
+                    σz = 0.03 * x * Math.pow(1 + 0.0015 * x, -0.5);
+                    break;
+                case "F":
+                    σy = 0.04 * x * Math.pow(1 + 0.0001 * x, -0.5);
+                    σz = 0.016 * x * Math.pow(1 + 0.0015 * x, -0.5);
+                    break;
+                default:
+                    σy = 0.08 * x * Math.pow(1 + 0.0001 * x, -0.5);
+                    σz = 0.06 * x * Math.pow(1 + 0.0015 * x, -0.5);
+            }
+            σz = Math.min(σz, mixingHeight);
+
+            for (let i = -(Math.floor(numOffsets/2)); i <= Math.floor(numOffsets/2); i++) {
+
+                const y = i * σy * spreadFactor / (numOffsets / 2);
+                const z = 1.5;
+
+                const exp1 = Math.exp(-Math.pow(y / σy, 2) / 2);
+                const exp2 = Math.exp(-Math.pow((z - H) / σz, 2) / 2);
+                const exp3 = Math.exp(-Math.pow((z + H) / σz, 2) / 2);
+
+                const C = (Q / (2 * Math.PI * windSpeed * σy * σz)) * exp1 * (exp2 + exp3);
+
+                const doseRate_Sv_per_week = C * breathingRate * doseConversionFactor * 3600 * 24 * 7;
+                if (doseRate_Sv_per_week * 1e3 < 1) continue;
+
+                const dx = (x / 1000) * Math.cos(rad) - (y / 1000) * Math.sin(rad);
+                const dy = (x / 1000) * Math.sin(rad) + (y / 1000) * Math.cos(rad);
+
+                const pointLat = lat + (dy / 111);
+                const pointLon = lon + (dx / (111 * Math.cos(lat * Math.PI / 180)));
+
+                let color = "black";
+                if (doseRate_Sv_per_week <= 0.001) color = "green";
+                else if (doseRate_Sv_per_week <= 0.01) color = "orange";
+                else if (doseRate_Sv_per_week <= 0.1) color = "red";
+
+                const circle = L.circle([pointLat, pointLon], {
+                    radius: 500,
+                    fillColor: color,
+                    color: color,
+                    weight: 0,
+                    fillOpacity: opacity
+                }).addTo(map);
+
+                // Only attach popup to centreline points to avoid clutter
+                if (angleDeg === 0) {
+                    circle.bindPopup(
+                        `Etäisyys: ${(x/1000).toFixed(1)} km<br>
+                        Poikkeama: ${Math.round(y)} m<br>
+                        Pitoisuus: ${C.toExponential(2)} Bq/m³<br>
+                        Annos viikossa: ${(doseRate_Sv_per_week * 1e3).toFixed(2)} mSv`
+                    );
+                }
+
+                plumeLayers.push(circle);
+            }
         }
-        σz = Math.min(σz, mixingHeight); // cap at mixing layer height
-
-        for (let i = -(Math.floor(numOffsets/2)); i <= Math.floor(numOffsets/2); i++) {
-  
-            const y = i * σy * spreadFactor / (numOffsets / 2);
-
-            const z = 1.5; // mittauskorkeus m
-
-            const exp1 = Math.exp(-Math.pow(y / σy, 2) / 2);
-            const exp2 = Math.exp(-Math.pow((z - H) / σz, 2) / 2);
-            const exp3 = Math.exp(-Math.pow((z + H) / σz, 2) / 2);
-
-            const C = (Q / (2 * Math.PI * windSpeed * σy * σz)) * exp1 * (exp2 + exp3); // Bq/m³
-
-            // Annos viikossa
-            const doseRate_Sv_per_week = C * breathingRate * doseConversionFactor * 3600 * 24 * 7;
-            if (doseRate_Sv_per_week * 1e3 < 1) continue; // ohita jos alle 1 mSv
-
-            const dx = (x / 1000) * Math.cos(rad) - (y / 1000) * Math.sin(rad);
-            const dy = (x / 1000) * Math.sin(rad) + (y / 1000) * Math.cos(rad);
-
-            const pointLat = lat + (dy / 111);
-            const pointLon = lon + (dx / (111 * Math.cos(lat * Math.PI / 180)));
-
-        // Määritä väri annoksen mukaan
-        let color = "blue";
-        if (doseRate_Sv_per_week > 1) color = "black";
-        else if (doseRate_Sv_per_week > 0.1) color = "red";
-        else if (doseRate_Sv_per_week > 0.01) color = "orange";
-        else if (doseRate_Sv_per_week > 0.001) color = "green";
-   
-        const marker = L.circle([pointLat, pointLon], {
-                radius: 500,
-                fillColor: color,
-                color: color,
-                weight: 0.5,
-                opacity: 0.6,
-                fillOpacity: 0.3
-            }).addTo(map);
-            
-            marker.bindPopup(
-                `Etäisyys: ${(x/1000).toFixed(1)} km<br>
-                Poikkeama: ${Math.round(y)} m<br>
-                Pitoisuus: ${C.toExponential(2)} Bq/m³<br>
-                Annos viikossa: ${(doseRate_Sv_per_week * 1e3).toFixed(2)} mSv`
-            );
-
-            plumeLayers.push(marker);
-        }
-    }
+    });
 }
 
 
