@@ -285,24 +285,80 @@ function simulateGaussian(lat, lon) {
 
     // INES-luokan mukainen päästö (TBq -> Bq)
     let ines = parseInt(document.getElementById("ines").value);
+
+    plumeLayers.forEach(layer => map.removeLayer(layer));
+    plumeLayers = [];
+
+    // --- INES 3: only a site-area effect, no environmental release ---
+    if (ines === 3) {
+        const circle = L.circle([lat, lon], {
+            radius: 1000,
+            color: "yellow",
+            weight: 2,
+            fillColor: "yellow",
+            fillOpacity: 0.4
+        }).addTo(map);
+        circle.bindPopup("INES 3 – Vakava poikkeama:<br>Vaikutukset rajoittuvat laitosalueelle.<br>Ympäristöön ei tapahdu merkittävää radioaktiivista päästöä.");
+        plumeLayers.push(circle);
+        return;
+    }
+
+    // --- INES 4: limited local release, protective zone only ---
+    if (ines === 4) {
+        const circle = L.circle([lat, lon], {
+            radius: 5000,
+            color: "orange",
+            weight: 2,
+            fillColor: "orange",
+            fillOpacity: 0.3
+        }).addTo(map);
+        circle.bindPopup("INES 4 – Onnettomuus:<br>Vaikutukset rajoittuvat suojavyöhykkeelle (n. 5 km).<br>Merkittävää ympäristöpäästöä ei odoteta.");
+        plumeLayers.push(circle);
+        return;
+    }
+
+    // --- INES 5-7: full Gaussian plume with confidence cone ---
     let Q_TBq = Math.pow(10, ines - 4) * 10;
-    let Q_tot = Q_TBq * 5 * 1e12; // Bq, IAEAn mukaa INES 7 on tens of thousands TBq, valitaan 50 000
+    let Q_tot = Q_TBq * 5 * 1e12; // Bq
     let Q = Q_tot / 7 / 24 / 3600; // Bq/s viikon ajan
-    
+
     const windSpeed = parseFloat(document.getElementById("windSpeed").value) || 5;
     const windDirection = (parseFloat(document.getElementById("windDirection").value));
     const H = parseFloat(document.getElementById("stackHeight").value) || 100;
     const stability = document.getElementById("stabilityClass").value || "D";
 
-    // Hengitystilavuus ja I-131 annosmuunnoskerroin
-    const breathingRate = 1.2 / 3600; // m³/s (1.2 m³/h)
-    const doseConversionFactor = 2.2e-8; // Sv/Bq (I-131 aikuisella, ICRP-tyyppi)
+    const breathingRate = 1.2 / 3600;
+    const doseConversionFactor = 2.2e-8;
 
-    const numOffsets = 15; // Montako pistettä sivulle
-    const spreadFactor = 4; // laajenna piirtokaistaa
+    const numOffsets = 15;
+    const spreadFactor = 4;
 
-    plumeLayers.forEach(layer => map.removeLayer(layer));
-    plumeLayers = [];
+    // --- Determine max range: furthest x where centreline dose >= 10 mSv ---
+    // Pre-scan the centreline to find the plume extent before drawing anything.
+    const mixingHeight = (stability === "A" || stability === "B") ? 1500
+                       : stability === "C" ? 1200
+                       : stability === "D" ? 800
+                       : 500;
+    let maxRangeKm = 10; // minimum fallback
+    for (let x = 500; x <= 500000; x += 1000) {
+        let σy, σz;
+        switch (stability) {
+            case "A": σy = 0.22*x*Math.pow(1+0.0001*x,-0.5); σz = 0.20*x*Math.pow(1+0.0001*x,-0.5); break;
+            case "B": σy = 0.16*x*Math.pow(1+0.0001*x,-0.5); σz = 0.12*x*Math.pow(1+0.0001*x,-0.5); break;
+            case "C": σy = 0.11*x*Math.pow(1+0.0001*x,-0.5); σz = 0.08*x*Math.pow(1+0.0015*x,-0.5); break;
+            case "D": σy = 0.08*x*Math.pow(1+0.0001*x,-0.5); σz = 0.06*x*Math.pow(1+0.0015*x,-0.5); break;
+            case "E": σy = 0.06*x*Math.pow(1+0.0001*x,-0.5); σz = 0.03*x*Math.pow(1+0.0015*x,-0.5); break;
+            case "F": σy = 0.04*x*Math.pow(1+0.0001*x,-0.5); σz = 0.016*x*Math.pow(1+0.0015*x,-0.5); break;
+            default:  σy = 0.08*x*Math.pow(1+0.0001*x,-0.5); σz = 0.06*x*Math.pow(1+0.0015*x,-0.5);
+        }
+        σz = Math.min(σz, mixingHeight);
+        const C = (Q / (2 * Math.PI * windSpeed * σy * σz)) *
+                  Math.exp(-Math.pow((1.5 + H) / σz, 2) / 2); // centreline y=0
+        const dose = C * breathingRate * doseConversionFactor * 3600 * 24 * 7;
+        if (dose >= 0.01) maxRangeKm = x / 1000; // 10 mSv threshold
+        else break; // dose dropped below threshold, stop scanning
+    }
+    maxRangeKm = Math.min(maxRangeKm, 500); // hard cap at 500 km
 
     // --- Confidence cone background wedge ---
     // Fills the entire ±30° fan so there are no empty gaps that could be
@@ -311,7 +367,7 @@ function simulateGaussian(lat, lon) {
     (function drawConeBackground() {
         const coneHalfAngle = 30; // degrees
         const coneSteps = 30;     // polygon smoothness
-        const maxRangeKm = 500;
+        // maxRangeKm is pre-calculated above based on 10 mSv dose threshold
 
         // Find the furthest x where any dose circle was drawn — approximate
         // by using maxRange directly. We draw the wedge to max range.
@@ -363,7 +419,7 @@ function simulateGaussian(lat, lon) {
         const adjustedDirection = (270 - offsetDirection + 360) % 360;
         const rad = adjustedDirection * Math.PI / 180;
 
-        for (let x = 500; x <= 500000; x += 1000) {
+        for (let x = 500; x <= maxRangeKm * 1000; x += 1000) {
 
             let σy, σz;
             switch (stability) {
