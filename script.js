@@ -408,10 +408,7 @@ function simulateGaussian(lat, lon) {
         { angleDeg: -30, opacity: 0.08 },
     ];
 
-    const mixingHeight = (stability === "A" || stability === "B") ? 1500
-                       : stability === "C" ? 1200
-                       : stability === "D" ? 800
-                       : 500;
+    // mixingHeight already declared above in the pre-scan block
 
     coneOffsets.forEach(({ angleDeg, opacity }) => {
 
