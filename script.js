@@ -358,7 +358,7 @@ function simulateGaussian(lat, lon) {
         if (dose >= 0.001) maxRangeKm = x / 1000; // keep updating to furthest point >= 10 mSv
     }
  //   maxRangeKm = Math.min(maxRangeKm, 500); // hard cap at 500 km
-    maxRangeKm " 500;
+    maxRangeKm = 500;
 
     // --- Confidence cone background wedge ---
     // Fills the entire ±30° fan so there are no empty gaps that could be
