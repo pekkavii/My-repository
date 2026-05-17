@@ -355,7 +355,7 @@ function simulateGaussian(lat, lon) {
         const C = (Q / (2 * Math.PI * windSpeed * σy * σz)) *
                   Math.exp(-Math.pow((1.5 + H) / σz, 2) / 2); // centreline y=0
         const dose = C * breathingRate * doseConversionFactor * 3600 * 24 * 7;
-        if (dose >= 0.01) maxRangeKm = x / 1000; // keep updating to furthest point >= 10 mSv
+        if (dose >= 0.001) maxRangeKm = x / 1000; // keep updating to furthest point >= 10 mSv
     }
     maxRangeKm = Math.min(maxRangeKm, 500); // hard cap at 500 km
 
