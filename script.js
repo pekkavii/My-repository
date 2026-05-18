@@ -469,9 +469,8 @@ function simulateGaussian(lat, lon) {
             fillColor: "yellow",
             fillOpacity: 0.07
         }).addTo(map);
-        wedge.bindPopup("Epävarmuuskartion alue (±30°):<br>Tuuli voi suuntautua tälle alueelle.<br>Säteilyannos riippuu todellisesta tuulen suunnasta.");
-        // Insert wedge at the beginning so it renders beneath the dose circles
-        plumeLayers.unshift(wedge);
+        // No popup — wedge sits on top and would block dose circle popups
+        plumeLayers.push(wedge);
     }
 }
 
