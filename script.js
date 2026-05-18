@@ -361,7 +361,7 @@ function simulateGaussian(lat, lon) {
         const adjustedDirection = (270 - offsetDirection + 360) % 360;
         const rad = adjustedDirection * Math.PI / 180;
 
-        for (let x = 500; x <= maxRangeKm * 1000; x += 1000) {
+        for (let x = 500; x <= 500000; x += 1000) {
 
             let σy, σz;
             switch (stability) {
