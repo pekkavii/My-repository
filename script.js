@@ -333,68 +333,13 @@ function simulateGaussian(lat, lon) {
     const numOffsets = 15;
     const spreadFactor = 4;
 
-    // --- Determine max range: furthest x where centreline dose >= 10 mSv ---
-    // Pre-scan the centreline to find the plume extent before drawing anything.
     const mixingHeight = (stability === "A" || stability === "B") ? 1500
                        : stability === "C" ? 1200
                        : stability === "D" ? 800
                        : 500;
-    let maxRangeKm = 10; // minimum fallback
-    for (let x = 500; x <= 500000; x += 1000) {
-        let σy, σz;
-        switch (stability) {
-            case "A": σy = 0.22*x*Math.pow(1+0.0001*x,-0.5); σz = 0.20*x*Math.pow(1+0.0001*x,-0.5); break;
-            case "B": σy = 0.16*x*Math.pow(1+0.0001*x,-0.5); σz = 0.12*x*Math.pow(1+0.0001*x,-0.5); break;
-            case "C": σy = 0.11*x*Math.pow(1+0.0001*x,-0.5); σz = 0.08*x*Math.pow(1+0.0015*x,-0.5); break;
-            case "D": σy = 0.08*x*Math.pow(1+0.0001*x,-0.5); σz = 0.06*x*Math.pow(1+0.0015*x,-0.5); break;
-            case "E": σy = 0.06*x*Math.pow(1+0.0001*x,-0.5); σz = 0.03*x*Math.pow(1+0.0015*x,-0.5); break;
-            case "F": σy = 0.04*x*Math.pow(1+0.0001*x,-0.5); σz = 0.016*x*Math.pow(1+0.0015*x,-0.5); break;
-            default:  σy = 0.08*x*Math.pow(1+0.0001*x,-0.5); σz = 0.06*x*Math.pow(1+0.0015*x,-0.5);
-        }
-        σz = Math.min(σz, mixingHeight);
-        const C = (Q / (2 * Math.PI * windSpeed * σy * σz)) *
-                  Math.exp(-Math.pow((1.5 + H) / σz, 2) / 2); // centreline y=0
-        const dose = C * breathingRate * doseConversionFactor * 3600 * 24 * 7;
-        if (dose >= 0.001) maxRangeKm = x / 1000; // keep updating to furthest point >= 10 mSv
-    }
- //   maxRangeKm = Math.min(maxRangeKm, 500); // hard cap at 500 km
-    maxRangeKm = 500;
-
-    // --- Confidence cone background wedge ---
-    // Fills the entire ±30° fan so there are no empty gaps that could be
-    // misread as "safe" areas. The wedge is drawn before the dose circles
-    // so dose colours always appear on top.
-    (function drawConeBackground() {
-        const coneHalfAngle = 30; // degrees
-        const coneSteps = 30;     // polygon smoothness
-        // maxRangeKm is pre-calculated above based on 10 mSv dose threshold
-
-        // Find the furthest x where any dose circle was drawn — approximate
-        // by using maxRange directly. We draw the wedge to max range.
-        const wedgePoints = [[lat, lon]]; // tip at source
-
-        for (let s = 0; s <= coneSteps; s++) {
-            const angleDeg = windDirection - coneHalfAngle + (s / coneSteps) * (2 * coneHalfAngle);
-            const adjustedDir = (270 - angleDeg + 360) % 360;
-            const rad = adjustedDir * Math.PI / 180;
-            const dx = maxRangeKm * Math.cos(rad);
-            const dy = maxRangeKm * Math.sin(rad);
-            const pLat = lat + (dy / 111);
-            const pLon = lon + (dx / (111 * Math.cos(lat * Math.PI / 180)));
-            wedgePoints.push([pLat, pLon]);
-        }
-        wedgePoints.push([lat, lon]); // close back to tip
-
-        const wedge = L.polygon(wedgePoints, {
-            color: "gray",
-            weight: 1,
-            opacity: 0.4,
-            fillColor: "yellow",
-            fillOpacity: 0.07  // very subtle — just enough to fill gaps
-        }).addTo(map);
-        wedge.bindPopup("Epävarmuuskartion alue (±30°):<br>Tuuli voi suuntautua tälle alueelle.<br>Säteilyannos riippuu todellisesta tuulen suunnasta.");
-        plumeLayers.push(wedge);
-    })();
+    // Post-scan: actualMaxRangeKm is updated as circles are drawn on the centreline.
+    // The wedge is drawn afterwards to exactly match the actual plume extent.
+    let actualMaxRangeKm = 0;
 
     // Confidence cone: render centreline + ±15° and ±30° offset plumes.
     // Opacity decreases with angular offset to visualise wind direction uncertainty.
@@ -492,12 +437,42 @@ function simulateGaussian(lat, lon) {
                         Pitoisuus: ${C.toExponential(2)} Bq/m³<br>
                         Annos viikossa: ${(doseRate_Sv_per_week * 1e3).toFixed(2)} mSv`
                     );
+                    // Post-scan: track furthest drawn centreline point (y=0 offset)
+                    if (i === 0) actualMaxRangeKm = Math.max(actualMaxRangeKm, x / 1000);
                 }
 
                 plumeLayers.push(circle);
             }
         }
     });
+
+    // --- Post-scan wedge: drawn after dose circles so extent matches actual plume ---
+    if (actualMaxRangeKm > 0) {
+        const coneHalfAngle = 30;
+        const coneSteps = 30;
+        const wedgePoints = [[lat, lon]];
+        for (let s = 0; s <= coneSteps; s++) {
+            const angleDeg = windDirection - coneHalfAngle + (s / coneSteps) * (2 * coneHalfAngle);
+            const adjustedDir = (270 - angleDeg + 360) % 360;
+            const wRad = adjustedDir * Math.PI / 180;
+            const dx = actualMaxRangeKm * Math.cos(wRad);
+            const dy = actualMaxRangeKm * Math.sin(wRad);
+            const pLat = lat + (dy / 111);
+            const pLon = lon + (dx / (111 * Math.cos(lat * Math.PI / 180)));
+            wedgePoints.push([pLat, pLon]);
+        }
+        wedgePoints.push([lat, lon]);
+        const wedge = L.polygon(wedgePoints, {
+            color: "gray",
+            weight: 1,
+            opacity: 0.4,
+            fillColor: "yellow",
+            fillOpacity: 0.07
+        }).addTo(map);
+        wedge.bindPopup("Epävarmuuskartion alue (±30°):<br>Tuuli voi suuntautua tälle alueelle.<br>Säteilyannos riippuu todellisesta tuulen suunnasta.");
+        // Insert wedge at the beginning so it renders beneath the dose circles
+        plumeLayers.unshift(wedge);
+    }
 }
 
 
