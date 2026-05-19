@@ -20,24 +20,24 @@
         "country": "Ruotsi",
         "reactor_type": "3 BWR",
         "electrical_power_MW": 3320,
-        "lat": 60.4033,
-        "lon": 18.1667
+        "lat": 60.4025,
+        "lon": 18.1711
     },
     {
         "name": "Oskarshamn",
         "country": "Ruotsi",
         "reactor_type": "BWR",
         "electrical_power_MW": 1400,
-        "lat": 57.4158,
-        "lon": 16.6672
+        "lat": 57.4128,
+        "lon": 16.6742
     },
     {
         "name": "Ringhals",
         "country": "Ruotsi",
         "reactor_type": "2 PWR",
         "electrical_power_MW": 2240,
-        "lat": 57.25,
-        "lon": 12.11
+        "lat": 57.2583,
+        "lon": 12.1058
     },
     {
         "name": "Barsebäck (suljettu)",
@@ -52,8 +52,8 @@
         "country": "Sveitsi",
         "reactor_type": "BWR",
         "electrical_power_MW": 1220,
-        "lat": 47.6,
-        "lon": 8.1833
+        "lat": 47.6014,
+        "lon": 8.1836
     },
     {
         "name": "Beznau",
@@ -68,8 +68,8 @@
         "country": "Sveitsi",
         "reactor_type": "PWR",
         "electrical_power_MW": 1060,
-        "lat": 47.3667,
-        "lon": 7.9667
+        "lat": 47.3664,
+        "lon": 7.9661
     },
     {
         "name": "Mühleberg (suljettu)",
@@ -260,24 +260,24 @@
         "country": "Alankomaat",
         "reactor_type": "PWR",
         "electrical_power_MW": 512,
-        "lat": 51.4167,
-        "lon": 3.7167
+        "lat": 51.4128,
+        "lon": 3.7197
     },
     {
         "name": "Doel",
         "country": "Belgia",
         "reactor_type": "4 PWR",
         "electrical_power_MW": 4017,
-        "lat": 51.3167,
-        "lon": 4.2667
+        "lat": 51.3253,
+        "lon": 4.2628
     },
     {
         "name": "Tihange",
         "country": "Belgia",
         "reactor_type": "3 PWR",
         "electrical_power_MW": 3006,
-        "lat": 50.5333,
-        "lon": 5.2667
+        "lat": 50.5339,
+        "lon": 5.2706
     },
     {
         "name": "Hinkley Point C",
@@ -333,15 +333,15 @@
         "reactor_type": "2 PWR",
         "electrical_power_MW": 2020,
         "lat": 39.8067,
-        "lon": -5.6983
+        "lon": -5.6981
     },
     {
         "name": "Ascó",
         "country": "Espanja",
         "reactor_type": "2 PWR",
         "electrical_power_MW": 2000,
-        "lat": 41.2,
-        "lon": 0.5667
+        "lat": 41.2003,
+        "lon": 0.5683
     },
     {
         "name": "Cofrentes",
@@ -349,23 +349,23 @@
         "reactor_type": "BWR",
         "electrical_power_MW": 1092,
         "lat": 39.25,
-        "lon": -1.0667
+        "lon": -1.0631
     },
     {
         "name": "Vandellós II",
         "country": "Espanja",
         "reactor_type": "PWR",
         "electrical_power_MW": 1088,
-        "lat": 40.9167,
-        "lon": 0.8833
+        "lat": 40.9514,
+        "lon": 0.8667
     },
     {
         "name": "Trillo",
         "country": "Espanja",
         "reactor_type": "PWR",
         "electrical_power_MW": 1066,
-        "lat": 40.6833,
-        "lon": -2.5833
+        "lat": 40.6872,
+        "lon": -2.5872
     },
     {
         "name": "Dukovany",
@@ -380,8 +380,8 @@
         "country": "Tšekki",
         "reactor_type": "2 VVER-1000",
         "electrical_power_MW": 2160,
-        "lat": 49.2,
-        "lon": 14.3667
+        "lat": 49.1967,
+        "lon": 14.3742
     },
     {
         "name": "Paks",
@@ -412,16 +412,16 @@
         "country": "Romania",
         "reactor_type": "2 CANDU",
         "electrical_power_MW": 1400,
-        "lat": 44.3167,
-        "lon": 28.05
+        "lat": 44.32,
+        "lon": 28.0567
     },
     {
         "name": "Kozloduy",
         "country": "Bulgaria",
         "reactor_type": "2 VVER-1000",
         "electrical_power_MW": 2000,
-        "lat": 43.7958,
-        "lon": 23.7833
+        "lat": 43.7961,
+        "lon": 23.7842
     },
     {
         "name": "Krško",
@@ -444,16 +444,16 @@
         "country": "Venäjä",
         "reactor_type": "4 RBMK + 2 VVER-1200",
         "electrical_power_MW": 5500,
-        "lat": 59.8333,
-        "lon": 29.0833
+        "lat": 59.8317,
+        "lon": 29.0731
     },
     {
         "name": "Kola",
         "country": "Venäjä",
         "reactor_type": "4 VVER-440",
         "electrical_power_MW": 1760,
-        "lat": 67.4667,
-        "lon": 32.5
+        "lat": 67.4656,
+        "lon": 32.4978
     },
     {
         "name": "Kalinin",
@@ -484,8 +484,8 @@
         "country": "Ukraina",
         "reactor_type": "6 VVER-1000",
         "electrical_power_MW": 5700,
-        "lat": 47.5111,
-        "lon": 34.5865
+        "lat": 47.5083,
+        "lon": 34.5864
     },
     {
         "name": "Rivne",
