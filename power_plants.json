@@ -420,7 +420,7 @@
         "country": "Bulgaria",
         "reactor_type": "2 VVER-1000",
         "electrical_power_MW": 2000,
-        "lat": 43.9389,
+        "lat": 43.7961,
         "lon": 23.7842
     },
     {
@@ -428,8 +428,8 @@
         "country": "Slovenia",
         "reactor_type": "PWR",
         "electrical_power_MW": 696,
-        "lat": 45.9388,
-        "lon": 15.5156
+        "lat": 45.8294,
+        "lon": 15.5694
     },
     {
         "name": "Metsamor",
