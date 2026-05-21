@@ -436,8 +436,8 @@
         "country": "Armenia",
         "reactor_type": "2 VVER-440",
         "electrical_power_MW": 800,
-        "lat": 40.1833,
-        "lon": 44.1333
+        "lat": 40.1807,
+        "lon": 44.1477
     },
     {
         "name": "Leningrad",
