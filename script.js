@@ -467,7 +467,7 @@ function simulateGaussian(lat, lon) {
             weight: 1,
             opacity: 0.4,
             fillColor: "yellow",
-            fillOpacity: 0.07,
+            fillOpacity: 0.2,
             interactive: false  // clicks pass through to dose circles below
         }).addTo(map);
         // No popup — wedge sits on top and would block dose circle popups
