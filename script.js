@@ -41,6 +41,33 @@ document.addEventListener("DOMContentLoaded", function () {
                 });
                 select.appendChild(group);
             });
+
+            // Add a small cross marker for every plant on the map
+            // Tapping opens an infobox with plant details
+            const crossIcon = L.divIcon({
+                className: '',
+                html: `<svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+                    <line x1="8" y1="1" x2="8" y2="15" stroke="#cc0000" stroke-width="2.5"/>
+                    <line x1="1" y1="8" x2="15" y2="8" stroke="#cc0000" stroke-width="2.5"/>
+                </svg>`,
+                iconSize: [16, 16],
+                iconAnchor: [8, 8],
+                popupAnchor: [0, -10]
+            });
+
+            data.forEach(plant => {
+                const nppMarker = L.marker([plant.lat, plant.lon], { icon: crossIcon })
+                    .addTo(map);
+                const statusText = plant.electrical_power_MW === 0
+                    ? '<span style="color:gray">(Suljettu)</span>'
+                    : `${plant.electrical_power_MW} MW`;
+                nppMarker.bindPopup(`
+                    <b>${plant.name}</b><br>
+                    <b>Maa:</b> ${plant.country}<br>
+                    <b>Reaktori:</b> ${plant.reactor_type}<br>
+                    <b>Sähköteho:</b> ${statusText}
+                `, { maxWidth: 220 });
+            });
        
     select.addEventListener("change", function () {
     let selectedOption = select.options[select.selectedIndex];
@@ -347,10 +374,10 @@ function simulateGaussian(lat, lon) {
     // ±30°: probability ~90% — outer boundary of realistic uncertainty
     const coneOffsets = [
         { angleDeg:   0, opacity: 0.35 },  // centreline — full opacity
-     //   { angleDeg:  15, opacity: 0.20 },  // ±15° inner cone
-     //   { angleDeg: -15, opacity: 0.20 },
-     //   { angleDeg:  30, opacity: 0.08 },  // ±30° outer cone
-     //    { angleDeg: -30, opacity: 0.08 },
+        { angleDeg:  15, opacity: 0.20 },  // ±15° inner cone
+        { angleDeg: -15, opacity: 0.20 },
+        { angleDeg:  30, opacity: 0.08 },  // ±30° outer cone
+        { angleDeg: -30, opacity: 0.08 },
     ];
 
     // mixingHeight already declared above in the pre-scan block
@@ -467,7 +494,7 @@ function simulateGaussian(lat, lon) {
             weight: 1,
             opacity: 0.4,
             fillColor: "yellow",
-            fillOpacity: 0.2,
+            fillOpacity: 0.07,
             interactive: false  // clicks pass through to dose circles below
         }).addTo(map);
         // No popup — wedge sits on top and would block dose circle popups
