@@ -374,10 +374,10 @@ function simulateGaussian(lat, lon) {
     // ±30°: probability ~90% — outer boundary of realistic uncertainty
     const coneOffsets = [
         { angleDeg:   0, opacity: 0.35 },  // centreline — full opacity
-        { angleDeg:  15, opacity: 0.20 },  // ±15° inner cone
-        { angleDeg: -15, opacity: 0.20 },
-        { angleDeg:  30, opacity: 0.08 },  // ±30° outer cone
-        { angleDeg: -30, opacity: 0.08 },
+   //     { angleDeg:  15, opacity: 0.20 },  // ±15° inner cone
+   //     { angleDeg: -15, opacity: 0.20 },
+   //     { angleDeg:  30, opacity: 0.08 },  // ±30° outer cone
+   //     { angleDeg: -30, opacity: 0.08 },
     ];
 
     // mixingHeight already declared above in the pre-scan block
@@ -494,7 +494,7 @@ function simulateGaussian(lat, lon) {
             weight: 1,
             opacity: 0.4,
             fillColor: "yellow",
-            fillOpacity: 0.07,
+            fillOpacity: 0.2,
             interactive: false  // clicks pass through to dose circles below
         }).addTo(map);
         // No popup — wedge sits on top and would block dose circle popups
