@@ -7,6 +7,13 @@ document.addEventListener("DOMContentLoaded", function () {
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; OpenStreetMap contributors'
     }).addTo(map);
+
+    // Create panes for dose layers so severe doses always render on top
+    // Higher zIndex = rendered on top
+    map.createPane('doseGreen');  map.getPane('doseGreen').style.zIndex  = 410;
+    map.createPane('doseOrange'); map.getPane('doseOrange').style.zIndex = 420;
+    map.createPane('doseRed');    map.getPane('doseRed').style.zIndex    = 430;
+    map.createPane('doseBlack');  map.getPane('doseBlack').style.zIndex  = 440;
     
     let select = document.getElementById("powerPlantSelection");
     let marker;
@@ -39,7 +46,7 @@ document.addEventListener("DOMContentLoaded", function () {
         // frameIndex is 0-based; day = floor(hours / 24), hours start at 1
         const hour = frameIndex + 1;
         const day = Math.floor((hour - 1) / 24);
-        dayDisplay.textContent = `DAY ${day}`;
+        dayDisplay.textContent = `DAY ${day + 1}`;
         dayDisplay.style.display = "block";
     }
 
@@ -364,9 +371,13 @@ document.addEventListener("DOMContentLoaded", function () {
                     else if (doseRate_Sv_per_week > 0.1)  color = "red";
                     else if (doseRate_Sv_per_week > 0.01) color = "orange";
 
+                    const pane = color === "black" ? "doseBlack"
+                                : color === "red"   ? "doseRed"
+                                : color === "orange" ? "doseOrange"
+                                : "doseGreen";
                     const circle = L.circle([pointLat, pointLon], {
                         radius: 500, fillColor: color, color: color,
-                        weight: 0, fillOpacity: opacity
+                        weight: 0, fillOpacity: opacity, pane
                     }).addTo(map);
 
                     if (angleDeg === 0) {
@@ -475,9 +486,13 @@ document.addEventListener("DOMContentLoaded", function () {
                     const pointLon = lon + dx / (111 * Math.cos(lat * Math.PI / 180));
 
                     let color = dose > 1 ? "black" : dose > 0.1 ? "red" : dose > 0.01 ? "orange" : "green";
+                    const pane = color === "black" ? "doseBlack"
+                               : color === "red"   ? "doseRed"
+                               : color === "orange" ? "doseOrange"
+                               : "doseGreen";
                     frameGroup.addLayer(L.circle([pointLat, pointLon], {
                         radius: 400, fillColor: color, color: color,
-                        weight: 0, fillOpacity: 0.4
+                        weight: 0, fillOpacity: 0.4, pane
                     }));
                 }
             }
