@@ -285,6 +285,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
         plumeLayers.forEach(layer => map.removeLayer(layer));
         plumeLayers = [];
+        // Also clear any animation layers so old animation doesn't show under simulation
+        animationLayers.forEach(layer => map.removeLayer(layer));
+        animationLayers = [];
+        clearInterval(animationTimer);
+        isPlaying = false;
 
         // INES 3 — site area only
         if (ines === 3) {
@@ -502,6 +507,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function playAnimation() {
         if (!selectedLat || !selectedLon) { alert("Valitse ensin voimala."); return; }
+        // Clear any static simulation result before starting animation
+        plumeLayers.forEach(layer => map.removeLayer(layer));
+        plumeLayers = [];
         generateAnimationLayers(selectedLat, selectedLon);
         if (animationTimer) clearInterval(animationTimer);
         currentFrame = 0;
@@ -550,7 +558,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function toggleAnimation() {
         if (!selectedLat || !selectedLon) { alert("Valitse ensin voimala."); return; }
-        if (animationLayers.length === 0) generateAnimationLayers(selectedLat, selectedLon);
+        if (animationLayers.length === 0) {
+            // Clear any static simulation result before generating animation
+            plumeLayers.forEach(layer => map.removeLayer(layer));
+            plumeLayers = [];
+            generateAnimationLayers(selectedLat, selectedLon);
+        }
         if (isPlaying) {
             clearInterval(animationTimer);
             isPlaying = false;
