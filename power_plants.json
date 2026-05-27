@@ -92,8 +92,8 @@
         "country": "Ranska",
         "reactor_type": "2 PWR + 1 EPR",
         "electrical_power_MW": 4200,
-        "lat": 49.5167,
-        "lon": -1.8833
+        "lat": 49.5382,
+        "lon": -1.8803
     },
     {
         "name": "Paluel",
@@ -300,8 +300,8 @@
         "country": "Iso-Britannia",
         "reactor_type": "2 AGR",
         "electrical_power_MW": 1364,
-        "lat": 55.9667,
-        "lon": -2.4333
+        "lat": 55.9687,
+        "lon": -2.4085
     },
     {
         "name": "Heysham",
