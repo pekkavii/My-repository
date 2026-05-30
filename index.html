@@ -49,6 +49,17 @@
 
 </select>
 
+<!-- Shown only for custom location -->
+<div id="reactorTypeRow" style="display:none;">
+  <label for="reactorType">Reaktorityyppi:</label>
+  <select id="reactorType" onchange="updateInesOptions()">
+    <option value="mmr">MMR – Micro Modular Reactor (&lt;50 MW, max INES 5)</option>
+    <option value="smr">SMR – Small Modular Reactor (&lt;300 MW, max INES 6)</option>
+    <option value="medium">Keskikokoinen reaktori (~800 MW)</option>
+    <option value="large" selected>Suuri reaktori (~1300 MW)</option>
+  </select>
+</div>
+
 <label for="ines">INES-luokka:</label>
 <select id="ines">
 <option value="3">3 - Vakava poikkeama</option>
