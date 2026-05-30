@@ -110,6 +110,8 @@ document.addEventListener("DOMContentLoaded", function () {
                     if (marker) map.removeLayer(marker);
                     plumeLayers.forEach(layer => map.removeLayer(layer));
                     plumeLayers = [];
+                    document.getElementById("reactorTypeRow").style.display = "none";
+                    Array.from(document.getElementById("ines").options).forEach(opt => opt.disabled = false);
                     return;
                 }
 
@@ -139,17 +141,35 @@ document.addEventListener("DOMContentLoaded", function () {
                 plumeLayers.forEach(layer => map.removeLayer(layer));
                 plumeLayers = [];
 
+                const isClosed = plant.electrical_power_MW === 0;
+
                 marker = L.marker([lat, lon]).addTo(map)
                     .bindPopup(`
                         <b>${plant.name}</b><br>
                         <b>Maa:</b> ${plant.country}<br>
                         <b>Reaktori:</b> ${plant.reactor_type}<br>
-                        <b>Sähköteho:</b> ${plant.electrical_power_MW} MW
+                        <b>Sähköteho:</b> ${isClosed ? '<i>Suljettu</i>' : plant.electrical_power_MW + ' MW'}<br>
+                        ${isClosed ? '<b style="color:gray">Laitos on suljettu. Vain INES 3–4 mahdollinen.</b>' : ''}
                     `).openPopup();
 
                 map.setView([lat, lon], 7);
                 selectedLat = lat;
                 selectedLon = lon;
+
+                // Hide custom reactor type selector for predefined plants
+                document.getElementById("reactorTypeRow").style.display = "none";
+
+                // For closed plants, limit INES to 3-4
+                const inesSelect = document.getElementById("ines");
+                Array.from(inesSelect.options).forEach(opt => {
+                    opt.disabled = isClosed && parseInt(opt.value) > 4;
+                });
+                if (isClosed && parseInt(inesSelect.value) > 4) {
+                    inesSelect.value = "4";
+                } else if (!isClosed) {
+                    // Re-enable all options for operational plants
+                    Array.from(inesSelect.options).forEach(opt => opt.disabled = false);
+                }
 
                 if (document.getElementById("useWeatherBasedValues").checked) {
                     fetchWeather();
@@ -218,6 +238,17 @@ document.addEventListener("DOMContentLoaded", function () {
             alert("Valitse ensin voimala!");
             return;
         }
+
+        // Enforce INES limit based on reactor type
+        const reactorType = document.getElementById("reactorType").value;
+        const ines = parseInt(document.getElementById("ines").value);
+        const maxInes = { "mmr": 5, "smr": 6, "medium": 7, "large": 7, "custom": 7 };
+        const limit = maxInes[reactorType] || 7;
+        if (ines > limit) {
+            alert(`Valittu reaktorityyppi sallii enintään INES ${limit} -onnettomuuden.\nValitse pienempi INES-luokka.`);
+            return;
+        }
+
         hideDayDisplay();
         simulateGaussian(selectedLat, selectedLon);
     });
@@ -594,6 +625,22 @@ document.addEventListener("DOMContentLoaded", function () {
     // Make seekAnimation global so oninput in HTML can reach it
     window.seekAnimation = seekAnimation;
 
+    // Update INES dropdown options based on reactor type
+    function updateInesOptions() {
+        const reactorType = document.getElementById("reactorType").value;
+        const maxInes = { "mmr": 5, "smr": 6, "medium": 7, "large": 7, "custom": 7 };
+        const limit = maxInes[reactorType] || 7;
+        const inesSelect = document.getElementById("ines");
+        Array.from(inesSelect.options).forEach(opt => {
+            opt.disabled = parseInt(opt.value) > limit;
+        });
+        // If currently selected value exceeds limit, reset to limit
+        if (parseInt(inesSelect.value) > limit) {
+            inesSelect.value = String(limit);
+        }
+    }
+    window.updateInesOptions = updateInesOptions;
+
     function clearAnimation() {
         animationLayers.forEach(layer => map.removeLayer(layer));
         animationLayers = [];
@@ -693,7 +740,11 @@ document.addEventListener("DOMContentLoaded", function () {
         selectedLat = lat;
         selectedLon = lng;
         map.setView([lat, lng], 7);
-        alert(`Voimalan paikka asetettu: ${lat.toFixed(4)}, ${lng.toFixed(4)}.\nVoit nyt suorittaa mallinnuksen.`);
+
+        // Update reactor type selector visibility
+        document.getElementById("reactorTypeRow").style.display = "block";
+        updateInesOptions();
+        alert(`Vapaavalintainen paikka asetettu: ${lat.toFixed(4)}, ${lng.toFixed(4)}.\nValitse reaktorityyppi ja suorita mallinnus.`);
     }
 
 });
