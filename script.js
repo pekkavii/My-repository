@@ -156,10 +156,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 selectedLat = lat;
                 selectedLon = lon;
 
-                // Hide custom reactor type selector for predefined plants
+                // Hide custom reactor type selector and reset it for predefined plants
                 document.getElementById("reactorTypeRow").style.display = "none";
+                document.getElementById("reactorType").value = "large"; // reset so INES limits don't linger
 
-                // Reset all INES options first, then apply closed-plant limit if needed
+                // Reset ALL INES options unconditionally, then restrict if closed
                 const inesSelect = document.getElementById("ines");
                 Array.from(inesSelect.options).forEach(opt => opt.disabled = false);
                 if (isClosed) {
@@ -183,6 +184,11 @@ document.addEventListener("DOMContentLoaded", function () {
         toggleBtn.textContent = controls.classList.contains("collapsed")
             ? "Näytä ohjaimet"
             : "Piilota ohjaimet";
+        // When collapsing, remove inline display style from reactorTypeRow
+        // so the CSS collapsed rule can hide it properly
+        if (controls.classList.contains("collapsed")) {
+            document.getElementById("reactorTypeRow").style.display = "";
+        }
     });
 
     document.getElementById("useWeatherBasedValues").addEventListener("change", function () {
