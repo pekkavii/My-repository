@@ -159,16 +159,14 @@ document.addEventListener("DOMContentLoaded", function () {
                 // Hide custom reactor type selector for predefined plants
                 document.getElementById("reactorTypeRow").style.display = "none";
 
-                // For closed plants, limit INES to 3-4
+                // Reset all INES options first, then apply closed-plant limit if needed
                 const inesSelect = document.getElementById("ines");
-                Array.from(inesSelect.options).forEach(opt => {
-                    opt.disabled = isClosed && parseInt(opt.value) > 4;
-                });
-                if (isClosed && parseInt(inesSelect.value) > 4) {
-                    inesSelect.value = "4";
-                } else if (!isClosed) {
-                    // Re-enable all options for operational plants
-                    Array.from(inesSelect.options).forEach(opt => opt.disabled = false);
+                Array.from(inesSelect.options).forEach(opt => opt.disabled = false);
+                if (isClosed) {
+                    Array.from(inesSelect.options).forEach(opt => {
+                        opt.disabled = parseInt(opt.value) > 4;
+                    });
+                    if (parseInt(inesSelect.value) > 4) inesSelect.value = "4";
                 }
 
                 if (document.getElementById("useWeatherBasedValues").checked) {
