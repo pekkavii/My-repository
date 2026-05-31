@@ -8,6 +8,59 @@ document.addEventListener("DOMContentLoaded", function () {
         attribution: '&copy; OpenStreetMap contributors'
     }).addTo(map);
 
+    // --- User location ---
+    let userLocationMarker = null;
+    let userLocationCircle = null;
+
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                const userLat = position.coords.latitude;
+                const userLon = position.coords.longitude;
+                const accuracy = position.coords.accuracy; // metres
+
+                // Blue dot for user location
+                const userIcon = L.divIcon({
+                    className: '',
+                    html: `<div style="
+                        width: 16px; height: 16px;
+                        background: #1a73e8;
+                        border: 3px solid white;
+                        border-radius: 50%;
+                        box-shadow: 0 0 6px rgba(0,0,0,0.4);
+                    "></div>`,
+                    iconSize: [16, 16],
+                    iconAnchor: [8, 8],
+                    popupAnchor: [0, -12]
+                });
+
+                userLocationMarker = L.marker([userLat, userLon], { icon: userIcon })
+                    .addTo(map)
+                    .bindPopup(`
+                        <b>Sijaintisi</b><br>
+                        Lat: ${userLat.toFixed(4)}<br>
+                        Lon: ${userLon.toFixed(4)}<br>
+                        Tarkkuus: ±${Math.round(accuracy)} m
+                    `);
+
+                // Accuracy circle around user location
+                userLocationCircle = L.circle([userLat, userLon], {
+                    radius: accuracy,
+                    color: '#1a73e8',
+                    weight: 1,
+                    fillColor: '#1a73e8',
+                    fillOpacity: 0.1,
+                    interactive: false
+                }).addTo(map);
+            },
+            (error) => {
+                console.log("Sijainti ei saatavilla:", error.message);
+                // Silently fail — user denied or unavailable
+            },
+            { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
+        );
+    }
+
     // Create panes for dose layers so severe doses always render on top
     // Higher zIndex = rendered on top
     map.createPane('doseGreen');  map.getPane('doseGreen').style.zIndex  = 410;
