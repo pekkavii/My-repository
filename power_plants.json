@@ -1,7 +1,7 @@
 [
     {
         "name": "Loviisa",
-        "country": "Suomi",
+        "country": "Finland",
         "reactor_type": "2 VVER-440",
         "electrical_power_MW": 1010,
         "lat": 60.3714,
@@ -9,7 +9,7 @@
     },
     {
         "name": "Olkiluoto",
-        "country": "Suomi",
+        "country": "Finland",
         "reactor_type": "2 BWR + 1 EPR",
         "electrical_power_MW": 3560,
         "lat": 61.2392,
@@ -17,7 +17,7 @@
     },
     {
         "name": "Forsmark",
-        "country": "Ruotsi",
+        "country": "Sweden",
         "reactor_type": "3 BWR",
         "electrical_power_MW": 3320,
         "lat": 60.4025,
@@ -25,7 +25,7 @@
     },
     {
         "name": "Oskarshamn",
-        "country": "Ruotsi",
+        "country": "Sweden",
         "reactor_type": "BWR",
         "electrical_power_MW": 1400,
         "lat": 57.4128,
@@ -33,23 +33,23 @@
     },
     {
         "name": "Ringhals",
-        "country": "Ruotsi",
+        "country": "Sweden",
         "reactor_type": "2 PWR",
         "electrical_power_MW": 2240,
         "lat": 57.2583,
         "lon": 12.1058
     },
     {
-        "name": "Barsebäck (suljettu)",
-        "country": "Ruotsi",
-        "reactor_type": "2 BWR (suljettu)",
+        "name": "Barsebäck (closed)",
+        "country": "Sweden",
+        "reactor_type": "2 BWR (closed)",
         "electrical_power_MW": 0,
         "lat": 55.75,
         "lon": 12.9
     },
     {
         "name": "Leibstadt",
-        "country": "Sveitsi",
+        "country": "Switzerland",
         "reactor_type": "BWR",
         "electrical_power_MW": 1220,
         "lat": 47.6014,
@@ -57,7 +57,7 @@
     },
     {
         "name": "Beznau",
-        "country": "Sveitsi",
+        "country": "Switzerland",
         "reactor_type": "2 PWR",
         "electrical_power_MW": 730,
         "lat": 47.5236,
@@ -65,23 +65,23 @@
     },
     {
         "name": "Gösgen",
-        "country": "Sveitsi",
+        "country": "Switzerland",
         "reactor_type": "PWR",
         "electrical_power_MW": 1060,
         "lat": 47.3664,
         "lon": 7.9661
     },
     {
-        "name": "Mühleberg (suljettu)",
-        "country": "Sveitsi",
-        "reactor_type": "BWR (suljettu)",
+        "name": "Mühleberg (closed)",
+        "country": "Switzerland",
+        "reactor_type": "BWR (closed)",
         "electrical_power_MW": 0,
         "lat": 46.9667,
         "lon": 7.2667
     },
     {
         "name": "Cattenom",
-        "country": "Ranska",
+        "country": "France",
         "reactor_type": "4 PWR",
         "electrical_power_MW": 5448,
         "lat": 49.4,
@@ -89,7 +89,7 @@
     },
     {
         "name": "Flamanville",
-        "country": "Ranska",
+        "country": "France",
         "reactor_type": "2 PWR + 1 EPR",
         "electrical_power_MW": 4200,
         "lat": 49.5382,
@@ -97,7 +97,7 @@
     },
     {
         "name": "Paluel",
-        "country": "Ranska",
+        "country": "France",
         "reactor_type": "4 PWR",
         "electrical_power_MW": 5320,
         "lat": 49.8667,
@@ -105,7 +105,7 @@
     },
     {
         "name": "Gravelines",
-        "country": "Ranska",
+        "country": "France",
         "reactor_type": "6 PWR",
         "electrical_power_MW": 5460,
         "lat": 51.0167,
@@ -113,7 +113,7 @@
     },
     {
         "name": "Blayais",
-        "country": "Ranska",
+        "country": "France",
         "reactor_type": "4 PWR",
         "electrical_power_MW": 3640,
         "lat": 45.25,
@@ -121,7 +121,7 @@
     },
     {
         "name": "Bugey",
-        "country": "Ranska",
+        "country": "France",
         "reactor_type": "4 PWR",
         "electrical_power_MW": 3564,
         "lat": 45.7981,
@@ -129,7 +129,7 @@
     },
     {
         "name": "Chinon",
-        "country": "Ranska",
+        "country": "France",
         "reactor_type": "4 PWR",
         "electrical_power_MW": 3584,
         "lat": 47.2333,
@@ -137,7 +137,7 @@
     },
     {
         "name": "Civaux",
-        "country": "Ranska",
+        "country": "France",
         "reactor_type": "2 PWR",
         "electrical_power_MW": 2990,
         "lat": 46.4597,
@@ -145,7 +145,7 @@
     },
     {
         "name": "Cruas",
-        "country": "Ranska",
+        "country": "France",
         "reactor_type": "4 PWR",
         "electrical_power_MW": 3660,
         "lat": 44.6333,
@@ -153,7 +153,7 @@
     },
     {
         "name": "Dampierre",
-        "country": "Ranska",
+        "country": "France",
         "reactor_type": "4 PWR",
         "electrical_power_MW": 3568,
         "lat": 47.7333,
@@ -161,7 +161,7 @@
     },
     {
         "name": "Golfech",
-        "country": "Ranska",
+        "country": "France",
         "reactor_type": "2 PWR",
         "electrical_power_MW": 2620,
         "lat": 44.1,
@@ -169,7 +169,7 @@
     },
     {
         "name": "Nogent-sur-Seine",
-        "country": "Ranska",
+        "country": "France",
         "reactor_type": "2 PWR",
         "electrical_power_MW": 2620,
         "lat": 48.5167,
@@ -177,7 +177,7 @@
     },
     {
         "name": "Penly",
-        "country": "Ranska",
+        "country": "France",
         "reactor_type": "2 PWR",
         "electrical_power_MW": 2660,
         "lat": 49.9833,
@@ -185,7 +185,7 @@
     },
     {
         "name": "Saint-Alban",
-        "country": "Ranska",
+        "country": "France",
         "reactor_type": "2 PWR",
         "electrical_power_MW": 2660,
         "lat": 45.4333,
@@ -193,7 +193,7 @@
     },
     {
         "name": "Saint-Laurent",
-        "country": "Ranska",
+        "country": "France",
         "reactor_type": "2 PWR",
         "electrical_power_MW": 1830,
         "lat": 47.7167,
@@ -201,63 +201,63 @@
     },
     {
         "name": "Tricastin",
-        "country": "Ranska",
+        "country": "France",
         "reactor_type": "4 PWR",
         "electrical_power_MW": 3660,
         "lat": 44.3333,
         "lon": 4.7333
     },
     {
-        "name": "Brokdorf (suljettu)",
-        "country": "Saksa",
-        "reactor_type": "PWR (suljettu)",
+        "name": "Brokdorf (closed)",
+        "country": "Germany",
+        "reactor_type": "PWR (closed)",
         "electrical_power_MW": 0,
         "lat": 53.8511,
         "lon": 9.3947
     },
     {
-        "name": "Grohnde (suljettu)",
-        "country": "Saksa",
-        "reactor_type": "PWR (suljettu)",
+        "name": "Grohnde (closed)",
+        "country": "Germany",
+        "reactor_type": "PWR (closed)",
         "electrical_power_MW": 0,
         "lat": 52.0333,
         "lon": 9.3833
     },
     {
-        "name": "Gundremmingen (suljettu)",
-        "country": "Saksa",
-        "reactor_type": "2 BWR (suljettu)",
+        "name": "Gundremmingen (closed)",
+        "country": "Germany",
+        "reactor_type": "2 BWR (closed)",
         "electrical_power_MW": 0,
         "lat": 48.5122,
         "lon": 10.4011
     },
     {
-        "name": "Isar (suljettu)",
-        "country": "Saksa",
-        "reactor_type": "2 PWR/BWR (suljettu)",
+        "name": "Isar (closed)",
+        "country": "Germany",
+        "reactor_type": "2 PWR/BWR (closed)",
         "electrical_power_MW": 0,
         "lat": 48.6058,
         "lon": 12.2917
     },
     {
-        "name": "Emsland (suljettu)",
-        "country": "Saksa",
-        "reactor_type": "PWR (suljettu)",
+        "name": "Emsland (closed)",
+        "country": "Germany",
+        "reactor_type": "PWR (closed)",
         "electrical_power_MW": 0,
         "lat": 52.4742,
         "lon": 7.3231
     },
     {
-        "name": "Neckarwestheim (suljettu)",
-        "country": "Saksa",
-        "reactor_type": "2 PWR (suljettu)",
+        "name": "Neckarwestheim (closed)",
+        "country": "Germany",
+        "reactor_type": "2 PWR (closed)",
         "electrical_power_MW": 0,
         "lat": 49.0408,
         "lon": 9.1742
     },
     {
         "name": "Borssele",
-        "country": "Alankomaat",
+        "country": "Netherlands",
         "reactor_type": "PWR",
         "electrical_power_MW": 512,
         "lat": 51.4312,
@@ -265,7 +265,7 @@
     },
     {
         "name": "Doel",
-        "country": "Belgia",
+        "country": "Belgium",
         "reactor_type": "4 PWR",
         "electrical_power_MW": 4017,
         "lat": 51.3253,
@@ -273,7 +273,7 @@
     },
     {
         "name": "Tihange",
-        "country": "Belgia",
+        "country": "Belgium",
         "reactor_type": "3 PWR",
         "electrical_power_MW": 3006,
         "lat": 50.5339,
@@ -281,15 +281,15 @@
     },
     {
         "name": "Hinkley Point C",
-        "country": "Iso-Britannia",
-        "reactor_type": "2 EPR (rakenteilla)",
+        "country": "United Kingdom",
+        "reactor_type": "2 EPR (under construction)",
         "electrical_power_MW": 3260,
         "lat": 51.2078,
         "lon": -3.1333
     },
     {
         "name": "Sizewell B",
-        "country": "Iso-Britannia",
+        "country": "United Kingdom",
         "reactor_type": "PWR",
         "electrical_power_MW": 1198,
         "lat": 52.2083,
@@ -297,7 +297,7 @@
     },
     {
         "name": "Torness",
-        "country": "Iso-Britannia",
+        "country": "United Kingdom",
         "reactor_type": "2 AGR",
         "electrical_power_MW": 1364,
         "lat": 55.9687,
@@ -305,7 +305,7 @@
     },
     {
         "name": "Heysham",
-        "country": "Iso-Britannia",
+        "country": "United Kingdom",
         "reactor_type": "4 AGR",
         "electrical_power_MW": 2400,
         "lat": 54.0292,
@@ -313,23 +313,23 @@
     },
     {
         "name": "Hartlepool",
-        "country": "Iso-Britannia",
+        "country": "United Kingdom",
         "reactor_type": "2 AGR",
         "electrical_power_MW": 1210,
         "lat": 54.6333,
         "lon": -1.1833
     },
     {
-        "name": "Dungeness B (suljettu)",
-        "country": "Iso-Britannia",
-        "reactor_type": "2 AGR (suljettu)",
+        "name": "Dungeness B (closed)",
+        "country": "United Kingdom",
+        "reactor_type": "2 AGR (closed)",
         "electrical_power_MW": 0,
         "lat": 50.9167,
         "lon": 0.9667
     },
     {
         "name": "Almaraz",
-        "country": "Espanja",
+        "country": "Spain",
         "reactor_type": "2 PWR",
         "electrical_power_MW": 2020,
         "lat": 39.8067,
@@ -337,7 +337,7 @@
     },
     {
         "name": "Ascó",
-        "country": "Espanja",
+        "country": "Spain",
         "reactor_type": "2 PWR",
         "electrical_power_MW": 2000,
         "lat": 41.2003,
@@ -345,7 +345,7 @@
     },
     {
         "name": "Cofrentes",
-        "country": "Espanja",
+        "country": "Spain",
         "reactor_type": "BWR",
         "electrical_power_MW": 1092,
         "lat": 39.25,
@@ -353,7 +353,7 @@
     },
     {
         "name": "Vandellós II",
-        "country": "Espanja",
+        "country": "Spain",
         "reactor_type": "PWR",
         "electrical_power_MW": 1088,
         "lat": 40.9514,
@@ -361,7 +361,7 @@
     },
     {
         "name": "Trillo",
-        "country": "Espanja",
+        "country": "Spain",
         "reactor_type": "PWR",
         "electrical_power_MW": 1066,
         "lat": 40.6872,
@@ -369,7 +369,7 @@
     },
     {
         "name": "Dukovany",
-        "country": "Tšekki",
+        "country": "Czech Republic",
         "reactor_type": "4 VVER-440",
         "electrical_power_MW": 2040,
         "lat": 49.0883,
@@ -377,7 +377,7 @@
     },
     {
         "name": "Temelín",
-        "country": "Tšekki",
+        "country": "Czech Republic",
         "reactor_type": "2 VVER-1000",
         "electrical_power_MW": 2160,
         "lat": 49.1967,
@@ -385,7 +385,7 @@
     },
     {
         "name": "Paks",
-        "country": "Unkari",
+        "country": "Hungary",
         "reactor_type": "4 VVER-440",
         "electrical_power_MW": 2000,
         "lat": 46.5736,
@@ -441,7 +441,7 @@
     },
     {
         "name": "Leningrad",
-        "country": "Venäjä",
+        "country": "Russia",
         "reactor_type": "4 RBMK + 2 VVER-1200",
         "electrical_power_MW": 5500,
         "lat": 59.8317,
@@ -449,7 +449,7 @@
     },
     {
         "name": "Kola",
-        "country": "Venäjä",
+        "country": "Russia",
         "reactor_type": "4 VVER-440",
         "electrical_power_MW": 1760,
         "lat": 67.4656,
@@ -457,7 +457,7 @@
     },
     {
         "name": "Kalinin",
-        "country": "Venäjä",
+        "country": "Russia",
         "reactor_type": "4 VVER-1000",
         "electrical_power_MW": 4000,
         "lat": 57.9167,
@@ -465,7 +465,7 @@
     },
     {
         "name": "Smolensk",
-        "country": "Venäjä",
+        "country": "Russia",
         "reactor_type": "3 RBMK",
         "electrical_power_MW": 3000,
         "lat": 54.1667,
@@ -473,7 +473,7 @@
     },
     {
         "name": "Novovoronezh",
-        "country": "Venäjä",
+        "country": "Russia",
         "reactor_type": "2 VVER-440 + 2 VVER-1000 + 2 VVER-1200",
         "electrical_power_MW": 5760,
         "lat": 51.2833,
@@ -481,7 +481,7 @@
     },
     {
         "name": "Zaporižžja",
-        "country": "Ukraina",
+        "country": "Ukraine",
         "reactor_type": "6 VVER-1000",
         "electrical_power_MW": 5700,
         "lat": 47.5083,
@@ -489,7 +489,7 @@
     },
     {
         "name": "Rivne",
-        "country": "Ukraina",
+        "country": "Ukraine",
         "reactor_type": "4 VVER",
         "electrical_power_MW": 2835,
         "lat": 51.3167,
@@ -497,47 +497,47 @@
     },
     {
         "name": "Hmelnytski",
-        "country": "Ukraina",
+        "country": "Ukraine",
         "reactor_type": "2 VVER-1000",
         "electrical_power_MW": 1900,
         "lat": 50.3,
         "lon": 26.65
     },
     {
-        "name": "Etelä-Ukraina",
-        "country": "Ukraina",
+        "name": "South Ukraine",
+        "country": "Ukraine",
         "reactor_type": "3 VVER-1000",
         "electrical_power_MW": 2850,
         "lat": 47.8333,
         "lon": 31.2167
     },
     {
-        "name": "Tšernobyl (suljettu)",
-        "country": "Ukraina",
-        "reactor_type": "4 RBMK (suljettu)",
+        "name": "Chernobyl (closed)",
+        "country": "Ukraine",
+        "reactor_type": "4 RBMK (closed)",
         "electrical_power_MW": 0,
         "lat": 51.3833,
         "lon": 30.0997
     },
     {
-        "name": "Ignalina (suljettu)",
-        "country": "Liettua",
-        "reactor_type": "2 RBMK (suljettu)",
+        "name": "Ignalina (closed)",
+        "country": "Lithuania",
+        "reactor_type": "2 RBMK (closed)",
         "electrical_power_MW": 0,
         "lat": 55.6,
         "lon": 26.5667
     },
     {
-        "name": "Fukushima Daiichi (suljettu)",
-        "country": "Japani",
-        "reactor_type": "6 GE-BWR (suljettu)",
+        "name": "Fukushima Daiichi (closed)",
+        "country": "Japan",
+        "reactor_type": "6 GE-BWR (closed)",
         "electrical_power_MW": 0,
         "lat": 37.4214,
         "lon": 141.0325
     },
     {
         "name": "Fukushima Daini",
-        "country": "Japani",
+        "country": "Japan",
         "reactor_type": "4 BWR",
         "electrical_power_MW": 4400,
         "lat": 37.3167,
