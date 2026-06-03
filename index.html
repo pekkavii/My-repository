@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="fi">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
-    <title>Ydinvoimalaonnettomuusmalli</title>
+    <title>Nuclear Power Plant Accident Model</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
 
@@ -38,67 +38,67 @@
 <div id="construction-banner">🚧 This site is still under construction 🚧</div>
 
 <div id="controls">
-<button id="toggleControls" class="toggle-btn">Piilota ohjaimet</button>
+<button id="toggleControls" class="toggle-btn">Hide controls</button>
   
-<h1>Onnettomuusmalli</h1>
+<h1>Accident Model</h1>
 
-<label for="powerPlantSelection">Valitse ydinvoimala:</label>
+<label for="powerPlantSelection">Select nuclear power plant:</label>
 <select id="powerPlantSelection">
-  <option value="">Valitse voimala...</option>
-  <option value="custom">Valitse voimalan paikka kartalta</option>
+  <option value="">Select a plant...</option>
+  <option value="custom">Set custom location on map</option>
 
 </select>
 
 <!-- Shown only for custom location -->
 <div id="reactorTypeRow" style="display:none;">
-  <label for="reactorType">Reaktorityyppi:</label>
+  <label for="reactorType">Reactor type:</label>
   <select id="reactorType" onchange="updateInesOptions()">
     <option value="mmr">MMR – Micro Modular Reactor (&lt;50 MW, max INES 5)</option>
     <option value="smr">SMR – Small Modular Reactor (&lt;300 MW, max INES 6)</option>
-    <option value="medium">Keskikokoinen reaktori (~800 MW)</option>
-    <option value="large" selected>Suuri reaktori (~1300 MW)</option>
+    <option value="medium">Medium reactor (~800 MW)</option>
+    <option value="large" selected>Large reactor (~1300 MW)</option>
   </select>
 </div>
 
-<label for="ines">INES-luokka:</label>
+<label for="ines">INES class:</label>
 <select id="ines">
-<option value="3">3 - Vakava poikkeama</option>
-<option value="4">4 - Onnettomuus, paikallinen vaikutus</option>
-<option value="5" selected>5 - Onnettomuus, laajempi vaikutus</option>
-<option value="6">6 - Vakava onnettomuus</option>
-<option value="7">7 - Suurin onnettomuus</option>
+<option value="3">3 - Serious incident</option>
+<option value="4">4 - Accident, local impact</option>
+<option value="5" selected>5 - Accident, wider impact</option>
+<option value="6">6 - Serious accident</option>
+<option value="7">7 - Major accident</option>
 </select>
 
 
-<label>Tuulen suunta:</label>
+<label>Wind direction (°):</label>
 <input type="number" id="windDirection" min="0" max="360" value="90">
 
-<label>Tuulen nopeus (m/s):</label>
+<label>Wind speed (m/s):</label>
 <input type="number" min="0" max="20" value="5" id="windSpeed">
 
 
 
-<label for="stackHeight">Päästökorkeus (m):</label>
+<label for="stackHeight">Release height (m):</label>
 <input type="number" id="stackHeight" value="100"><br>
 
-<label for="stabilityClass">Stabiilisuusluokka (A–F):</label>
+<label for="stabilityClass">Stability class (A–F):</label>
 <select id="stabilityClass">
-  <option value="A">A (hyvin epävakaa)</option>
+  <option value="A">A (very unstable)</option>
   <option value="B">B</option>
   <option value="C">C</option>
-  <option value="D" selected>D (neutraali)</option>
+  <option value="D" selected>D (neutral)</option>
   <option value="E">E</option>
-  <option value="F">F (vakaa)</option>
+  <option value="F">F (stable)</option>
 </select><br>
     
 <label>
   <input type="checkbox" id="useWeatherBasedValues">
-  Käytä todellisia säätietoja (open-meteo.com)
+  Use real weather data (open-meteo.com)
 </label>
     
-<button id="simulateButton">Simuloi</button>
+<button id="simulateButton">Simulate</button>
 
-<div id="loadingSpinner" style="display:none;">Haetaan säätietoja...</div>
+<div id="loadingSpinner" style="display:none;">Fetching weather data...</div>
     
 </div>
     
@@ -110,10 +110,10 @@
     <hr style="margin: 6px 0; border-color: #ccc;">
     <div class="legend-item">
         <span class="legend-box" style="background-color: rgba(255,255,0,0.4); border: 1px solid gray;"></span>
-        Epävarmuuskartio ±30°
+        Uncertainty cone ±30°
     </div>
     <div style="font-size: 11px; color: #555; margin-top: 4px; max-width: 140px;">
-        Tuuli voi suuntautua koko kartion alueelle. Annos riippuu todellisesta tuulen suunnasta.
+        Wind may blow anywhere within the cone. Actual dose depends on real wind direction.
     </div>
 </div>
 
@@ -121,41 +121,35 @@
 
 <div id="infoBox">
     <button id="closeInfo">&times;</button>
-    <h2>Ydinvoimalaonnettomuusmalli</h2>
-    <p>Tämä malli havainnollistaa ydinvoimalaonnettomuuden mahdollisia vaikutuksia tuulen ja INES-luokan perusteella.
-        Malli on esittää viikossa kertyvän säteilyannoksen yksilölle,
-        joka oleskelee päästön vaikutusalueella viikon ajan. Valittava onnettomuus on 
-        täysin hypoteettinen, ja radioaktiivisen päästön suuruus on valittu
-        kansainvälisen INES-asteikon luokitusten mukaiseksi. Jos laitokseksi valitaan 
-        hypoteettinen laitos, jolla maksimiseuraukset eivät voi alla suurimpien 
-        INES-luokkien tasoisia, ei tätä päästöä esitetä. </p>
+    <h2>Nuclear Power Plant Accident Model</h2>
+    <p>This model illustrates the potential consequences of a nuclear power plant accident based on wind conditions and INES class.
+        It shows the radiation dose accumulated over one week by an individual remaining in the affected area.
+        The selected accident is entirely hypothetical, and the release magnitude follows the international INES scale classifications.
+        If a hypothetical plant is selected for which the maximum consequences cannot reach the highest INES classes, that release is not shown. </p>
      
-    <h3>INES-luokat</h3>
-    <p>INES (International Nuclear Event Scale) -luokat kuvaavat ydinvoimaonnettomuuksien vakavuutta asteikolla 1–7:</p>
+    <h3>INES Classes</h3>
+    <p>INES (International Nuclear Event Scale) classes describe the severity of nuclear events on a scale of 1–7:</p>
     <ul>
-        <li><b>3–4:</b> Vähäinen riski ympäristölle</li>
-        <li><b>5:</b> Paikallinen vakava vahinko</li>
-        <li><b>6:</b> Laajempi ympäristövaikutus</li>
-        <li><b>7:</b> Suurimittainen onnettomuus (esim. Tšernobyl, Fukushima)</li>
+        <li><b>3–4:</b> Minor risk to the environment</li>
+        <li><b>5:</b> Localised serious damage</li>
+        <li><b>6:</b> Wider environmental impact</li>
+        <li><b>7:</b> Major accident (e.g. Chernobyl, Fukushima)</li>
     </ul>
 
-    <h3>Säteilyannokset</h3>
-    <p>Altistuminen säteilylle voi aiheuttaa terveysvaikutuksia:</p>
+    <h3>Radiation Doses</h3>
+    <p>Radiation exposure may cause health effects:</p>
     <ul>
-        <li><b>1–10 mSv:</b> Ei merkittäviä terveyshaittoja</li>
-        <li><b>10–100 mSv:</b> Pieni lisäriski syövälle</li>
-        <li><b>100+ mSv:</b> Kasvava riski vakaville vaikutuksille</li>
+        <li><b>1–10 mSv:</b> No significant health effects</li>
+        <li><b>10–100 mSv:</b> Small increased cancer risk</li>
+        <li><b>100+ mSv:</b> Growing risk of serious health effects</li>
     </ul>
 
-    <h3>Tärkeää</h3>
-    <p><b>Tämä malli on havainnollistava.</b> Todellisessa onnettomuustilanteessa 
-        tulee aina noudattaa <b>viranomaisten ohjeita.
-        </b>Suojelutoimet ovat toimenpiteitä, joiden tavoitteena on, 
-        että säteilyvaaratilanteessa väestön säteilyaltistus jää mahdollisimman 
-        pieneksi, tilanteesta aiheutuvat muut haitat saadaan pidettyä 
-        mahdollisimman pieninä sekä ihmisten elinolosuhteet ja 
-        yhteiskunnan toiminta saadaan säteilyvaaratilanteen jälkeen 
-        palautettua mahdollisimman normaaleiksi.</p>
+    <h3>Important</h3>
+    <p><b>This model is for illustrative purposes only.</b> In a real emergency situation,
+        always follow <b>official authorities' instructions.</b>
+        Protective actions aim to keep population radiation exposure as low as possible,
+        minimise other harmful effects, and restore normal living conditions
+        and societal function after a radiation emergency.</p>
 </div>
 
 
@@ -164,7 +158,7 @@
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script src="https://rawgit.com/gregallensworth/Leaflet.Ellipse/master/leaflet.ellipse.js"></script>
 
-<!-- Animaatio-ohjaimet -->
+<!-- Animation controls -->
 <div id="animationControls">
     <button id="resetAnimationButton">⏮</button>
     <button id="toggleAnimationButton">▶️ / ⏸️</button>
