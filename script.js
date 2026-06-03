@@ -37,10 +37,10 @@ document.addEventListener("DOMContentLoaded", function () {
                 userLocationMarker = L.marker([userLat, userLon], { icon: userIcon })
                     .addTo(map)
                     .bindPopup(`
-                        <b>Sijaintisi</b><br>
+                        <b>Your location</b><br>
                         Lat: ${userLat.toFixed(4)}<br>
                         Lon: ${userLon.toFixed(4)}<br>
-                        Tarkkuus: ±${Math.round(accuracy)} m
+                        Accuracy: ±${Math.round(accuracy)} m
                     `);
 
                 // Accuracy circle around user location
@@ -54,7 +54,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 }).addTo(map);
             },
             (error) => {
-                console.log("Sijainti ei saatavilla:", error.message);
+                console.log("Location unavailable:", error.message);
                 // Silently fail — user denied or unavailable
             },
             { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
@@ -147,9 +147,9 @@ document.addEventListener("DOMContentLoaded", function () {
                     : `${plant.electrical_power_MW} MW`;
                 nppMarker.bindPopup(`
                     <b>${plant.name}</b><br>
-                    <b>Maa:</b> ${plant.country}<br>
-                    <b>Reaktori:</b> ${plant.reactor_type}<br>
-                    <b>Sähköteho:</b> ${statusText}
+                    <b>Country:</b> ${plant.country}<br>
+                    <b>Reactor:</b> ${plant.reactor_type}<br>
+                    <b>Power:</b> ${statusText}
                 `, { maxWidth: 220 });
             });
        
@@ -169,7 +169,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
 
                 if (selectedOption.value === "custom") {
-                    alert("Tuplaklikkaa kartalta vapaavalintainen voimalan paikka.");
+                    alert("Double-tap on the map to set a custom plant location.");
                     if (marker) map.removeLayer(marker);
                     if (customMarker) { map.removeLayer(customMarker); customMarker = null; }
                     plumeLayers.forEach(layer => map.removeLayer(layer));
@@ -185,7 +185,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 let lon = parseFloat(plant.lon);
 
                 if (isNaN(lat) || isNaN(lon)) {
-                    console.error("Virhe: lat tai lon on NaN!", lat, lon);
+                    console.error("Error: lat or lon is NaN!", lat, lon);
                     return;
                 }
 
@@ -199,10 +199,10 @@ document.addEventListener("DOMContentLoaded", function () {
                 marker = L.marker([lat, lon]).addTo(map)
                     .bindPopup(`
                         <b>${plant.name}</b><br>
-                        <b>Maa:</b> ${plant.country}<br>
-                        <b>Reaktori:</b> ${plant.reactor_type}<br>
-                        <b>Sähköteho:</b> ${isClosed ? '<i>Suljettu</i>' : plant.electrical_power_MW + ' MW'}<br>
-                        ${isClosed ? '<b style="color:gray">Laitos on suljettu. Vain INES 3–4 mahdollinen.</b>' : ''}
+                        <b>Country:</b> ${plant.country}<br>
+                        <b>Reactor:</b> ${plant.reactor_type}<br>
+                        <b>Power:</b> ${isClosed ? '<i>Closed</i>' : plant.electrical_power_MW + ' MW'}<br>
+                        ${isClosed ? '<b style="color:gray">This plant is closed. Only INES 3–4 is applicable.</b>' : ''}
                     `).openPopup();
 
                 map.setView([lat, lon], 7);
@@ -235,8 +235,8 @@ document.addEventListener("DOMContentLoaded", function () {
         controls.classList.toggle("collapsed");
         const toggleBtn = document.getElementById("toggleControls");
         toggleBtn.textContent = controls.classList.contains("collapsed")
-            ? "Näytä ohjaimet"
-            : "Piilota ohjaimet";
+            ? "Show controls"
+            : "Hide controls";
         // When collapsing, remove inline display style from reactorTypeRow
         // so the CSS collapsed rule can hide it properly
         if (controls.classList.contains("collapsed")) {
@@ -247,7 +247,7 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("useWeatherBasedValues").addEventListener("change", function () {
         if (this.checked) {
             if (selectedLat == null || selectedLon == null) {
-                alert("Valitse ensin voimala ennen säätietojen hakua!");
+                alert("Please select a plant before fetching weather data!");
                 this.checked = false;
             } else {
                 paramsChanged = true;
@@ -292,7 +292,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     document.getElementById("simulateButton").addEventListener("click", function () {
         if (selectedLat === undefined || selectedLon === undefined) {
-            alert("Valitse ensin voimala!");
+            alert("Please select a plant first!");
             return;
         }
 
@@ -302,7 +302,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const maxInes = { "mmr": 5, "smr": 6, "medium": 7, "large": 7, "custom": 7 };
         const limit = maxInes[reactorType] || 7;
         if (ines > limit) {
-            alert(`Valittu reaktorityyppi sallii enintään INES ${limit} -onnettomuuden.\nValitse pienempi INES-luokka.`);
+            alert(`The selected reactor type allows a maximum of INES ${limit}.\nPlease select a lower INES class.`);
             return;
         }
 
@@ -385,7 +385,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 radius: 1000, color: "yellow", weight: 2,
                 fillColor: "yellow", fillOpacity: 0.4
             }).addTo(map);
-            circle.bindPopup("INES 3 – Vakava poikkeama:<br>Vaikutukset rajoittuvat laitosalueelle.<br>Ympäristöön ei tapahdu merkittävää radioaktiivista päästöä.");
+            circle.bindPopup("INES 3 – Serious incident:<br>Effects are limited to the plant site.<br>No significant radioactive release to the environment.");
             plumeLayers.push(circle);
             return;
         }
@@ -396,7 +396,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 radius: 5000, color: "orange", weight: 2,
                 fillColor: "orange", fillOpacity: 0.3
             }).addTo(map);
-            circle.bindPopup("INES 4 – Onnettomuus:<br>Vaikutukset rajoittuvat suojavyöhykkeelle (n. 5 km).<br>Merkittävää ympäristöpäästöä ei odoteta.");
+            circle.bindPopup("INES 4 – Accident:<br>Effects limited to the emergency planning zone (~5 km).<br>No significant environmental release expected.");
             plumeLayers.push(circle);
             return;
         }
@@ -475,10 +475,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
                     if (angleDeg === 0) {
                         circle.bindPopup(
-                            `Etäisyys: ${(x/1000).toFixed(1)} km<br>
-                            Poikkeama: ${Math.round(y)} m<br>
-                            Pitoisuus: ${C.toExponential(2)} Bq/m³<br>
-                            Annos viikossa: ${(doseRate_Sv_per_week * 1e3).toFixed(2)} mSv`
+                            `Distance: ${(x/1000).toFixed(1)} km<br>
+                            Lateral offset: ${Math.round(y)} m<br>
+                            Concentration: ${C.toExponential(2)} Bq/m³<br>
+                            Weekly dose: ${(doseRate_Sv_per_week * 1e3).toFixed(2)} mSv`
                         );
                         if (i === 0) actualMaxRangeKm = Math.max(actualMaxRangeKm, x / 1000);
                     }
@@ -521,7 +521,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const animationDelay = 500;
 
     function generateAnimationLayers(lat, lon) {
-        if (!lat || !lon) { alert("Valitse ensin voimala tai paikka kartalta."); return; }
+        if (!lat || !lon) { alert("Please select a plant or set a custom location on the map."); return; }
 
         plumeLayers.forEach(layer => map.removeLayer(layer));
         plumeLayers = [];
@@ -594,7 +594,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function playAnimation() {
-        if (!selectedLat || !selectedLon) { alert("Valitse ensin voimala."); return; }
+        if (!selectedLat || !selectedLon) { alert("Please select a plant first."); return; }
         // Clear any static simulation result before starting animation
         plumeLayers.forEach(layer => map.removeLayer(layer));
         plumeLayers = [];
@@ -645,7 +645,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function toggleAnimation() {
-        if (!selectedLat || !selectedLon) { alert("Valitse ensin voimala."); return; }
+        if (!selectedLat || !selectedLon) { alert("Please select a plant first."); return; }
         if (animationLayers.length === 0) {
             // Clear any static simulation result before generating animation
             plumeLayers.forEach(layer => map.removeLayer(layer));
@@ -720,7 +720,7 @@ document.addEventListener("DOMContentLoaded", function () {
         spinner.style.display = "block";
 
         if (selectedLat == null || selectedLon == null) {
-            alert("Valitse ensin voimala ennen säätietojen hakua!");
+            alert("Please select a plant before fetching weather data!");
             document.getElementById("useWeatherBasedValues").checked = false;
             spinner.style.display = "none";
             return;
@@ -765,8 +765,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
             })
             .catch(err => {
-                console.error("Virhe säätiedoissa:", err);
-                alert("Säätietoja ei voitu hakea");
+                console.error("Weather data error:", err);
+                alert("Weather data could not be retrieved");
                 document.getElementById("useWeatherBasedValues").checked = false;
                 spinner.style.display = "none";
             });
@@ -801,7 +801,7 @@ document.addEventListener("DOMContentLoaded", function () {
         // Update reactor type selector visibility
         document.getElementById("reactorTypeRow").style.display = "block";
         updateInesOptions();
-        alert(`Vapaavalintainen paikka asetettu: ${lat.toFixed(4)}, ${lng.toFixed(4)}.\nValitse reaktorityyppi ja suorita mallinnus.`);
+        alert(`Custom location set: ${lat.toFixed(4)}, ${lng.toFixed(4)}.\nSelect reactor type and run the simulation.`);
     }
 
 });
