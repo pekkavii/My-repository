@@ -60,6 +60,11 @@ html, body {
     box-shadow: 0 2px 6px rgba(0,0,0,0.2);
 }
 
+/* Push Leaflet zoom controls below the construction banner */
+.leaflet-top.leaflet-left {
+    top: 40px !important;
+}
+
 /* ============================================================
    Controls panel
    ============================================================ */
@@ -166,12 +171,16 @@ html, body {
 }
 
 #controls.collapsed {
-    /* When collapsed, fix the panel to right edge so tab stays inside map */
+    /* Fixed to right edge, below banner + zoom buttons */
     position: fixed;
     right: 0;
-    top: 120px; /* below zoom buttons */
+    top: 160px;
     width: auto;
     padding: 0;
+    background: transparent;
+    box-shadow: none;
+    border: none;
+    backdrop-filter: none;
 }
 
 #controls.collapsed #toggleControls {
@@ -496,7 +505,7 @@ html, body {
     }
 
     #controls.collapsed {
-        top: 140px; /* clear Leaflet zoom buttons on iPhone */
+        top: 180px; /* clear banner + zoom buttons on iPhone */
     }
 
     #controls h1 {
