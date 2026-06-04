@@ -6,129 +6,117 @@
     <title>Nuclear Power Plant Accident Model</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
-
     <link rel="icon" type="image/x-icon" href="favicon.ico">
-<style>
-    *, *::before, *::after { box-sizing: border-box; }
-    html, body { 
-        margin: 0; 
-        padding: 0; 
-        width: 100%; 
-        max-width: 100vw;
-        overflow-x: hidden; 
-    }
-</style>
 </head>
-    
+
 <script>
     function adjustMapSize() {
         const map = document.getElementById("map");
-        if (map) {
-            map.style.width = "100%";
-            map.style.maxWidth = "100vw";
-        }
+        if (map) { map.style.width = "100%"; map.style.maxWidth = "100vw"; }
     }
     document.addEventListener("DOMContentLoaded", adjustMapSize);
     window.addEventListener("resize", adjustMapSize);
 </script>
 
-    
+<style>
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; width: 100%; max-width: 100vw; overflow-x: hidden; }
+</style>
+
 <body>
-    
+
 <div id="construction-banner">🚧 This site is still under construction 🚧</div>
 
 <div id="controls">
-<button id="toggleControls" class="toggle-btn">Hide controls</button>
-  
-<h1>Accident Model</h1>
+    <!-- Toggle handle sits as absolute tab on left edge -->
+    <button id="toggleControls" title="Toggle controls">☰</button>
 
-<label for="powerPlantSelection">Select nuclear power plant:</label>
-<select id="powerPlantSelection">
-  <option value="">Select a plant...</option>
-  <option value="custom">Set custom location on map</option>
+    <!-- Header: title + info button -->
+    <div id="controls-header">
+        <h1>Accident Model</h1>
+        <button id="infoButton" title="About this model">i</button>
+    </div>
 
-</select>
+    <label for="powerPlantSelection">Nuclear power plant:</label>
+    <select id="powerPlantSelection">
+        <option value="">Select a plant...</option>
+        <option value="custom">Set custom location on map</option>
+    </select>
 
-<!-- Shown only for custom location -->
-<div id="reactorTypeRow" style="display:none;">
-  <label for="reactorType">Reactor type:</label>
-  <select id="reactorType" onchange="updateInesOptions()">
-    <option value="mmr">MMR – Micro Modular Reactor (&lt;50 MW, max INES 5)</option>
-    <option value="smr">SMR – Small Modular Reactor (&lt;300 MW, max INES 6)</option>
-    <option value="medium">Medium reactor (~800 MW)</option>
-    <option value="large" selected>Large reactor (~1300 MW)</option>
-  </select>
+    <!-- Shown only for custom location -->
+    <div id="reactorTypeRow" style="display:none;">
+        <label for="reactorType">Reactor type:</label>
+        <select id="reactorType" onchange="updateInesOptions()">
+            <option value="mmr">MMR – Micro Modular Reactor (&lt;50 MW, max INES 5)</option>
+            <option value="smr">SMR – Small Modular Reactor (&lt;300 MW, max INES 6)</option>
+            <option value="medium">Medium reactor (~800 MW)</option>
+            <option value="large" selected>Large reactor (~1300 MW)</option>
+        </select>
+    </div>
+
+    <label for="ines">INES class:</label>
+    <select id="ines">
+        <option value="3">3 – Serious incident</option>
+        <option value="4">4 – Accident, local impact</option>
+        <option value="5" selected>5 – Accident, wider impact</option>
+        <option value="6">6 – Serious accident</option>
+        <option value="7">7 – Major accident</option>
+    </select>
+
+    <label for="windDirection">Wind direction (°):</label>
+    <input type="number" id="windDirection" min="0" max="360" value="90">
+
+    <label for="windSpeed">Wind speed (m/s):</label>
+    <input type="number" id="windSpeed" min="0" max="20" value="5">
+
+    <label for="stackHeight">Release height (m):</label>
+    <input type="number" id="stackHeight" value="100">
+
+    <label for="stabilityClass">Stability class (A–F):</label>
+    <select id="stabilityClass">
+        <option value="A">A (very unstable)</option>
+        <option value="B">B</option>
+        <option value="C">C</option>
+        <option value="D" selected>D (neutral)</option>
+        <option value="E">E</option>
+        <option value="F">F (stable)</option>
+    </select>
+
+    <div class="checkbox-row">
+        <input type="checkbox" id="useWeatherBasedValues">
+        <label for="useWeatherBasedValues">Use real weather data (open-meteo.com)</label>
+    </div>
+
+    <button id="simulateButton">Simulate</button>
+    <div id="loadingSpinner" style="display:none;">Fetching weather data...</div>
 </div>
 
-<label for="ines">INES class:</label>
-<select id="ines">
-<option value="3">3 - Serious incident</option>
-<option value="4">4 - Accident, local impact</option>
-<option value="5" selected>5 - Accident, wider impact</option>
-<option value="6">6 - Serious accident</option>
-<option value="7">7 - Major accident</option>
-</select>
-
-
-<label>Wind direction (°):</label>
-<input type="number" id="windDirection" min="0" max="360" value="90">
-
-<label>Wind speed (m/s):</label>
-<input type="number" min="0" max="20" value="5" id="windSpeed">
-
-
-
-<label for="stackHeight">Release height (m):</label>
-<input type="number" id="stackHeight" value="100"><br>
-
-<label for="stabilityClass">Stability class (A–F):</label>
-<select id="stabilityClass">
-  <option value="A">A (very unstable)</option>
-  <option value="B">B</option>
-  <option value="C">C</option>
-  <option value="D" selected>D (neutral)</option>
-  <option value="E">E</option>
-  <option value="F">F (stable)</option>
-</select><br>
-    
-<label>
-  <input type="checkbox" id="useWeatherBasedValues">
-  Use real weather data (open-meteo.com)
-</label>
-    
-<button id="simulateButton">Simulate</button>
-
-<div id="loadingSpinner" style="display:none;">Fetching weather data...</div>
-    
-</div>
-    
+<!-- Legend — bottom left -->
 <div id="legend">
+    <div id="legend-title">Weekly dose</div>
     <div class="legend-item"><span class="legend-box green"></span> 1–10 mSv</div>
     <div class="legend-item"><span class="legend-box orange"></span> 10–100 mSv</div>
-    <div class="legend-item"><span class="legend-box red"></span> 100 mSv - 1 Sv</div>
-    <div class="legend-item"><span class="legend-box black"></span> > 1 Sv</div>
-    <hr style="margin: 6px 0; border-color: #ccc;">
+    <div class="legend-item"><span class="legend-box red"></span> 100 mSv – 1 Sv</div>
+    <div class="legend-item"><span class="legend-box black"></span> &gt; 1 Sv</div>
+    <hr>
     <div class="legend-item">
-        <span class="legend-box" style="background-color: rgba(255,255,0,0.4); border: 1px solid gray;"></span>
-        Uncertainty cone ±30°
+        <span class="legend-cone-box"></span> Uncertainty cone ±30°
     </div>
-    <div style="font-size: 11px; color: #555; margin-top: 4px; max-width: 140px;">
-        Wind may blow anywhere within the cone. Actual dose depends on real wind direction.
-    </div>
+    <div class="legend-note">Wind may blow anywhere within the cone.</div>
 </div>
 
- <button id="infoButton">ℹ Info</button>
-
+<!-- Info modal -->
 <div id="infoBox">
     <button id="closeInfo">&times;</button>
     <h2>Nuclear Power Plant Accident Model</h2>
-    <p>This model illustrates the potential consequences of a nuclear power plant accident based on wind conditions and INES class.
-        It shows the radiation dose accumulated over one week by an individual remaining in the affected area.
-        The selected accident is entirely hypothetical, and the release magnitude follows the international INES scale classifications.
-        If a hypothetical plant is selected for which the maximum consequences cannot reach the highest INES classes, that release is not shown. </p>
-     
+    <p>This model illustrates the potential consequences of a nuclear power plant accident
+        based on wind conditions and INES class. It shows the radiation dose accumulated
+        over one week by an individual remaining in the affected area. The selected accident
+        is entirely hypothetical, and the release magnitude follows the international INES
+        scale classifications.</p>
+
     <h3>INES Classes</h3>
-    <p>INES (International Nuclear Event Scale) classes describe the severity of nuclear events on a scale of 1–7:</p>
+    <p>INES (International Nuclear Event Scale) describes nuclear event severity on a scale of 1–7:</p>
     <ul>
         <li><b>3–4:</b> Minor risk to the environment</li>
         <li><b>5:</b> Localised serious damage</li>
@@ -137,7 +125,6 @@
     </ul>
 
     <h3>Radiation Doses</h3>
-    <p>Radiation exposure may cause health effects:</p>
     <ul>
         <li><b>1–10 mSv:</b> No significant health effects</li>
         <li><b>10–100 mSv:</b> Small increased cancer risk</li>
@@ -145,37 +132,35 @@
     </ul>
 
     <h3>Important</h3>
-    <p><b>This model is for illustrative purposes only.</b> In a real emergency situation,
-        always follow <b>official authorities' instructions.</b>
-        Protective actions aim to keep population radiation exposure as low as possible,
-        minimise other harmful effects, and restore normal living conditions
-        and societal function after a radiation emergency.</p>
+    <p><b>This model is for illustrative purposes only.</b> In a real emergency,
+        always follow <b>official authorities' instructions.</b> Protective actions
+        aim to keep population radiation exposure as low as possible and restore
+        normal living conditions after a radiation emergency.</p>
 </div>
-
 
 <div id="map"></div>
 
-    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-    <script src="https://rawgit.com/gregallensworth/Leaflet.Ellipse/master/leaflet.ellipse.js"></script>
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+<script src="https://rawgit.com/gregallensworth/Leaflet.Ellipse/master/leaflet.ellipse.js"></script>
 
 <!-- Animation controls -->
 <div id="animationControls">
-    <button id="resetAnimationButton">⏮</button>
-    <button id="toggleAnimationButton">▶️ / ⏸️</button>
-    <button id="jumpToEndButton">⏭</button>
+    <button id="resetAnimationButton" title="Reset">⏮</button>
+    <button id="toggleAnimationButton" title="Play / Pause">▶ / ⏸</button>
+    <button id="jumpToEndButton" title="Jump to end">⏭</button>
     <span id="animationStatus">0 / 168 h</span>
-    <input type="range" id="animationSlider" min="0" max="168" value="0" style="width: 200px;" oninput="seekAnimation(this.value)">
+    <input type="range" id="animationSlider" min="0" max="168" value="0"
+           oninput="seekAnimation(this.value)">
 </div>
-    
+
 <script>
-document.getElementById("infoButton").addEventListener("click", function() {
+document.getElementById("infoButton").addEventListener("click", function () {
     document.getElementById("infoBox").style.display = "block";
 });
-
-document.getElementById("closeInfo").addEventListener("click", function() {
+document.getElementById("closeInfo").addEventListener("click", function () {
     document.getElementById("infoBox").style.display = "none";
 });
 </script>
-<script src="script.js"></script>    
+<script src="script.js"></script>
 </body>
 </html>
