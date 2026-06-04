@@ -233,12 +233,10 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("toggleControls").addEventListener("click", () => {
         const controls = document.getElementById("controls");
         controls.classList.toggle("collapsed");
-        const toggleBtn = document.getElementById("toggleControls");
-        toggleBtn.textContent = controls.classList.contains("collapsed")
-            ? "Show controls"
-            : "Hide controls";
-        // When collapsing, remove inline display style from reactorTypeRow
-        // so the CSS collapsed rule can hide it properly
+        // Icon changes direction to hint at open/close state
+        document.getElementById("toggleControls").textContent =
+            controls.classList.contains("collapsed") ? "▶" : "☰";
+        // When collapsing, clear inline display so CSS rule can hide reactorTypeRow
         if (controls.classList.contains("collapsed")) {
             document.getElementById("reactorTypeRow").style.display = "";
         }
