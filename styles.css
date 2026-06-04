@@ -137,7 +137,7 @@ html, body {
     border-radius: 8px 0 0 8px;
     box-shadow: -3px 2px 8px rgba(0,0,0,0.12);
     cursor: pointer;
-    font-size: 16px;
+    font-size: 14px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -165,15 +165,24 @@ html, body {
     display: none;
 }
 
+#controls.collapsed {
+    /* When collapsed, fix the panel to right edge so tab stays inside map */
+    position: fixed;
+    right: 0;
+    top: 120px; /* below zoom buttons */
+    width: auto;
+    padding: 0;
+}
+
 #controls.collapsed #toggleControls {
-    position: absolute;
-    top: 12px;
-    left: 0;
-    border-radius: 0 8px 8px 0;
+    position: static;
+    border-radius: 8px 0 0 8px;
     border: 1px solid rgba(255,255,255,0.6);
-    border-left: none;
-    box-shadow: 3px 2px 8px rgba(0,0,0,0.12);
+    border-right: none;
+    box-shadow: -3px 2px 8px rgba(0,0,0,0.12);
     background: rgba(255, 255, 255, 0.92);
+    left: auto;
+    top: auto;
 }
 
 /* Form elements inside controls */
@@ -484,6 +493,10 @@ html, body {
         top: 36px;
         padding: 12px 14px 14px;
         font-size: 13px;
+    }
+
+    #controls.collapsed {
+        top: 140px; /* clear Leaflet zoom buttons on iPhone */
     }
 
     #controls h1 {
