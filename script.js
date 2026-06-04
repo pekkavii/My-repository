@@ -237,9 +237,16 @@ document.addEventListener("DOMContentLoaded", function () {
         // ▶ when expanded (tab on left edge of panel, invites closing)
         document.getElementById("toggleControls").textContent =
             controls.classList.contains("collapsed") ? "◀" : "▶";
-        // When collapsing, clear inline display so CSS rule can hide reactorTypeRow
+
+        const reactorTypeRow = document.getElementById("reactorTypeRow");
         if (controls.classList.contains("collapsed")) {
-            document.getElementById("reactorTypeRow").style.display = "";
+            // Collapsing: clear inline style so CSS hides the row
+            reactorTypeRow.style.display = "";
+        } else {
+            // Expanding: only show reactorTypeRow if custom location is active
+            // (selectedLat/Lon set but no predefined plant marker)
+            const isCustom = document.getElementById("powerPlantSelection").value === "custom";
+            reactorTypeRow.style.display = isCustom ? "block" : "none";
         }
     });
 
