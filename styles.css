@@ -76,7 +76,7 @@ html, body {
     max-width: 340px;
     min-width: 0;
     padding: 14px 16px 16px;
-    z-index: 1000;
+    z-index: 1050; /* above legend and Leaflet zoom controls */
     background: rgba(255, 255, 255, 0.92);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
@@ -363,7 +363,7 @@ html, body {
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
     border: 1px solid rgba(255, 255, 255, 0.6);
     font-size: 12px;
-    z-index: 1000;
+    z-index: 900; /* below controls panel */
     text-align: left;
 }
 
@@ -505,7 +505,12 @@ html, body {
     }
 
     #controls.collapsed {
-        top: 180px; /* clear banner + zoom buttons on iPhone */
+        top: 190px; /* clear banner + zoom buttons on iPhone */
+    }
+
+    /* Push zoom controls further down on mobile to clear banner */
+    .leaflet-top.leaflet-left {
+        top: 50px !important;
     }
 
     #controls h1 {
