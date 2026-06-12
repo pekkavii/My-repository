@@ -498,16 +498,19 @@ document.addEventListener("DOMContentLoaded", function () {
             const coneHalfAngle = 30;
             const coneSteps = 30;
 
-            // Helper: build wedge polygon points for a given range
+            // Helper: build wedge polygon — same dx/dy formula as dose circles
             function buildWedge(rangeKm) {
                 const pts = [[lat, lon]];
                 for (let s = 0; s <= coneSteps; s++) {
                     const aDeg = windDirection - coneHalfAngle + (s / coneSteps) * (2 * coneHalfAngle);
                     const aDir = (270 - aDeg + 360) % 360;
                     const wR = aDir * Math.PI / 180;
+                    // dx/dy matches the dose circle coordinate formula exactly
+                    const dx = rangeKm * Math.cos(wR);
+                    const dy = rangeKm * Math.sin(wR);
                     pts.push([
-                        lat + rangeKm * Math.sin(wR) / 111,
-                        lon + rangeKm * Math.cos(wR) / (111 * Math.cos(lat * Math.PI / 180))
+                        lat + dy / 111,
+                        lon + dx / (111 * Math.cos(lat * Math.PI / 180))
                     ]);
                 }
                 pts.push([lat, lon]);
