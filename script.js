@@ -493,26 +493,70 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
 
-        // Post-scan wedge
+        // Post-scan wedge: uncertainty cone to 1 mSv boundary
         if (actualMaxRangeKm > 0) {
             const coneHalfAngle = 30;
             const coneSteps = 30;
-            const wedgePoints = [[lat, lon]];
-            for (let s = 0; s <= coneSteps; s++) {
-                const angleDeg = windDirection - coneHalfAngle + (s / coneSteps) * (2 * coneHalfAngle);
-                const adjustedDir = (270 - angleDeg + 360) % 360;
-                const wRad = adjustedDir * Math.PI / 180;
-                const dx = actualMaxRangeKm * Math.cos(wRad);
-                const dy = actualMaxRangeKm * Math.sin(wRad);
-                wedgePoints.push([lat + dy/111, lon + dx/(111*Math.cos(lat*Math.PI/180))]);
+
+            // Helper: build wedge polygon points for a given range
+            function buildWedge(rangeKm) {
+                const pts = [[lat, lon]];
+                for (let s = 0; s <= coneSteps; s++) {
+                    const aDeg = windDirection - coneHalfAngle + (s / coneSteps) * (2 * coneHalfAngle);
+                    const aDir = (270 - aDeg + 360) % 360;
+                    const wR = aDir * Math.PI / 180;
+                    pts.push([
+                        lat + rangeKm * Math.sin(wR) / 111,
+                        lon + rangeKm * Math.cos(wR) / (111 * Math.cos(lat * Math.PI / 180))
+                    ]);
+                }
+                pts.push([lat, lon]);
+                return pts;
             }
-            wedgePoints.push([lat, lon]);
-            const wedge = L.polygon(wedgePoints, {
+
+            // Outer uncertainty cone (yellow)
+            const wedge = L.polygon(buildWedge(actualMaxRangeKm), {
                 color: "gray", weight: 1, opacity: 0.4,
                 fillColor: "yellow", fillOpacity: 0.2,
                 interactive: false
             }).addTo(map);
             plumeLayers.push(wedge);
+
+            // --- Protective measures zone ---
+            // Scan centreline for furthest point where weekly dose >= 10 mSv
+            let protectiveRangeKm = 0;
+            for (let x = 500; x <= 500000; x += 1000) {
+                let σy, σz;
+                switch (stability) {
+                    case "A": σy=0.22*x*Math.pow(1+0.0001*x,-0.5); σz=0.20*x*Math.pow(1+0.0001*x,-0.5); break;
+                    case "B": σy=0.16*x*Math.pow(1+0.0001*x,-0.5); σz=0.12*x*Math.pow(1+0.0001*x,-0.5); break;
+                    case "C": σy=0.11*x*Math.pow(1+0.0001*x,-0.5); σz=0.08*x*Math.pow(1+0.0015*x,-0.5); break;
+                    case "D": σy=0.08*x*Math.pow(1+0.0001*x,-0.5); σz=0.06*x*Math.pow(1+0.0015*x,-0.5); break;
+                    case "E": σy=0.06*x*Math.pow(1+0.0001*x,-0.5); σz=0.03*x*Math.pow(1+0.0015*x,-0.5); break;
+                    case "F": σy=0.04*x*Math.pow(1+0.0001*x,-0.5); σz=0.016*x*Math.pow(1+0.0015*x,-0.5); break;
+                    default:  σy=0.08*x*Math.pow(1+0.0001*x,-0.5); σz=0.06*x*Math.pow(1+0.0015*x,-0.5);
+                }
+                σz = Math.min(σz, mixingHeight);
+                const C = Q / (2 * Math.PI * windSpeed * σy * σz) *
+                          Math.exp(-Math.pow((1.5 + H) / σz, 2) / 2);
+                const dose = C * breathingRate * doseConversionFactor * 3600 * 24 * 7;
+                if (dose >= 0.01) protectiveRangeKm = x / 1000;
+            }
+
+            if (protectiveRangeKm > 0) {
+                const protWedge = L.polygon(buildWedge(protectiveRangeKm), {
+                    color: "#cc2200", weight: 1.5, opacity: 0.7,
+                    fillColor: "#ff4422", fillOpacity: 0.18,
+                    interactive: true
+                }).addTo(map);
+                protWedge.bindPopup(
+                    "<b>⚠ Protective measures recommended</b><br>" +
+                    "Weekly dose may exceed 10 mSv within this zone.<br>" +
+                    "Sheltering, iodine tablets or evacuation<br>" +
+                    "may be advised by authorities."
+                );
+                plumeLayers.push(protWedge);
+            }
         }
     }
 
