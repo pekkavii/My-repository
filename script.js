@@ -526,7 +526,9 @@ document.addEventListener("DOMContentLoaded", function () {
             plumeLayers.push(wedge);
 
             // --- Protective measures zone ---
-            // Scan centreline for furthest point where weekly dose >= 10 mSv
+            // Scan ALL lateral offsets (same as dose circles) to find the true
+            // furthest point where weekly dose >= 10 mSv — centreline alone
+            // underestimates because lateral points extend further.
             let protectiveRangeKm = 0;
             for (let x = 500; x <= 500000; x += 1000) {
                 let σy, σz;
@@ -540,10 +542,17 @@ document.addEventListener("DOMContentLoaded", function () {
                     default:  σy=0.08*x*Math.pow(1+0.0001*x,-0.5); σz=0.06*x*Math.pow(1+0.0015*x,-0.5);
                 }
                 σz = Math.min(σz, mixingHeight);
-                const C = Q / (2 * Math.PI * windSpeed * σy * σz) *
-                          Math.exp(-Math.pow((1.5 + H) / σz, 2) / 2);
-                const dose = C * breathingRate * doseConversionFactor * 3600 * 24 * 7;
-                if (dose >= 0.01) protectiveRangeKm = x / 1000;
+                const z = 1.5;
+                const exp2 = Math.exp(-Math.pow((z - H) / σz, 2) / 2);
+                const exp3 = Math.exp(-Math.pow((z + H) / σz, 2) / 2);
+                // Check all lateral offsets — same as dose circle loop
+                for (let i = -(Math.floor(numOffsets/2)); i <= Math.floor(numOffsets/2); i++) {
+                    const y = i * σy * spreadFactor / (numOffsets / 2);
+                    const exp1 = Math.exp(-Math.pow(y / σy, 2) / 2);
+                    const C = (Q / (2 * Math.PI * windSpeed * σy * σz)) * exp1 * (exp2 + exp3);
+                    const dose = C * breathingRate * doseConversionFactor * 3600 * 24 * 7;
+                    if (dose >= 0.01) protectiveRangeKm = Math.max(protectiveRangeKm, x / 1000);
+                }
             }
 
             if (protectiveRangeKm > 0) {
