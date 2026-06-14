@@ -320,6 +320,13 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("toggleAnimationButton").addEventListener("click", toggleAnimation);
     document.getElementById("jumpToEndButton").addEventListener("click", jumpToEnd);
 
+    // Collapse/expand animation controls bar (frees up map space on small screens)
+    document.getElementById("toggleAnimationControls").addEventListener("click", function () {
+        const bar = document.getElementById("animationControls");
+        bar.classList.toggle("collapsed");
+        this.textContent = bar.classList.contains("collapsed") ? "▲" : "▼";
+    });
+
 
     // -----------------------------------------------------------------------
     // Ellipse model (kept for reference, not currently used in UI)
@@ -605,51 +612,62 @@ document.addEventListener("DOMContentLoaded", function () {
         const spreadFactor = 4;
         const adjustedDirection = (270 - windDirection + 360) % 360;
         const rad = adjustedDirection * Math.PI / 180;
+        const mixingHeight = (stability === "A" || stability === "B") ? 1500
+                           : stability === "C" ? 1200
+                           : stability === "D" ? 800 : 500;
 
+        // --- Precompute geometry once (identical grid to simulateGaussian) ---
+        // C (concentration factor) and lat/lon do not depend on hour,
+        // only the accumulated dose does. Precomputing avoids redoing the
+        // trig for every one of the 168 frames.
+        const points = [];
+        for (let x = 500; x <= 500000; x += 1000) {
+            let σy, σz;
+            switch (stability) {
+                case "A": σy = 0.22*x*Math.pow(1+0.0001*x,-0.5); σz = 0.20*x*Math.pow(1+0.0001*x,-0.5); break;
+                case "B": σy = 0.16*x*Math.pow(1+0.0001*x,-0.5); σz = 0.12*x*Math.pow(1+0.0001*x,-0.5); break;
+                case "C": σy = 0.11*x*Math.pow(1+0.0001*x,-0.5); σz = 0.08*x*Math.pow(1+0.0015*x,-0.5); break;
+                case "D": σy = 0.08*x*Math.pow(1+0.0001*x,-0.5); σz = 0.06*x*Math.pow(1+0.0015*x,-0.5); break;
+                case "E": σy = 0.06*x*Math.pow(1+0.0001*x,-0.5); σz = 0.03*x*Math.pow(1+0.0015*x,-0.5); break;
+                case "F": σy = 0.04*x*Math.pow(1+0.0001*x,-0.5); σz = 0.016*x*Math.pow(1+0.0015*x,-0.5); break;
+                default:  σy = 0.08*x*Math.pow(1+0.0001*x,-0.5); σz = 0.06*x*Math.pow(1+0.0015*x,-0.5);
+            }
+            σz = Math.min(σz, mixingHeight);
+
+            for (let i = -(Math.floor(numOffsets/2)); i <= Math.floor(numOffsets/2); i++) {
+                const y = i * σy * spreadFactor / (numOffsets / 2);
+                const z = 1.5;
+                const exp1 = Math.exp(-Math.pow(y / σy, 2) / 2);
+                const exp2 = Math.exp(-Math.pow((z - H) / σz, 2) / 2);
+                const exp3 = Math.exp(-Math.pow((z + H) / σz, 2) / 2);
+                const C = (Q / (2 * Math.PI * windSpeed * σy * σz)) * exp1 * (exp2 + exp3);
+
+                const dx = (x/1000)*Math.cos(rad) - (y/1000)*Math.sin(rad);
+                const dy = (x/1000)*Math.sin(rad) + (y/1000)*Math.cos(rad);
+                const pointLat = lat + dy / 111;
+                const pointLon = lon + dx / (111 * Math.cos(lat * Math.PI / 180));
+
+                points.push({ pointLat, pointLon, C });
+            }
+        }
+
+        // --- Build one frame per hour using the precomputed points ---
         for (let hour = 1; hour <= maxFrames; hour++) {
             const frameGroup = L.layerGroup();
 
-            for (let x = 500; x <= 500000; x += 2000) {
-                const mixingHeight = (stability === "A" || stability === "B") ? 1500
-                                   : stability === "C" ? 1200
-                                   : stability === "D" ? 800 : 500;
-                let σy, σz;
-                switch (stability) {
-                    case "A": σy = 0.22*x*Math.pow(1+0.0001*x,-0.5); σz = 0.20*x*Math.pow(1+0.0001*x,-0.5); break;
-                    case "B": σy = 0.16*x*Math.pow(1+0.0001*x,-0.5); σz = 0.12*x*Math.pow(1+0.0001*x,-0.5); break;
-                    case "C": σy = 0.11*x*Math.pow(1+0.0001*x,-0.5); σz = 0.08*x*Math.pow(1+0.0015*x,-0.5); break;
-                    case "D": σy = 0.08*x*Math.pow(1+0.0001*x,-0.5); σz = 0.06*x*Math.pow(1+0.0015*x,-0.5); break;
-                    case "E": σy = 0.06*x*Math.pow(1+0.0001*x,-0.5); σz = 0.03*x*Math.pow(1+0.0015*x,-0.5); break;
-                    case "F": σy = 0.04*x*Math.pow(1+0.0001*x,-0.5); σz = 0.016*x*Math.pow(1+0.0015*x,-0.5); break;
-                    default:  σy = 0.08*x*Math.pow(1+0.0001*x,-0.5); σz = 0.06*x*Math.pow(1+0.0015*x,-0.5);
-                }
-                σz = Math.min(σz, mixingHeight);
+            for (const p of points) {
+                const dose = p.C * breathingRate * doseConversionFactor * 3600 * hour;
+                if (dose * 1000 < 1) continue;
 
-                for (let i = -(Math.floor(numOffsets/2)); i <= Math.floor(numOffsets/2); i++) {
-                    const y = i * σy * spreadFactor / (numOffsets / 2);
-                    const z = 1.5;
-                    const exp1 = Math.exp(-Math.pow(y / σy, 2) / 2);
-                    const exp2 = Math.exp(-Math.pow((z - H) / σz, 2) / 2);
-                    const exp3 = Math.exp(-Math.pow((z + H) / σz, 2) / 2);
-                    const C = (Q / (2 * Math.PI * windSpeed * σy * σz)) * exp1 * (exp2 + exp3);
-                    const dose = C * breathingRate * doseConversionFactor * 3600 * hour;
-                    if (dose * 1000 < 1) continue;
-
-                    const dx = (x/1000)*Math.cos(rad) - (y/1000)*Math.sin(rad);
-                    const dy = (x/1000)*Math.sin(rad) + (y/1000)*Math.cos(rad);
-                    const pointLat = lat + dy / 111;
-                    const pointLon = lon + dx / (111 * Math.cos(lat * Math.PI / 180));
-
-                    let color = dose > 1 ? "black" : dose > 0.1 ? "red" : dose > 0.01 ? "orange" : "green";
-                    const pane = color === "black" ? "doseBlack"
-                               : color === "red"   ? "doseRed"
-                               : color === "orange" ? "doseOrange"
-                               : "doseGreen";
-                    frameGroup.addLayer(L.circle([pointLat, pointLon], {
-                        radius: 400, fillColor: color, color: color,
-                        weight: 0, fillOpacity: 0.4, pane
-                    }));
-                }
+                let color = dose > 1 ? "black" : dose > 0.1 ? "red" : dose > 0.01 ? "orange" : "green";
+                const pane = color === "black" ? "doseBlack"
+                           : color === "red"   ? "doseRed"
+                           : color === "orange" ? "doseOrange"
+                           : "doseGreen";
+                frameGroup.addLayer(L.circle([p.pointLat, p.pointLon], {
+                    radius: 500, fillColor: color, color: color,
+                    weight: 0, fillOpacity: 0.35, pane
+                }));
             }
             animationLayers.push(frameGroup);
         }
