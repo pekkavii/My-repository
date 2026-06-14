@@ -386,9 +386,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
         plumeLayers.forEach(layer => map.removeLayer(layer));
         plumeLayers = [];
-        // Also clear any animation layers so old animation doesn't show under simulation
-        animationLayers.forEach(layer => map.removeLayer(layer));
-        animationLayers = [];
+        // Also clear any animation frame/state so old animation doesn't show under simulation
+        if (currentFrameLayer) { map.removeLayer(currentFrameLayer); currentFrameLayer = null; }
+        animationPoints = [];
         clearInterval(animationTimer);
         isPlaying = false;
 
