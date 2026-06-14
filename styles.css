@@ -348,6 +348,25 @@ html, body {
     cursor: pointer;
 }
 
+/* Toggle button for animation controls — first child */
+#toggleAnimationControls {
+    font-size: 12px !important;
+    padding: 4px 8px !important;
+    color: #6b7280 !important;
+    order: -1;
+}
+
+/* Collapsed state: shrink to a small pill showing only the toggle */
+#animationControls.collapsed {
+    padding: 6px 10px;
+    gap: 0;
+    border-radius: 16px;
+}
+
+#animationControls.collapsed > *:not(#toggleAnimationControls) {
+    display: none;
+}
+
 /* ============================================================
    Legend — bottom left
    ============================================================ */
