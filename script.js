@@ -863,6 +863,12 @@ document.addEventListener("DOMContentLoaded", function () {
         // Update reactor type selector visibility
         document.getElementById("reactorTypeRow").style.display = "block";
         updateInesOptions();
+
+        // If using real weather data, re-fetch for the new location
+        if (document.getElementById("useWeatherBasedValues").checked) {
+            fetchWeather();
+        }
+
         alert(`Custom location set: ${lat.toFixed(4)}, ${lng.toFixed(4)}.\nSelect reactor type and run the simulation.`);
     }
 
