@@ -583,19 +583,25 @@ document.addEventListener("DOMContentLoaded", function () {
     // -----------------------------------------------------------------------
     // Animation
     // -----------------------------------------------------------------------
-    let animationLayers = [];
+    // animationPoints holds precomputed geometry (~7500 entries) — cheap.
+    // Frames are built ON DEMAND from this, never all 168 stored at once,
+    // which previously caused ~1.26M Leaflet objects in memory and crashed
+    // mobile browsers (page reset to initial state).
+    let animationPoints = [];
+    let currentFrameLayer = null; // the single layerGroup currently on the map
     let animationTimer = null;
-    let currentFrame = 0;
+    let currentFrame = 0; // 0-based index, hour = currentFrame + 1
     const maxFrames = 168;
     const animationDelay = 500;
 
+    // Precompute geometry only — identical grid to simulateGaussian
     function generateAnimationLayers(lat, lon) {
         if (!lat || !lon) { alert("Please select a plant or set a custom location on the map."); return; }
 
         plumeLayers.forEach(layer => map.removeLayer(layer));
         plumeLayers = [];
-        animationLayers.forEach(layer => map.removeLayer(layer));
-        animationLayers = [];
+        if (currentFrameLayer) { map.removeLayer(currentFrameLayer); currentFrameLayer = null; }
+        animationPoints = [];
 
         let ines = parseInt(document.getElementById("ines").value);
         let Q_TBq = Math.pow(10, ines - 4) * 10;
@@ -606,8 +612,6 @@ document.addEventListener("DOMContentLoaded", function () {
         const windDirection = parseFloat(document.getElementById("windDirection").value);
         const H           = parseFloat(document.getElementById("stackHeight").value) || 100;
         const stability   = document.getElementById("stabilityClass").value || "D";
-        const breathingRate = 1.2 / 3600;
-        const doseConversionFactor = 2.2e-8;
         const numOffsets  = 15;
         const spreadFactor = 4;
         const adjustedDirection = (270 - windDirection + 360) % 360;
@@ -616,11 +620,6 @@ document.addEventListener("DOMContentLoaded", function () {
                            : stability === "C" ? 1200
                            : stability === "D" ? 800 : 500;
 
-        // --- Precompute geometry once (identical grid to simulateGaussian) ---
-        // C (concentration factor) and lat/lon do not depend on hour,
-        // only the accumulated dose does. Precomputing avoids redoing the
-        // trig for every one of the 168 frames.
-        const points = [];
         for (let x = 500; x <= 500000; x += 1000) {
             let σy, σz;
             switch (stability) {
@@ -647,30 +646,32 @@ document.addEventListener("DOMContentLoaded", function () {
                 const pointLat = lat + dy / 111;
                 const pointLon = lon + dx / (111 * Math.cos(lat * Math.PI / 180));
 
-                points.push({ pointLat, pointLon, C });
+                animationPoints.push({ pointLat, pointLon, C });
             }
         }
+    }
 
-        // --- Build one frame per hour using the precomputed points ---
-        for (let hour = 1; hour <= maxFrames; hour++) {
-            const frameGroup = L.layerGroup();
+    // Build a single frame's layerGroup on demand for a given hour (1-based)
+    function buildFrame(hour) {
+        const breathingRate = 1.2 / 3600;
+        const doseConversionFactor = 2.2e-8;
+        const frameGroup = L.layerGroup();
 
-            for (const p of points) {
-                const dose = p.C * breathingRate * doseConversionFactor * 3600 * hour;
-                if (dose * 1000 < 1) continue;
+        for (const p of animationPoints) {
+            const dose = p.C * breathingRate * doseConversionFactor * 3600 * hour;
+            if (dose * 1000 < 1) continue;
 
-                let color = dose > 1 ? "black" : dose > 0.1 ? "red" : dose > 0.01 ? "orange" : "green";
-                const pane = color === "black" ? "doseBlack"
-                           : color === "red"   ? "doseRed"
-                           : color === "orange" ? "doseOrange"
-                           : "doseGreen";
-                frameGroup.addLayer(L.circle([p.pointLat, p.pointLon], {
-                    radius: 500, fillColor: color, color: color,
-                    weight: 0, fillOpacity: 0.35, pane
-                }));
-            }
-            animationLayers.push(frameGroup);
+            let color = dose > 1 ? "black" : dose > 0.1 ? "red" : dose > 0.01 ? "orange" : "green";
+            const pane = color === "black" ? "doseBlack"
+                       : color === "red"   ? "doseRed"
+                       : color === "orange" ? "doseOrange"
+                       : "doseGreen";
+            frameGroup.addLayer(L.circle([p.pointLat, p.pointLon], {
+                radius: 500, fillColor: color, color: color,
+                weight: 0, fillOpacity: 0.35, pane
+            }));
         }
+        return frameGroup;
     }
 
     function playAnimation() {
@@ -683,12 +684,13 @@ document.addEventListener("DOMContentLoaded", function () {
         currentFrame = 0;
 
         animationTimer = setInterval(() => {
-            if (currentFrame >= animationLayers.length) {
+            if (currentFrame >= maxFrames) {
                 clearInterval(animationTimer);
                 return;
             }
-            if (currentFrame > 0) map.removeLayer(animationLayers[currentFrame - 1]);
-            map.addLayer(animationLayers[currentFrame]);
+            if (currentFrameLayer) map.removeLayer(currentFrameLayer);
+            currentFrameLayer = buildFrame(currentFrame + 1);
+            map.addLayer(currentFrameLayer);
             updateDayDisplay(currentFrame);
             updateAnimationUI();
             currentFrame++;
@@ -705,9 +707,10 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function showFrame(frame) {
-        animationLayers.forEach(layer => map.removeLayer(layer));
-        if (frame >= 0 && frame < animationLayers.length) {
-            map.addLayer(animationLayers[frame]);
+        if (currentFrameLayer) { map.removeLayer(currentFrameLayer); currentFrameLayer = null; }
+        if (frame >= 0 && frame < maxFrames && animationPoints.length > 0) {
+            currentFrameLayer = buildFrame(frame + 1);
+            map.addLayer(currentFrameLayer);
             updateDayDisplay(frame);
         }
         currentFrame = frame;
@@ -716,7 +719,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function playStep() {
         if (!isPlaying) return;
-        if (currentFrame < animationLayers.length - 1) {
+        if (currentFrame < maxFrames - 1) {
             showFrame(currentFrame + 1);
         } else {
             isPlaying = false;
@@ -726,7 +729,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function toggleAnimation() {
         if (!selectedLat || !selectedLon) { alert("Please select a plant first."); return; }
-        if (animationLayers.length === 0) {
+        if (animationPoints.length === 0) {
             // Clear any static simulation result before generating animation
             plumeLayers.forEach(layer => map.removeLayer(layer));
             plumeLayers = [];
@@ -750,13 +753,13 @@ document.addEventListener("DOMContentLoaded", function () {
     function jumpToEnd() {
         clearInterval(animationTimer);
         isPlaying = false;
-        showFrame(animationLayers.length - 1);
+        showFrame(maxFrames - 1);
     }
 
     function seekAnimation(value) {
         clearInterval(animationTimer);
         isPlaying = false;
-        showFrame(parseInt(value));
+        showFrame(parseInt(value) - 1);
     }
 
     // Make seekAnimation global so oninput in HTML can reach it
@@ -779,8 +782,8 @@ document.addEventListener("DOMContentLoaded", function () {
     window.updateInesOptions = updateInesOptions;
 
     function clearAnimation() {
-        animationLayers.forEach(layer => map.removeLayer(layer));
-        animationLayers = [];
+        if (currentFrameLayer) { map.removeLayer(currentFrameLayer); currentFrameLayer = null; }
+        animationPoints = [];
         currentFrame = 0;
         isPlaying = false;
         clearInterval(animationTimer);
