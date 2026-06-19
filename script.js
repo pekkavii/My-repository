@@ -528,7 +528,7 @@ document.addEventListener("DOMContentLoaded", function () {
             }
 
             // Helper: place a distance label at the arc midpoint of a wedge
-            function addDistanceLabel(rangeKm, color, bgColor) {
+            function addDistanceLabel(rangeKm, color, bgColor, popupHtml) {
                 // Midpoint of arc = centreline direction at the given range
                 const midDir = (270 - windDirection + 360) % 360;
                 const midRad = midDir * Math.PI / 180;
@@ -540,31 +540,39 @@ document.addEventListener("DOMContentLoaded", function () {
                     icon: L.divIcon({
                         className: '',
                         html: `<div style="
+                            display:inline-block;
                             background:${bgColor};
                             color:${color};
                             font-size:11px;
                             font-weight:700;
-                            padding:2px 5px;
+                            padding:3px 7px;
                             border-radius:4px;
                             white-space:nowrap;
-                            box-shadow:0 1px 3px rgba(0,0,0,0.3);
+                            box-shadow:0 1px 3px rgba(0,0,0,0.35);
                             pointer-events:none;
+                            width:auto;
                         ">${rangeKm < 10 ? rangeKm.toFixed(1) : Math.round(rangeKm)} km</div>`,
-                        iconAnchor: [20, 10]
+                        iconSize: null,
+                        iconAnchor: [0, 10]
                     }),
-                    interactive: false
+                    interactive: !!popupHtml
                 }).addTo(map);
+                if (popupHtml) label.bindPopup(popupHtml);
                 plumeLayers.push(label);
             }
 
             // Outer uncertainty cone (yellow)
             const wedge = L.polygon(buildWedge(actualMaxRangeKm), {
-                color: "gray", weight: 1, opacity: 0.4,
-                fillColor: "yellow", fillOpacity: 0.2,
+                color: "gray", weight: 1, opacity: 0.3,
+                fillColor: "yellow", fillOpacity: 0.08,
                 interactive: false
             }).addTo(map);
             plumeLayers.push(wedge);
-            addDistanceLabel(actualMaxRangeKm, "#555", "rgba(255,255,180,0.9)");
+            addDistanceLabel(
+                actualMaxRangeKm, "#555", "rgba(255,255,180,0.9)",
+                "Uncertainty cone boundary<br>Wind direction uncertainty ±30°<br>" +
+                "Dose outside this distance is below 1 mSv/week."
+            );
 
             // --- Protective measures zone ---
             // Scan ALL lateral offsets (same as dose circles) to find the true
@@ -598,8 +606,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
             if (protectiveRangeKm > 0) {
                 const protWedge = L.polygon(buildWedge(protectiveRangeKm), {
-                    color: "#cc2200", weight: 1.5, opacity: 0.7,
-                    fillColor: "#ff4422", fillOpacity: 0.18,
+                    color: "#cc2200", weight: 1.5, opacity: 0.5,
+                    fillColor: "#ff4422", fillOpacity: 0.08,
                     interactive: true
                 }).addTo(map);
                 protWedge.bindPopup(
@@ -609,7 +617,12 @@ document.addEventListener("DOMContentLoaded", function () {
                     "may be advised by authorities."
                 );
                 plumeLayers.push(protWedge);
-                addDistanceLabel(protectiveRangeKm, "white", "rgba(204,34,0,0.85)");
+                addDistanceLabel(
+                    protectiveRangeKm, "white", "rgba(204,34,0,0.85)",
+                    "<b>⚠ Protective zone boundary</b><br>" +
+                    "Weekly dose exceeds 10 mSv within this distance.<br>" +
+                    "Protective measures may be needed."
+                );
             }
         }
     }
