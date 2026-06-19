@@ -3,7 +3,7 @@ let selectedLon;
 let customMarker = null;
 
 document.addEventListener("DOMContentLoaded", function () {
-    const map = L.map('map').setView([60.3714, 26.3469], 7);
+    const map = L.map('map').setView([51.3833, 30.0997], 5); // Chernobyl as default
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; OpenStreetMap contributors'
     }).addTo(map);
@@ -42,6 +42,9 @@ document.addEventListener("DOMContentLoaded", function () {
                         Lon: ${userLon.toFixed(4)}<br>
                         Accuracy: ±${Math.round(accuracy)} m
                     `);
+
+                // Pan to user location once permission is granted
+                map.setView([userLat, userLon], 7);
 
                 // Accuracy circle around user location
                 userLocationCircle = L.circle([userLat, userLon], {
@@ -524,6 +527,36 @@ document.addEventListener("DOMContentLoaded", function () {
                 return pts;
             }
 
+            // Helper: place a distance label at the arc midpoint of a wedge
+            function addDistanceLabel(rangeKm, color, bgColor) {
+                // Midpoint of arc = centreline direction at the given range
+                const midDir = (270 - windDirection + 360) % 360;
+                const midRad = midDir * Math.PI / 180;
+                const dx = rangeKm * Math.cos(midRad);
+                const dy = rangeKm * Math.sin(midRad);
+                const labelLat = lat + dy / 111;
+                const labelLon = lon + dx / (111 * Math.cos(lat * Math.PI / 180));
+                const label = L.marker([labelLat, labelLon], {
+                    icon: L.divIcon({
+                        className: '',
+                        html: `<div style="
+                            background:${bgColor};
+                            color:${color};
+                            font-size:11px;
+                            font-weight:700;
+                            padding:2px 5px;
+                            border-radius:4px;
+                            white-space:nowrap;
+                            box-shadow:0 1px 3px rgba(0,0,0,0.3);
+                            pointer-events:none;
+                        ">${rangeKm < 10 ? rangeKm.toFixed(1) : Math.round(rangeKm)} km</div>`,
+                        iconAnchor: [20, 10]
+                    }),
+                    interactive: false
+                }).addTo(map);
+                plumeLayers.push(label);
+            }
+
             // Outer uncertainty cone (yellow)
             const wedge = L.polygon(buildWedge(actualMaxRangeKm), {
                 color: "gray", weight: 1, opacity: 0.4,
@@ -531,6 +564,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 interactive: false
             }).addTo(map);
             plumeLayers.push(wedge);
+            addDistanceLabel(actualMaxRangeKm, "#555", "rgba(255,255,180,0.9)");
 
             // --- Protective measures zone ---
             // Scan ALL lateral offsets (same as dose circles) to find the true
@@ -575,6 +609,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     "may be advised by authorities."
                 );
                 plumeLayers.push(protWedge);
+                addDistanceLabel(protectiveRangeKm, "white", "rgba(204,34,0,0.85)");
             }
         }
     }
