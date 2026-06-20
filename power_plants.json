@@ -542,5 +542,453 @@
         "electrical_power_MW": 4400,
         "lat": 37.3167,
         "lon": 141.0167
+    },
+    {
+        "name": "Arkansas Nuclear One (ANO)",
+        "country": "United States",
+        "reactor_type": "2 PWR",
+        "electrical_power_MW": 1840,
+        "lat": 35.31028,
+        "lon": -93.23139
+    },
+    {
+        "name": "Beaver Valley",
+        "country": "United States",
+        "reactor_type": "2 PWR",
+        "electrical_power_MW": 1800,
+        "lat": 40.62333,
+        "lon": -80.43056
+    },
+    {
+        "name": "Braidwood",
+        "country": "United States",
+        "reactor_type": "2 PWR",
+        "electrical_power_MW": 2330,
+        "lat": 41.24361,
+        "lon": -88.22917
+    },
+    {
+        "name": "Browns Ferry",
+        "country": "United States",
+        "reactor_type": "3 BWR",
+        "electrical_power_MW": 3300,
+        "lat": 34.70389,
+        "lon": -87.11861
+    },
+    {
+        "name": "Brunswick",
+        "country": "United States",
+        "reactor_type": "2 BWR",
+        "electrical_power_MW": 1870,
+        "lat": 33.95833,
+        "lon": -78.01028
+    },
+    {
+        "name": "Byron",
+        "country": "United States",
+        "reactor_type": "2 PWR",
+        "electrical_power_MW": 2347,
+        "lat": 42.07417,
+        "lon": -89.28194
+    },
+    {
+        "name": "Callaway",
+        "country": "United States",
+        "reactor_type": "PWR",
+        "electrical_power_MW": 1190,
+        "lat": 38.76167,
+        "lon": -91.78
+    },
+    {
+        "name": "Calvert Cliffs",
+        "country": "United States",
+        "reactor_type": "2 PWR",
+        "electrical_power_MW": 1729,
+        "lat": 38.43194,
+        "lon": -76.44222
+    },
+    {
+        "name": "Catawba",
+        "country": "United States",
+        "reactor_type": "2 PWR",
+        "electrical_power_MW": 2258,
+        "lat": 35.05167,
+        "lon": -81.07
+    },
+    {
+        "name": "Clinton",
+        "country": "United States",
+        "reactor_type": "BWR",
+        "electrical_power_MW": 1062,
+        "lat": 40.17222,
+        "lon": -88.835
+    },
+    {
+        "name": "Columbia Generating Station",
+        "country": "United States",
+        "reactor_type": "BWR",
+        "electrical_power_MW": 1207,
+        "lat": 46.47111,
+        "lon": -119.33389
+    },
+    {
+        "name": "Comanche Peak",
+        "country": "United States",
+        "reactor_type": "2 PWR",
+        "electrical_power_MW": 2400,
+        "lat": 32.29833,
+        "lon": -97.785
+    },
+    {
+        "name": "Cooper",
+        "country": "United States",
+        "reactor_type": "BWR",
+        "electrical_power_MW": 769,
+        "lat": 40.36194,
+        "lon": -95.64139
+    },
+    {
+        "name": "Davis-Besse",
+        "country": "United States",
+        "reactor_type": "PWR",
+        "electrical_power_MW": 894,
+        "lat": 41.59667,
+        "lon": -83.08639
+    },
+    {
+        "name": "Diablo Canyon",
+        "country": "United States",
+        "reactor_type": "2 PWR",
+        "electrical_power_MW": 2256,
+        "lat": 35.21083,
+        "lon": -120.85611
+    },
+    {
+        "name": "Donald C. Cook",
+        "country": "United States",
+        "reactor_type": "2 PWR",
+        "electrical_power_MW": 2191,
+        "lat": 41.97528,
+        "lon": -86.56583
+    },
+    {
+        "name": "Dresden",
+        "country": "United States",
+        "reactor_type": "2 BWR",
+        "electrical_power_MW": 1845,
+        "lat": 41.38972,
+        "lon": -88.26806
+    },
+    {
+        "name": "Edwin I. Hatch",
+        "country": "United States",
+        "reactor_type": "2 BWR",
+        "electrical_power_MW": 1755,
+        "lat": 31.93417,
+        "lon": -82.34389
+    },
+    {
+        "name": "Enrico Fermi",
+        "country": "United States",
+        "reactor_type": "PWR",
+        "electrical_power_MW": 1122,
+        "lat": 41.96278,
+        "lon": -83.2575
+    },
+    {
+        "name": "Grand Gulf",
+        "country": "United States",
+        "reactor_type": "BWR",
+        "electrical_power_MW": 1401,
+        "lat": 32.00667,
+        "lon": -91.04833
+    },
+    {
+        "name": "Hope Creek",
+        "country": "United States",
+        "reactor_type": "BWR",
+        "electrical_power_MW": 1172,
+        "lat": 39.46778,
+        "lon": -75.53806
+    },
+    {
+        "name": "James A. FitzPatrick",
+        "country": "United States",
+        "reactor_type": "BWR",
+        "electrical_power_MW": 838,
+        "lat": 43.5233,
+        "lon": -76.3983
+    },
+    {
+        "name": "Joseph M. Farley",
+        "country": "United States",
+        "reactor_type": "2 PWR",
+        "electrical_power_MW": 1755,
+        "lat": 31.22306,
+        "lon": -85.11167
+    },
+    {
+        "name": "LaSalle",
+        "country": "United States",
+        "reactor_type": "2 BWR",
+        "electrical_power_MW": 2330,
+        "lat": 41.24556,
+        "lon": -88.66917
+    },
+    {
+        "name": "Limerick",
+        "country": "United States",
+        "reactor_type": "2 BWR",
+        "electrical_power_MW": 2317,
+        "lat": 40.22667,
+        "lon": -75.58722
+    },
+    {
+        "name": "McGuire",
+        "country": "United States",
+        "reactor_type": "2 PWR",
+        "electrical_power_MW": 2316,
+        "lat": 35.4325,
+        "lon": -80.94833
+    },
+    {
+        "name": "Millstone",
+        "country": "United States",
+        "reactor_type": "2 PWR",
+        "electrical_power_MW": 2089,
+        "lat": 41.31194,
+        "lon": -72.16861
+    },
+    {
+        "name": "Monticello",
+        "country": "United States",
+        "reactor_type": "BWR",
+        "electrical_power_MW": 671,
+        "lat": 45.33361,
+        "lon": -93.84917
+    },
+    {
+        "name": "Nine Mile Point",
+        "country": "United States",
+        "reactor_type": "2 BWR",
+        "electrical_power_MW": 1757,
+        "lat": 43.52083,
+        "lon": -76.40694
+    },
+    {
+        "name": "North Anna",
+        "country": "United States",
+        "reactor_type": "2 PWR",
+        "electrical_power_MW": 1892,
+        "lat": 38.06056,
+        "lon": -77.78944
+    },
+    {
+        "name": "Oconee",
+        "country": "United States",
+        "reactor_type": "3 PWR",
+        "electrical_power_MW": 2554,
+        "lat": 34.79389,
+        "lon": -82.89806
+    },
+    {
+        "name": "Palo Verde",
+        "country": "United States",
+        "reactor_type": "3 PWR",
+        "electrical_power_MW": 3937,
+        "lat": 33.38917,
+        "lon": -112.865
+    },
+    {
+        "name": "Peach Bottom",
+        "country": "United States",
+        "reactor_type": "2 BWR",
+        "electrical_power_MW": 2627,
+        "lat": 39.75833,
+        "lon": -76.26806
+    },
+    {
+        "name": "Perry",
+        "country": "United States",
+        "reactor_type": "BWR",
+        "electrical_power_MW": 1268,
+        "lat": 41.80083,
+        "lon": -81.14333
+    },
+    {
+        "name": "Point Beach",
+        "country": "United States",
+        "reactor_type": "2 PWR",
+        "electrical_power_MW": 1198,
+        "lat": 44.28111,
+        "lon": -87.53667
+    },
+    {
+        "name": "Prairie Island",
+        "country": "United States",
+        "reactor_type": "2 PWR",
+        "electrical_power_MW": 1096,
+        "lat": 44.62167,
+        "lon": -92.63306
+    },
+    {
+        "name": "Quad Cities",
+        "country": "United States",
+        "reactor_type": "2 BWR",
+        "electrical_power_MW": 1819,
+        "lat": 41.72639,
+        "lon": -90.31
+    },
+    {
+        "name": "R.E. Ginna",
+        "country": "United States",
+        "reactor_type": "PWR",
+        "electrical_power_MW": 614,
+        "lat": 43.27778,
+        "lon": -77.31
+    },
+    {
+        "name": "River Bend",
+        "country": "United States",
+        "reactor_type": "BWR",
+        "electrical_power_MW": 994,
+        "lat": 30.7567,
+        "lon": -91.333
+    },
+    {
+        "name": "Saint Lucie",
+        "country": "United States",
+        "reactor_type": "2 PWR",
+        "electrical_power_MW": 1989,
+        "lat": 27.34861,
+        "lon": -80.24639
+    },
+    {
+        "name": "Salem",
+        "country": "United States",
+        "reactor_type": "2 PWR",
+        "electrical_power_MW": 2275,
+        "lat": 39.46278,
+        "lon": -75.53556
+    },
+    {
+        "name": "Seabrook",
+        "country": "United States",
+        "reactor_type": "PWR",
+        "electrical_power_MW": 1296,
+        "lat": 42.89889,
+        "lon": -70.85083
+    },
+    {
+        "name": "Sequoyah",
+        "country": "United States",
+        "reactor_type": "2 PWR",
+        "electrical_power_MW": 2440,
+        "lat": 35.22639,
+        "lon": -85.09167
+    },
+    {
+        "name": "Shearon Harris",
+        "country": "United States",
+        "reactor_type": "PWR",
+        "electrical_power_MW": 964,
+        "lat": 35.6333,
+        "lon": -78.955
+    },
+    {
+        "name": "South Texas Project",
+        "country": "United States",
+        "reactor_type": "2 PWR",
+        "electrical_power_MW": 2700,
+        "lat": 28.79556,
+        "lon": -96.04889
+    },
+    {
+        "name": "Surry",
+        "country": "United States",
+        "reactor_type": "2 PWR",
+        "electrical_power_MW": 1648,
+        "lat": 37.16556,
+        "lon": -76.69778
+    },
+    {
+        "name": "Susquehanna",
+        "country": "United States",
+        "reactor_type": "2 BWR",
+        "electrical_power_MW": 2683,
+        "lat": 41.08889,
+        "lon": -76.14889
+    },
+    {
+        "name": "Vogtle",
+        "country": "United States",
+        "reactor_type": "4 PWR",
+        "electrical_power_MW": 4536,
+        "lat": 33.14306,
+        "lon": -81.76583
+    },
+    {
+        "name": "Watts Bar",
+        "country": "United States",
+        "reactor_type": "2 PWR",
+        "electrical_power_MW": 2316,
+        "lat": 35.60278,
+        "lon": -84.78944
+    },
+    {
+        "name": "H. B. Robinson",
+        "country": "United States",
+        "reactor_type": "PWR",
+        "electrical_power_MW": 769,
+        "lat": 34.40278,
+        "lon": -80.15833
+    },
+    {
+        "name": "Turkey Point",
+        "country": "United States",
+        "reactor_type": "2 PWR",
+        "electrical_power_MW": 1604,
+        "lat": 25.43417,
+        "lon": -80.33056
+    },
+    {
+        "name": "Waterford",
+        "country": "United States",
+        "reactor_type": "PWR",
+        "electrical_power_MW": 1152,
+        "lat": 29.99528,
+        "lon": -90.47111
+    },
+    {
+        "name": "Wolf Creek",
+        "country": "United States",
+        "reactor_type": "PWR",
+        "electrical_power_MW": 1200,
+        "lat": 38.23889,
+        "lon": -95.68889
+    },
+    {
+        "name": "Indian Point (closed)",
+        "country": "United States",
+        "reactor_type": "2 PWR (closed)",
+        "electrical_power_MW": 0,
+        "lat": 41.2695,
+        "lon": -73.9527
+    },
+    {
+        "name": "San Onofre (closed)",
+        "country": "United States",
+        "reactor_type": "2 PWR (closed)",
+        "electrical_power_MW": 0,
+        "lat": 33.3717,
+        "lon": -117.5572
+    },
+    {
+        "name": "Three Mile Island (closed)",
+        "country": "United States",
+        "reactor_type": "PWR (closed)",
+        "electrical_power_MW": 0,
+        "lat": 40.1532,
+        "lon": -76.725
     }
 ]
