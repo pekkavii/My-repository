@@ -990,5 +990,53 @@
         "electrical_power_MW": 0,
         "lat": 40.1532,
         "lon": -76.725
+    },
+    {
+        "name": "Bruce Nuclear Generating Station",
+        "country": "Canada",
+        "reactor_type": "8 CANDU PHWR",
+        "electrical_power_MW": 6610,
+        "lat": 44.32528,
+        "lon": -81.59944
+    },
+    {
+        "name": "Darlington",
+        "country": "Canada",
+        "reactor_type": "4 CANDU PHWR",
+        "electrical_power_MW": 3512,
+        "lat": 43.87278,
+        "lon": -78.71972
+    },
+    {
+        "name": "Pickering",
+        "country": "Canada",
+        "reactor_type": "4 CANDU PHWR (active)",
+        "electrical_power_MW": 2086,
+        "lat": 43.81167,
+        "lon": -79.06583
+    },
+    {
+        "name": "Point Lepreau",
+        "country": "Canada",
+        "reactor_type": "CANDU PHWR",
+        "electrical_power_MW": 660,
+        "lat": 45.06889,
+        "lon": -66.45472
+    },
+    {
+        "name": "Gentilly-2 (closed)",
+        "country": "Canada",
+        "reactor_type": "CANDU PHWR (closed)",
+        "electrical_power_MW": 0,
+        "lat": 46.3994,
+        "lon": -72.4983
+    },
+    {
+        "name": "Nuclear Power Demonstration (closed)",
+        "country": "Canada",
+        "reactor_type": "CANDU prototype (closed)",
+        "electrical_power_MW": 0,
+        "lat": 46.18667,
+        "lon": -77.65778
     }
 ]
