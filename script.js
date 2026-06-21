@@ -143,10 +143,25 @@ document.addEventListener("DOMContentLoaded", function () {
                 popupAnchor: [0, -10]
             });
 
+            // Closed plants (0 MW) get a blue cross instead of red
+            const crossIconClosed = L.divIcon({
+                className: '',
+                html: `<svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+                    <line x1="8" y1="1" x2="8" y2="15" stroke="#1d4ed8" stroke-width="2.5"/>
+                    <line x1="1" y1="8" x2="15" y2="8" stroke="#1d4ed8" stroke-width="2.5"/>
+                </svg>`,
+                iconSize: [16, 16],
+                iconAnchor: [8, 8],
+                popupAnchor: [0, -10]
+            });
+
             data.forEach(plant => {
-                const nppMarker = L.marker([plant.lat, plant.lon], { icon: crossIcon }).addTo(map);
-                const statusText = plant.electrical_power_MW === 0
-                    ? '<span style="color:gray">(Suljettu)</span>'
+                const isClosed = plant.electrical_power_MW === 0;
+                const nppMarker = L.marker([plant.lat, plant.lon], {
+                    icon: isClosed ? crossIconClosed : crossIcon
+                }).addTo(map);
+                const statusText = isClosed
+                    ? '<span style="color:#1d4ed8">(Closed)</span>'
                     : `${plant.electrical_power_MW} MW`;
                 nppMarker.bindPopup(`
                     <b>${plant.name}</b><br>
