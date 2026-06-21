@@ -1038,5 +1038,45 @@
         "electrical_power_MW": 0,
         "lat": 46.18667,
         "lon": -77.65778
+    },
+    {
+        "name": "Kursk",
+        "country": "Russia",
+        "reactor_type": "2 RBMK-1000 (active), 2 closed",
+        "electrical_power_MW": 2000,
+        "lat": 51.6764,
+        "lon": 35.6064
+    },
+    {
+        "name": "Balakovo",
+        "country": "Russia",
+        "reactor_type": "4 VVER-1000",
+        "electrical_power_MW": 4000,
+        "lat": 52.0934,
+        "lon": 47.9544
+    },
+    {
+        "name": "Rostov",
+        "country": "Russia",
+        "reactor_type": "4 VVER-1000",
+        "electrical_power_MW": 4030,
+        "lat": 47.6012,
+        "lon": 42.3677
+    },
+    {
+        "name": "Beloyarsk",
+        "country": "Russia",
+        "reactor_type": "BN-600 + BN-800 fast breeder",
+        "electrical_power_MW": 1485,
+        "lat": 56.8514,
+        "lon": 61.3158
+    },
+    {
+        "name": "Bilibino (closed)",
+        "country": "Russia",
+        "reactor_type": "4 EGP-6 (closed Dec 2025)",
+        "electrical_power_MW": 0,
+        "lat": 68.0508,
+        "lon": 166.5383
     }
 ]
