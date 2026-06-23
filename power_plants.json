@@ -1246,5 +1246,213 @@
         "electrical_power_MW": 2800,
         "lat": 37.0953,
         "lon": 129.3783
+    },
+    {
+        "name": "Qinshan",
+        "country": "China",
+        "reactor_type": "CNP-300 + 4 CANDU + 4 CPR-1000 PWR",
+        "electrical_power_MW": 4428,
+        "lat": 30.4358,
+        "lon": 120.9593
+    },
+    {
+        "name": "Daya Bay",
+        "country": "China",
+        "reactor_type": "2 PWR (M310)",
+        "electrical_power_MW": 1968,
+        "lat": 22.5977,
+        "lon": 114.5433
+    },
+    {
+        "name": "Ling Ao",
+        "country": "China",
+        "reactor_type": "4 PWR CPR-1000",
+        "electrical_power_MW": 3800,
+        "lat": 22.6068,
+        "lon": 114.556
+    },
+    {
+        "name": "Tianwan",
+        "country": "China",
+        "reactor_type": "6 VVER-1000 + 2 VVER-1200 (units 7-8 u/c)",
+        "electrical_power_MW": 6395,
+        "lat": 34.6969,
+        "lon": 119.4636
+    },
+    {
+        "name": "Yangjiang",
+        "country": "China",
+        "reactor_type": "6 CPR-1000/ACPR-1000",
+        "electrical_power_MW": 6080,
+        "lat": 21.735,
+        "lon": 111.6197
+    },
+    {
+        "name": "Hongyanhe",
+        "country": "China",
+        "reactor_type": "6 CPR-1000/ACPR-1000",
+        "electrical_power_MW": 6710,
+        "lat": 39.796,
+        "lon": 121.48
+    },
+    {
+        "name": "Ningde",
+        "country": "China",
+        "reactor_type": "6 CPR-1000",
+        "electrical_power_MW": 6090,
+        "lat": 26.6667,
+        "lon": 119.5167
+    },
+    {
+        "name": "Fuqing",
+        "country": "China",
+        "reactor_type": "4 CPR-1000 + 2 Hualong One",
+        "electrical_power_MW": 5294,
+        "lat": 25.4322,
+        "lon": 119.4033
+    },
+    {
+        "name": "Fangchenggang",
+        "country": "China",
+        "reactor_type": "4 CPR-1000/Hualong One",
+        "electrical_power_MW": 4280,
+        "lat": 21.6097,
+        "lon": 108.3664
+    },
+    {
+        "name": "Taishan",
+        "country": "China",
+        "reactor_type": "2 EPR",
+        "electrical_power_MW": 3400,
+        "lat": 22.1578,
+        "lon": 112.8231
+    },
+    {
+        "name": "Haiyang",
+        "country": "China",
+        "reactor_type": "2 AP1000",
+        "electrical_power_MW": 2500,
+        "lat": 36.7083,
+        "lon": 121.3833
+    },
+    {
+        "name": "Sanmen",
+        "country": "China",
+        "reactor_type": "4 AP1000 (units 1-2 op, 3-4 u/c)",
+        "electrical_power_MW": 2500,
+        "lat": 29.0997,
+        "lon": 121.6744
+    },
+    {
+        "name": "Fangjiashan",
+        "country": "China",
+        "reactor_type": "2 CPR-1000",
+        "electrical_power_MW": 2100,
+        "lat": 30.4342,
+        "lon": 120.9575
+    },
+    {
+        "name": "Zhangzhou",
+        "country": "China",
+        "reactor_type": "4 Hualong One (units 1-2 op, 3-4 u/c)",
+        "electrical_power_MW": 2200,
+        "lat": 24.0086,
+        "lon": 117.7017
+    },
+    {
+        "name": "Shidao Bay (HTR-PM)",
+        "country": "China",
+        "reactor_type": "2 HTR-PM (pebble bed HTGR, world first)",
+        "electrical_power_MW": 200,
+        "lat": 36.8581,
+        "lon": 122.5181
+    },
+    {
+        "name": "Xudabao",
+        "country": "China",
+        "reactor_type": "4 VVER-1200 (u/c)",
+        "electrical_power_MW": 0,
+        "lat": 40.5553,
+        "lon": 120.2272
+    },
+    {
+        "name": "San'ao",
+        "country": "China",
+        "reactor_type": "3 Hualong One",
+        "electrical_power_MW": 3300,
+        "lat": 27.5019,
+        "lon": 121.2697
+    },
+    {
+        "name": "Taipingling",
+        "country": "China",
+        "reactor_type": "3 Hualong One (u/c)",
+        "electrical_power_MW": 0,
+        "lat": 22.7581,
+        "lon": 114.8225
+    },
+    {
+        "name": "Lufeng",
+        "country": "China",
+        "reactor_type": "6 Hualong One (u/c)",
+        "electrical_power_MW": 0,
+        "lat": 22.8517,
+        "lon": 115.7378
+    },
+    {
+        "name": "Tarapur",
+        "country": "India",
+        "reactor_type": "2 BWR + 2 PHWR",
+        "electrical_power_MW": 1400,
+        "lat": 19.8336,
+        "lon": 72.6578
+    },
+    {
+        "name": "Rajasthan Atomic Power Station",
+        "country": "India",
+        "reactor_type": "6 PHWR + 1 IPHWR-700",
+        "electrical_power_MW": 1980,
+        "lat": 24.8711,
+        "lon": 75.5906
+    },
+    {
+        "name": "Madras (Kalpakkam)",
+        "country": "India",
+        "reactor_type": "2 PHWR",
+        "electrical_power_MW": 440,
+        "lat": 12.5597,
+        "lon": 80.1717
+    },
+    {
+        "name": "Narora",
+        "country": "India",
+        "reactor_type": "2 PHWR",
+        "electrical_power_MW": 440,
+        "lat": 28.1769,
+        "lon": 78.3908
+    },
+    {
+        "name": "Kakrapar",
+        "country": "India",
+        "reactor_type": "2 PHWR + 2 IPHWR-700",
+        "electrical_power_MW": 1040,
+        "lat": 21.2392,
+        "lon": 73.3483
+    },
+    {
+        "name": "Kaiga",
+        "country": "India",
+        "reactor_type": "4 PHWR",
+        "electrical_power_MW": 880,
+        "lat": 14.8639,
+        "lon": 74.4408
+    },
+    {
+        "name": "Kudankulam",
+        "country": "India",
+        "reactor_type": "2 VVER-1000 (units 3-4 u/c)",
+        "electrical_power_MW": 2000,
+        "lat": 8.1711,
+        "lon": 77.7139
     }
 ]
