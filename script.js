@@ -119,17 +119,132 @@ document.addEventListener("DOMContentLoaded", function () {
                 byCountry[plant.country].push(plant);
             });
 
+            // Also populate hidden select for script compatibility
+            // Build custom collapsible country/plant picker
+            // (Native <select> optgroups can't be collapsed — use a panel instead)
+            const picker = document.getElementById("plantPicker");
+            picker.innerHTML = "";
+
             Object.keys(byCountry).sort().forEach(country => {
-                const group = document.createElement("optgroup");
-                group.label = country;
-                byCountry[country].forEach(plant => {
-                    let option = document.createElement("option");
-                    option.value = `${plant.lat},${plant.lon}`;
-                    option.textContent = `${plant.name} (${plant.electrical_power_MW} MW)`;
-                    option.dataset.details = JSON.stringify(plant);
-                    group.appendChild(option);
+                const plants = byCountry[country];
+
+                // Country header row
+                const countryRow = document.createElement("div");
+                countryRow.className = "picker-country";
+                countryRow.innerHTML = `<span class="picker-arrow">▶</span> ${country} <span class="picker-count">(${plants.length})</span>`;
+
+                // Plant list (hidden by default)
+                const plantList = document.createElement("div");
+                plantList.className = "picker-plants";
+                plantList.style.display = "none";
+
+                plants.forEach(plant => {
+                    const isClosed = plant.electrical_power_MW === 0;
+                    const row = document.createElement("div");
+                    row.className = "picker-plant" + (isClosed ? " picker-plant-closed" : "");
+                    row.textContent = isClosed
+                        ? `${plant.name} (closed)`
+                        : `${plant.name} (${plant.electrical_power_MW} MW)`;
+                    row.dataset.details = JSON.stringify(plant);
+                    row.addEventListener("click", () => selectPlant(plant, row));
+                    plantList.appendChild(row);
                 });
-                select.appendChild(group);
+
+                // Toggle plant list on country click
+                countryRow.addEventListener("click", () => {
+                    const open = plantList.style.display !== "none";
+                    plantList.style.display = open ? "none" : "block";
+                    countryRow.querySelector(".picker-arrow").textContent = open ? "▶" : "▼";
+                });
+
+                picker.appendChild(countryRow);
+                picker.appendChild(plantList);
+            });
+
+            // Add custom option at top
+            const customRow = document.createElement("div");
+            customRow.className = "picker-plant picker-custom";
+            customRow.textContent = "📍 Set custom location on map";
+            customRow.addEventListener("click", () => {
+                closePicker();
+                clearAnimation();
+                alert("Double-tap on the map to set a custom plant location.");
+                if (marker) map.removeLayer(marker);
+                if (customMarker) { map.removeLayer(customMarker); customMarker = null; }
+                plumeLayers.forEach(layer => map.removeLayer(layer));
+                plumeLayers = [];
+                enableMapDoubleClick();
+                document.getElementById("reactorTypeRow").style.display = "block";
+                updateInesOptions();
+                document.getElementById("plantPickerInput").value = "Custom location";
+            });
+            picker.insertBefore(customRow, picker.firstChild);
+
+            // Dummy option kept for compatibility
+            select.style.display = "none";
+
+            // --- Build custom collapsible dropdown ---
+            const menu = document.getElementById("plantDropdownMenu");
+            const trigger = document.getElementById("plantDropdownTrigger");
+
+            Object.keys(byCountry).sort().forEach(country => {
+                const plants = byCountry[country];
+
+                const header = document.createElement("div");
+                header.className = "plant-country-group collapsed";
+                header.innerHTML = `<span>${country} <span style="color:#9ca3af;font-weight:400;">(${plants.length})</span></span><span class="plant-country-arrow">▼</span>`;
+
+                const plantList = document.createElement("div");
+                plantList.className = "plant-country-plants";
+                plantList.style.display = "none";
+
+                plants.forEach(plant => {
+                    const isClosed = plant.electrical_power_MW === 0;
+                    const row = document.createElement("div");
+                    row.className = "plant-option" + (isClosed ? " closed-plant" : "");
+                    row.textContent = `${plant.name} (${isClosed ? "closed" : plant.electrical_power_MW + " MW"})`;
+                    row.dataset.value = `${plant.lat},${plant.lon}`;
+                    row.dataset.details = JSON.stringify(plant);
+                    row.addEventListener("click", () => {
+                        trigger.textContent = plant.name;
+                        menu.style.display = "none";
+                        handlePlantSelection(plant, row.dataset.value);
+                    });
+                    plantList.appendChild(row);
+                });
+
+                header.addEventListener("click", () => {
+                    const isCollapsed = header.classList.contains("collapsed");
+                    header.classList.toggle("collapsed");
+                    plantList.style.display = isCollapsed ? "block" : "none";
+                });
+
+                menu.appendChild(header);
+                menu.appendChild(plantList);
+            });
+
+            // Toggle dropdown open/close on trigger click
+            trigger.addEventListener("click", e => {
+                e.stopPropagation();
+                menu.style.display = menu.style.display === "block" ? "none" : "block";
+            });
+
+            // Close on outside click
+            document.addEventListener("click", () => { menu.style.display = "none"; });
+            menu.addEventListener("click", e => e.stopPropagation());
+
+            // Wire top options (clear + custom)
+            document.querySelectorAll(".top-option").forEach(opt => {
+                opt.addEventListener("click", () => {
+                    const val = opt.dataset.value;
+                    trigger.textContent = opt.textContent;
+                    menu.style.display = "none";
+                    if (val === "") {
+                        handlePlantClear();
+                    } else if (val === "custom") {
+                        handleCustomOption();
+                    }
+                });
             });
 
             const crossIcon = L.divIcon({
@@ -171,6 +286,72 @@ document.addEventListener("DOMContentLoaded", function () {
                 `, { maxWidth: 220 });
             });
        
+            // Plant picker helpers
+            function openPicker() {
+                document.getElementById("plantPicker").style.display = "block";
+                document.getElementById("plantPickerInput").select();
+            }
+            function closePicker() {
+                document.getElementById("plantPicker").style.display = "none";
+            }
+
+            function selectPlant(plant, row) {
+                closePicker();
+                clearAnimation();
+                document.getElementById("plantPickerInput").value =
+                    plant.electrical_power_MW === 0
+                        ? `${plant.name} (closed)`
+                        : `${plant.name} (${plant.electrical_power_MW} MW)`;
+
+                const lat = parseFloat(plant.lat);
+                const lon = parseFloat(plant.lon);
+                if (isNaN(lat) || isNaN(lon)) return;
+
+                if (marker) map.removeLayer(marker);
+                if (customMarker) { map.removeLayer(customMarker); customMarker = null; }
+                plumeLayers.forEach(layer => map.removeLayer(layer));
+                plumeLayers = [];
+                disableMapDoubleClick();
+
+                const isClosed = plant.electrical_power_MW === 0;
+                marker = L.marker([lat, lon]).addTo(map)
+                    .bindPopup(`
+                        <b>${plant.name}</b><br>
+                        <b>Country:</b> ${plant.country}<br>
+                        <b>Reactor:</b> ${plant.reactor_type}<br>
+                        <b>Power:</b> ${isClosed ? '<i style="color:#1d4ed8">Closed</i>' : plant.electrical_power_MW + " MW"}
+                        ${isClosed ? "<br><b style='color:gray'>Only INES 3–4 applicable.</b>" : ""}
+                    `).openPopup();
+
+                map.setView([lat, lon], 7);
+                selectedLat = lat;
+                selectedLon = lon;
+
+                // Hide reactor type selector, reset INES
+                document.getElementById("reactorTypeRow").style.display = "none";
+                document.getElementById("reactorType").value = "large";
+                const inesSelect = document.getElementById("ines");
+                Array.from(inesSelect.options).forEach(opt => opt.disabled = false);
+                if (isClosed) {
+                    Array.from(inesSelect.options).forEach(opt => {
+                        opt.disabled = parseInt(opt.value) > 4;
+                    });
+                    if (parseInt(inesSelect.value) > 4) inesSelect.value = "4";
+                }
+
+                if (document.getElementById("useWeatherBasedValues").checked) fetchWeather();
+            }
+
+            // Close picker when clicking outside
+            document.addEventListener("click", (e) => {
+                const picker = document.getElementById("plantPicker");
+                const input = document.getElementById("plantPickerInput");
+                if (!picker.contains(e.target) && e.target !== input) {
+                    closePicker();
+                }
+            });
+
+            // Original select kept hidden for compatibility — not used
             select.addEventListener("change", function () {
                 let selectedOption = select.options[select.selectedIndex];
                 clearAnimation();
