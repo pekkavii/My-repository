@@ -511,6 +511,220 @@ html, body {
 }
 
 /* ============================================================
+   Custom plant dropdown
+   ============================================================ */
+#plantDropdown {
+    position: relative;
+    width: 100%;
+    margin-bottom: 2px;
+    font-size: 13px;
+}
+
+#plantDropdownTrigger {
+    width: 100%;
+    padding: 6px 28px 6px 8px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    background: white url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%236b7280'/%3E%3C/svg%3E") no-repeat right 8px center;
+    cursor: pointer;
+    color: #374151;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    box-sizing: border-box;
+}
+
+#plantDropdownTrigger:hover {
+    border-color: #3b82f6;
+}
+
+#plantDropdownMenu {
+    position: absolute;
+    top: calc(100% + 2px);
+    left: 0;
+    right: 0;
+    background: white;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+    z-index: 2000;
+    max-height: 320px;
+    overflow-y: auto;
+    font-size: 13px;
+}
+
+/* Country group header row */
+.plant-country-group {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 7px 10px 6px;
+    background: #f3f4f6;
+    font-weight: 700;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: #374151;
+    cursor: pointer;
+    user-select: none;
+    border-top: 1px solid #e5e7eb;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+.plant-country-group:first-child {
+    border-top: none;
+}
+
+.plant-country-group:hover {
+    background: #e5e7eb;
+}
+
+.plant-country-arrow {
+    font-size: 10px;
+    transition: transform 0.15s;
+    flex-shrink: 0;
+}
+
+.plant-country-group.collapsed .plant-country-arrow {
+    transform: rotate(-90deg);
+}
+
+/* Individual plant row */
+.plant-option {
+    padding: 6px 10px 6px 18px;
+    color: #374151;
+    cursor: pointer;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    border-top: 1px solid #f3f4f6;
+}
+
+.plant-option:hover {
+    background: #eff6ff;
+    color: #1d4ed8;
+}
+
+.plant-option.closed-plant {
+    color: #1d4ed8;
+}
+
+.plant-option.top-option {
+    padding-left: 10px;
+    font-style: italic;
+    color: #6b7280;
+    border-top: none;
+}
+
+.plant-option.top-option:hover {
+    background: #f3f4f6;
+    color: #374151;
+}
+
+
+/* ============================================================
+   Custom collapsible plant picker
+   ============================================================ */
+#plantPickerInput {
+    padding: 6px 8px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 13px;
+    background: white url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%236b7280'/%3E%3C/svg%3E") no-repeat right 8px center;
+    padding-right: 24px;
+}
+
+#plantPicker {
+    position: absolute;
+    background: white;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+    z-index: 2000;
+    max-height: 340px;
+    overflow-y: auto;
+    width: calc(100% - 32px); /* match controls panel padding */
+    margin-top: 2px;
+    font-size: 13px;
+}
+
+.picker-custom {
+    padding: 8px 12px;
+    color: #2563eb;
+    font-weight: 600;
+    border-bottom: 1px solid #e5e7eb;
+    cursor: pointer;
+}
+
+.picker-custom:hover {
+    background: #eff6ff;
+}
+
+.picker-country {
+    padding: 7px 12px;
+    font-weight: 700;
+    color: #1e3a5f;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    border-bottom: 1px solid #f3f4f6;
+    user-select: none;
+}
+
+.picker-country:hover {
+    background: #f0f4ff;
+}
+
+.picker-arrow {
+    font-size: 10px;
+    color: #6b7280;
+    width: 12px;
+    flex-shrink: 0;
+}
+
+.picker-count {
+    font-weight: 400;
+    color: #9ca3af;
+    font-size: 11px;
+    margin-left: auto;
+}
+
+.picker-plants {
+    background: #fafafa;
+}
+
+.picker-plant {
+    padding: 5px 12px 5px 28px;
+    cursor: pointer;
+    color: #374151;
+    border-bottom: 1px solid #f3f4f6;
+    font-size: 12px;
+}
+
+.picker-plant:hover {
+    background: #eff6ff;
+    color: #1d4ed8;
+}
+
+.picker-plant-closed {
+    color: #1d4ed8;
+    font-style: italic;
+}
+
+.picker-plant-closed:hover {
+    background: #eff6ff;
+}
+
+@media (max-width: 600px) {
+    #plantPicker {
+        width: calc(100vw - 40px);
+        max-height: 260px;
+    }
+}
+/* ============================================================
    Mobile
    ============================================================ */
 @media (max-width: 600px) {
