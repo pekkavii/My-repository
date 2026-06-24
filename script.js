@@ -682,7 +682,8 @@ document.addEventListener("DOMContentLoaded", function () {
                             border-radius:4px;
                             white-space:nowrap;
                             box-shadow:0 1px 3px rgba(0,0,0,0.35);
-                            pointer-events:none;
+                            pointer-events:${popupHtml ? 'auto' : 'none'};
+                            cursor:${popupHtml ? 'pointer' : 'default'};
                             width:auto;
                         ">${rangeKm < 10 ? rangeKm.toFixed(1) : Math.round(rangeKm)} km</div>`,
                         iconSize: null,
