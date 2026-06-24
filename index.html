@@ -37,11 +37,13 @@
         <button id="infoButton" title="About this model">i</button>
     </div>
 
-    <label for="powerPlantSelection">Nuclear power plant:</label>
-    <select id="powerPlantSelection">
-        <option value="">Select a plant...</option>
-        <option value="custom">Set custom location on map</option>
-    </select>
+    <label for="plantPickerInput">Nuclear power plant:</label>
+    <input type="text" id="plantPickerInput" placeholder="Select a plant..."
+           readonly style="cursor:pointer; width:100%; box-sizing:border-box;">
+    <!-- Collapsible country/plant picker panel -->
+    <div id="plantPicker" style="display:none;"></div>
+    <!-- Hidden native select for internal compatibility -->
+    <select id="powerPlantSelection" style="display:none;"></select>
 
     <!-- Shown only for custom location -->
     <div id="reactorTypeRow" style="display:none;">
