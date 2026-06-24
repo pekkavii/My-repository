@@ -1454,5 +1454,45 @@
         "electrical_power_MW": 2000,
         "lat": 8.1711,
         "lon": 77.7139
+    },
+    {
+        "name": "Chinshan (closed)",
+        "country": "Taiwan",
+        "reactor_type": "2 GE BWR Mark I (closed, decommissioning)",
+        "electrical_power_MW": 0,
+        "lat": 25.2972,
+        "lon": 121.5628
+    },
+    {
+        "name": "Kuosheng (closed)",
+        "country": "Taiwan",
+        "reactor_type": "2 GE BWR Mark III (closed, restart under review)",
+        "electrical_power_MW": 0,
+        "lat": 25.1714,
+        "lon": 121.6639
+    },
+    {
+        "name": "Maanshan (closed)",
+        "country": "Taiwan",
+        "reactor_type": "2 Westinghouse PWR (closed May 2025, restart under review)",
+        "electrical_power_MW": 0,
+        "lat": 21.9589,
+        "lon": 120.7501
+    },
+    {
+        "name": "Lungmen (closed)",
+        "country": "Taiwan",
+        "reactor_type": "2 ABWR (construction halted 2014, never commissioned)",
+        "electrical_power_MW": 0,
+        "lat": 25.0306,
+        "lon": 121.9222
+    },
+    {
+        "name": "Barakah",
+        "country": "United Arab Emirates",
+        "reactor_type": "4 APR-1400 PWR (all operating)",
+        "electrical_power_MW": 5600,
+        "lat": 23.9697,
+        "lon": 52.2319
     }
 ]
