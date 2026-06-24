@@ -39,7 +39,8 @@
 
     <label for="plantPickerInput">Nuclear power plant:</label>
     <input type="text" id="plantPickerInput" placeholder="Select a plant..."
-           readonly style="cursor:pointer; width:100%; box-sizing:border-box;">
+           readonly style="cursor:pointer; width:100%; box-sizing:border-box;"
+           onclick="openPicker()">
     <!-- Collapsible country/plant picker panel -->
     <div id="plantPicker" style="display:none;"></div>
     <!-- Hidden native select for internal compatibility -->
