@@ -113,6 +113,63 @@ document.addEventListener("DOMContentLoaded", function () {
     fetch('power_plants.json')
         .then(response => response.json())
         .then(data => {
+
+            // --- Picker helper functions defined first so all code below can use them ---
+            function openPicker() {
+                document.getElementById("plantPicker").style.display = "block";
+            }
+            function closePicker() {
+                document.getElementById("plantPicker").style.display = "none";
+            }
+            window.openPicker = openPicker;
+
+            function selectPlant(plant) {
+                closePicker();
+                clearAnimation();
+                document.getElementById("plantPickerInput").value =
+                    plant.electrical_power_MW === 0
+                        ? `${plant.name} (closed)`
+                        : `${plant.name} (${plant.electrical_power_MW} MW)`;
+
+                const lat = parseFloat(plant.lat);
+                const lon = parseFloat(plant.lon);
+                if (isNaN(lat) || isNaN(lon)) return;
+
+                if (marker) map.removeLayer(marker);
+                if (customMarker) { map.removeLayer(customMarker); customMarker = null; }
+                plumeLayers.forEach(layer => map.removeLayer(layer));
+                plumeLayers = [];
+                disableMapDoubleClick();
+
+                const isClosed = plant.electrical_power_MW === 0;
+                marker = L.marker([lat, lon]).addTo(map)
+                    .bindPopup(`
+                        <b>${plant.name}</b><br>
+                        <b>Country:</b> ${plant.country}<br>
+                        <b>Reactor:</b> ${plant.reactor_type}<br>
+                        <b>Power:</b> ${isClosed ? '<i style="color:#1d4ed8">Closed</i>' : plant.electrical_power_MW + " MW"}
+                        ${isClosed ? "<br><b style='color:gray'>Only INES 3–4 applicable.</b>" : ""}
+                    `).openPopup();
+
+                map.setView([lat, lon], 7);
+                selectedLat = lat;
+                selectedLon = lon;
+
+                document.getElementById("reactorTypeRow").style.display = "none";
+                document.getElementById("reactorType").value = "large";
+                const inesSelect = document.getElementById("ines");
+                Array.from(inesSelect.options).forEach(opt => opt.disabled = false);
+                if (isClosed) {
+                    Array.from(inesSelect.options).forEach(opt => {
+                        opt.disabled = parseInt(opt.value) > 4;
+                    });
+                    if (parseInt(inesSelect.value) > 4) inesSelect.value = "4";
+                }
+
+                if (document.getElementById("useWeatherBasedValues").checked) fetchWeather();
+            }
+            // --- End picker helpers ---
+
             const byCountry = {};
             data.forEach(plant => {
                 if (!byCountry[plant.country]) byCountry[plant.country] = [];
@@ -146,7 +203,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         ? `${plant.name} (closed)`
                         : `${plant.name} (${plant.electrical_power_MW} MW)`;
                     row.dataset.details = JSON.stringify(plant);
-                    row.addEventListener("click", () => selectPlant(plant, row));
+                    row.addEventListener("click", () => selectPlant(plant));
                     plantList.appendChild(row);
                 });
 
@@ -221,62 +278,6 @@ document.addEventListener("DOMContentLoaded", function () {
                     <b>Power:</b> ${statusText}
                 `, { maxWidth: 220 });
             });
-       
-            // Plant picker helpers
-            function openPicker() {
-                document.getElementById("plantPicker").style.display = "block";
-            }
-            function closePicker() {
-                document.getElementById("plantPicker").style.display = "none";
-            }
-            window.openPicker = openPicker;
-
-            function selectPlant(plant, row) {
-                closePicker();
-                clearAnimation();
-                document.getElementById("plantPickerInput").value =
-                    plant.electrical_power_MW === 0
-                        ? `${plant.name} (closed)`
-                        : `${plant.name} (${plant.electrical_power_MW} MW)`;
-
-                const lat = parseFloat(plant.lat);
-                const lon = parseFloat(plant.lon);
-                if (isNaN(lat) || isNaN(lon)) return;
-
-                if (marker) map.removeLayer(marker);
-                if (customMarker) { map.removeLayer(customMarker); customMarker = null; }
-                plumeLayers.forEach(layer => map.removeLayer(layer));
-                plumeLayers = [];
-                disableMapDoubleClick();
-
-                const isClosed = plant.electrical_power_MW === 0;
-                marker = L.marker([lat, lon]).addTo(map)
-                    .bindPopup(`
-                        <b>${plant.name}</b><br>
-                        <b>Country:</b> ${plant.country}<br>
-                        <b>Reactor:</b> ${plant.reactor_type}<br>
-                        <b>Power:</b> ${isClosed ? '<i style="color:#1d4ed8">Closed</i>' : plant.electrical_power_MW + " MW"}
-                        ${isClosed ? "<br><b style='color:gray'>Only INES 3–4 applicable.</b>" : ""}
-                    `).openPopup();
-
-                map.setView([lat, lon], 7);
-                selectedLat = lat;
-                selectedLon = lon;
-
-                // Hide reactor type selector, reset INES
-                document.getElementById("reactorTypeRow").style.display = "none";
-                document.getElementById("reactorType").value = "large";
-                const inesSelect = document.getElementById("ines");
-                Array.from(inesSelect.options).forEach(opt => opt.disabled = false);
-                if (isClosed) {
-                    Array.from(inesSelect.options).forEach(opt => {
-                        opt.disabled = parseInt(opt.value) > 4;
-                    });
-                    if (parseInt(inesSelect.value) > 4) inesSelect.value = "4";
-                }
-
-                if (document.getElementById("useWeatherBasedValues").checked) fetchWeather();
-            }
 
             // Close picker when clicking outside
             document.addEventListener("click", (e) => {
