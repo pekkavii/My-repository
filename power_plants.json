@@ -1494,5 +1494,21 @@
         "electrical_power_MW": 5600,
         "lat": 23.9697,
         "lon": 52.2319
+    },
+    {
+        "name": "Karachi Nuclear Power Complex (KANUPP)",
+        "country": "Pakistan",
+        "reactor_type": "2 Hualong One PWR (K-2, K-3 operating); K-1 PHWR closed 2021",
+        "electrical_power_MW": 2200,
+        "lat": 24.9417,
+        "lon": 66.7928
+    },
+    {
+        "name": "Chashma Nuclear Power Station",
+        "country": "Pakistan",
+        "reactor_type": "4 PWR CNP-300 (C-1 to C-4 operating); C-5 1200MW u/c",
+        "electrical_power_MW": 1200,
+        "lat": 32.3903,
+        "lon": 71.4589
     }
 ]
