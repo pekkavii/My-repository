@@ -180,72 +180,8 @@ document.addEventListener("DOMContentLoaded", function () {
             });
             picker.insertBefore(customRow, picker.firstChild);
 
-            // Dummy option kept for compatibility
+            // Hide the native select — picker handles everything
             select.style.display = "none";
-
-            // --- Build custom collapsible dropdown ---
-            const menu = document.getElementById("plantDropdownMenu");
-            const trigger = document.getElementById("plantDropdownTrigger");
-
-            Object.keys(byCountry).sort().forEach(country => {
-                const plants = byCountry[country];
-
-                const header = document.createElement("div");
-                header.className = "plant-country-group collapsed";
-                header.innerHTML = `<span>${country} <span style="color:#9ca3af;font-weight:400;">(${plants.length})</span></span><span class="plant-country-arrow">▼</span>`;
-
-                const plantList = document.createElement("div");
-                plantList.className = "plant-country-plants";
-                plantList.style.display = "none";
-
-                plants.forEach(plant => {
-                    const isClosed = plant.electrical_power_MW === 0;
-                    const row = document.createElement("div");
-                    row.className = "plant-option" + (isClosed ? " closed-plant" : "");
-                    row.textContent = `${plant.name} (${isClosed ? "closed" : plant.electrical_power_MW + " MW"})`;
-                    row.dataset.value = `${plant.lat},${plant.lon}`;
-                    row.dataset.details = JSON.stringify(plant);
-                    row.addEventListener("click", () => {
-                        trigger.textContent = plant.name;
-                        menu.style.display = "none";
-                        handlePlantSelection(plant, row.dataset.value);
-                    });
-                    plantList.appendChild(row);
-                });
-
-                header.addEventListener("click", () => {
-                    const isCollapsed = header.classList.contains("collapsed");
-                    header.classList.toggle("collapsed");
-                    plantList.style.display = isCollapsed ? "block" : "none";
-                });
-
-                menu.appendChild(header);
-                menu.appendChild(plantList);
-            });
-
-            // Toggle dropdown open/close on trigger click
-            trigger.addEventListener("click", e => {
-                e.stopPropagation();
-                menu.style.display = menu.style.display === "block" ? "none" : "block";
-            });
-
-            // Close on outside click
-            document.addEventListener("click", () => { menu.style.display = "none"; });
-            menu.addEventListener("click", e => e.stopPropagation());
-
-            // Wire top options (clear + custom)
-            document.querySelectorAll(".top-option").forEach(opt => {
-                opt.addEventListener("click", () => {
-                    const val = opt.dataset.value;
-                    trigger.textContent = opt.textContent;
-                    menu.style.display = "none";
-                    if (val === "") {
-                        handlePlantClear();
-                    } else if (val === "custom") {
-                        handleCustomOption();
-                    }
-                });
-            });
 
             const crossIcon = L.divIcon({
                 className: '',
@@ -289,11 +225,11 @@ document.addEventListener("DOMContentLoaded", function () {
             // Plant picker helpers
             function openPicker() {
                 document.getElementById("plantPicker").style.display = "block";
-                document.getElementById("plantPickerInput").select();
             }
             function closePicker() {
                 document.getElementById("plantPicker").style.display = "none";
             }
+            window.openPicker = openPicker;
 
             function selectPlant(plant, row) {
                 closePicker();
