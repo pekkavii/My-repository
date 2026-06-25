@@ -1510,5 +1510,21 @@
         "electrical_power_MW": 1200,
         "lat": 32.3903,
         "lon": 71.4589
+    },
+    {
+        "name": "Ostrovets (Astravets)",
+        "country": "Belarus",
+        "reactor_type": "2 VVER-1200 (both operating); unit 3 planned",
+        "electrical_power_MW": 2388,
+        "lat": 54.7536,
+        "lon": 26.0786
+    },
+    {
+        "name": "Bushehr",
+        "country": "Iran",
+        "reactor_type": "VVER-1000 (unit 1 operating); 2 VVER-1000 (units 2-3 u/c, ~18% complete)",
+        "electrical_power_MW": 915,
+        "lat": 28.8289,
+        "lon": 50.8872
     }
 ]
