@@ -1526,5 +1526,69 @@
         "electrical_power_MW": 915,
         "lat": 28.8289,
         "lon": 50.8872
+    },
+    {
+        "name": "Koeberg",
+        "country": "South Africa",
+        "reactor_type": "2 PWR (Framatome 900 MWe class, both operating)",
+        "electrical_power_MW": 1860,
+        "lat": -33.6617,
+        "lon": 18.425
+    },
+    {
+        "name": "El Dabaa (under construction)",
+        "country": "Egypt",
+        "reactor_type": "4 VVER-1200 (u/c, first unit expected 2028)",
+        "electrical_power_MW": 0,
+        "lat": 30.7167,
+        "lon": 28.5667
+    },
+    {
+        "name": "Laguna Verde",
+        "country": "Mexico",
+        "reactor_type": "2 GE BWR-5",
+        "electrical_power_MW": 1552,
+        "lat": 19.7208,
+        "lon": -96.4064
+    },
+    {
+        "name": "Atucha",
+        "country": "Argentina",
+        "reactor_type": "2 PHWR KWU (Atucha I & II operating; CAREM-25 SMR u/c)",
+        "electrical_power_MW": 1170,
+        "lat": -33.9669,
+        "lon": -59.2075
+    },
+    {
+        "name": "Embalse",
+        "country": "Argentina",
+        "reactor_type": "CANDU 6 PHWR (refurbished 2019, operating)",
+        "electrical_power_MW": 683,
+        "lat": -32.2315,
+        "lon": -64.4438
+    },
+    {
+        "name": "Angra",
+        "country": "Brazil",
+        "reactor_type": "PWR Westinghouse + 2 PWR KWU (Angra 1&2 operating; Angra 3 u/c, target 2031)",
+        "electrical_power_MW": 1884,
+        "lat": -23.0075,
+        "lon": -44.4578
+    },
+    {
+        "name": "Akkuyu (under construction)",
+        "country": "Turkey",
+        "reactor_type": "4 VVER-1200 (unit 1 commissioning 2026, units 2-4 expected by 2028)",
+        "electrical_power_MW": 0,
+        "lat": 36.1444,
+        "lon": 33.5458
+    },
+    {
+        "name": "Rooppur",
+        "country": "Bangladesh",
+        "reactor_type": "2 VVER-1200 (unit 1 fuel loading Apr 2026, unit 2 expected Dec 2027)",
+        "electrical_power_MW": 0,
+        "lat": 24.0647,
+        "lon": 89.0403
     }
 ]
