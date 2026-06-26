@@ -170,12 +170,16 @@
         <button id="toggleAnimationControls" title="Hide/show animation controls">▼</button>
     </div>
     <div id="animation-body">
-        <button id="resetAnimationButton" title="Reset">⏮</button>
-        <button id="toggleAnimationButton" title="Play / Pause">▶ / ⏸</button>
-        <button id="jumpToEndButton" title="Jump to end">⏭</button>
-        <span id="animationStatus">0 / 168 h</span>
-        <input type="range" id="animationSlider" min="0" max="168" value="0"
-               oninput="seekAnimation(this.value)">
+        <div id="animation-controls-row">
+            <button id="resetAnimationButton" title="Reset">⏮</button>
+            <button id="toggleAnimationButton" title="Play / Pause">▶ / ⏸</button>
+            <button id="jumpToEndButton" title="Jump to end">⏭</button>
+            <span id="animationStatus">0 / 168 h</span>
+        </div>
+        <div id="animation-slider-row">
+            <input type="range" id="animationSlider" min="0" max="168" value="0"
+                   style="width:100%;" oninput="seekAnimation(this.value)">
+        </div>
     </div>
 </div>
 
