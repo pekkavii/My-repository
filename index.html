@@ -96,7 +96,17 @@
 
 <!-- Legend — bottom left -->
 <div id="legend">
-    <div id="legend-title">Weekly dose</div>
+    <div id="legend-header">
+        <div id="legend-title">Weekly dose</div>
+        <button id="toggleLegend" title="Hide legend" onclick="
+            const body = document.getElementById('legend-body');
+            const btn = document.getElementById('toggleLegend');
+            const visible = body.style.display !== 'none';
+            body.style.display = visible ? 'none' : 'block';
+            btn.textContent = visible ? '▲' : '▼';
+        ">▼</button>
+    </div>
+    <div id="legend-body">
     <div class="legend-item"><span class="legend-box green"></span> 1–10 mSv</div>
     <div class="legend-item"><span class="legend-box orange"></span> 10–100 mSv</div>
     <div class="legend-item"><span class="legend-box red"></span> 100 mSv – 1 Sv</div>
@@ -111,6 +121,7 @@
         ⚠ Protective zone
     </div>
     <div class="legend-note">Weekly dose &gt;10 mSv. Protective measures may be needed.</div>
+    </div><!-- end legend-body -->
 </div>
 
 <!-- Info modal -->
