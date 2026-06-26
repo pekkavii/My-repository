@@ -42,6 +42,50 @@ html, body {
 }
 
 /* ============================================================
+   Radiation spinner overlay
+   ============================================================ */
+#radiationSpinner {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2000;
+    pointer-events: none;
+}
+
+#radiationSpinnerInner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    background: rgba(255, 255, 255, 0.88);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-radius: 16px;
+    padding: 20px 28px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+    border: 1px solid rgba(255,255,255,0.7);
+}
+
+#radiationSVG {
+    width: 56px;
+    height: 56px;
+    animation: spinRadiation 1.2s linear infinite;
+}
+
+@keyframes spinRadiation {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+}
+
+#radiationSpinnerText {
+    font-size: 12px;
+    font-weight: 600;
+    color: #1e3a5f;
+    letter-spacing: 0.3px;
+}
+
+/* ============================================================
    Construction banner — amber instead of aggressive red
    ============================================================ */
 #construction-banner {
