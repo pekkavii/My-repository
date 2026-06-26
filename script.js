@@ -538,7 +538,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // Simulate directly from map popup
     // Updates controls panel then runs simulation
     // -----------------------------------------------------------------------
-    function simulateFromMap(plant) {
+    window.simulateFromMap = function simulateFromMap(plant) {
         const lat = parseFloat(plant.lat);
         const lon = parseFloat(plant.lon);
         if (isNaN(lat) || isNaN(lon)) return;
@@ -592,7 +592,8 @@ document.addEventListener("DOMContentLoaded", function () {
             // Weather fetch is async — run simulation after short delay
             setTimeout(() => simulateGaussian(lat, lon), 1500);
         } else {
-            simulateGaussian(lat, lon);
+            // Small delay ensures marker placement completes first
+            setTimeout(() => simulateGaussian(lat, lon), 100);
         }
 
         // Show controls panel if collapsed
