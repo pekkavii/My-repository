@@ -64,17 +64,17 @@ document.addEventListener("DOMContentLoaded", function () {
         );
     }
 
-    // Create panes for dose layers so severe doses always render on top
-    // Higher zIndex = rendered on top
-    map.createPane('doseGreen');  map.getPane('doseGreen').style.zIndex  = 410;
-    map.createPane('doseOrange'); map.getPane('doseOrange').style.zIndex = 420;
-    map.createPane('doseRed');    map.getPane('doseRed').style.zIndex    = 430;
-    map.createPane('doseBlack');  map.getPane('doseBlack').style.zIndex  = 440;
-    // Cone pane sits above dose circles so its border is tappable
-    map.createPane('conePane');   map.getPane('conePane').style.zIndex   = 450;
-    map.getPane('conePane').style.pointerEvents = 'none'; // fill non-interactive
-    // Label pane on top of everything
-    map.createPane('labelPane');  map.getPane('labelPane').style.zIndex  = 460;
+    // Z-index and pointer-events priority (highest = tapped first):
+    // 1. Dose circles (highest visual + tap priority)
+    // 2. Protective zone border
+    // 3. Uncertainty cone border (lowest — only tappable where no circles exist)
+    map.createPane('conePane');      map.getPane('conePane').style.zIndex   = 401;
+    map.createPane('protPane');      map.getPane('protPane').style.zIndex   = 402;
+    map.createPane('doseGreen');     map.getPane('doseGreen').style.zIndex  = 410;
+    map.createPane('doseOrange');    map.getPane('doseOrange').style.zIndex = 420;
+    map.createPane('doseRed');       map.getPane('doseRed').style.zIndex    = 430;
+    map.createPane('doseBlack');     map.getPane('doseBlack').style.zIndex  = 440;
+    map.createPane('labelPane');     map.getPane('labelPane').style.zIndex  = 450;
     
     let select = document.getElementById("powerPlantSelection");
     let marker;
@@ -803,7 +803,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 interactive: false,
                 pane: 'conePane'
             }).addTo(map);
-            // Separate thin interactive border polygon for the popup
+            // Wide transparent tap target on cone border — in conePane (below dose circles)
             const wedgeTap = L.polygon(buildWedge(actualMaxRangeKm), {
                 color: "transparent", weight: 12, opacity: 0,
                 fillColor: "transparent", fillOpacity: 0,
@@ -858,7 +858,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 const protWedge = L.polygon(buildWedge(protectiveRangeKm), {
                     color: "#cc2200", weight: 1.5, opacity: 0.5,
                     fillColor: "#ff4422", fillOpacity: 0.08,
-                    interactive: true
+                    interactive: true,
+                    pane: 'protPane'
                 }).addTo(map);
                 protWedge.bindPopup(
                     "<b>⚠ Protective measures recommended</b><br>" +
