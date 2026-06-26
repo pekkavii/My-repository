@@ -409,8 +409,17 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("useWeatherBasedValues").addEventListener("change", function () {
         if (this.checked) {
             if (selectedLat == null || selectedLon == null) {
-                alert("Please select a plant before fetching weather data!");
-                this.checked = false;
+                // No location yet — checkbox stays checked but fetch happens
+                // automatically when a plant is selected (selectPlant/simulateFromMap)
+                // Show a gentle hint rather than blocking alert
+                document.getElementById("loadingSpinner").style.display = "block";
+                document.getElementById("loadingSpinner").textContent =
+                    "Weather will be fetched when a plant is selected.";
+                setTimeout(() => {
+                    document.getElementById("loadingSpinner").style.display = "none";
+                    document.getElementById("loadingSpinner").textContent =
+                        "Fetching weather data...";
+                }, 2500);
             } else {
                 paramsChanged = true;
                 animationLayersGenerated = false;
@@ -608,7 +617,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // -----------------------------------------------------------------------
     // Gaussian plume — static simulation
     // -----------------------------------------------------------------------
-    function simulateGaussian(lat, lon) {
+    window.simulateGaussian = function simulateGaussian(lat, lon) {
         let ines = parseInt(document.getElementById("ines").value);
 
         plumeLayers.forEach(layer => map.removeLayer(layer));
@@ -1071,7 +1080,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // -----------------------------------------------------------------------
     // Weather fetch
     // -----------------------------------------------------------------------
-    function fetchWeather() {
+    window.fetchWeather = function fetchWeather() {
         const spinner = document.getElementById("loadingSpinner");
         spinner.style.display = "block";
 
