@@ -271,12 +271,32 @@ document.addEventListener("DOMContentLoaded", function () {
                 const statusText = isClosed
                     ? '<span style="color:#1d4ed8">(Closed)</span>'
                     : `${plant.electrical_power_MW} MW`;
-                nppMarker.bindPopup(`
-                    <b>${plant.name}</b><br>
-                    <b>Country:</b> ${plant.country}<br>
-                    <b>Reactor:</b> ${plant.reactor_type}<br>
-                    <b>Power:</b> ${statusText}
-                `, { maxWidth: 220 });
+                nppMarker.bindPopup(() => {
+                    const div = document.createElement("div");
+                    div.innerHTML = `
+                        <b>${plant.name}</b><br>
+                        <b>Country:</b> ${plant.country}<br>
+                        <b>Reactor:</b> ${plant.reactor_type}<br>
+                        <b>Power:</b> ${statusText}<br>
+                        <button id="simFromMap_${plant.name.replace(/[^a-z0-9]/gi,'_')}"
+                            style="margin-top:8px;width:100%;padding:5px 0;
+                            background:linear-gradient(135deg,#1d4ed8,#2563eb);
+                            color:white;border:none;border-radius:6px;
+                            font-size:12px;font-weight:700;cursor:pointer;">
+                            ▶ Simulate from here
+                        </button>`;
+
+                    // Wire up button after popup renders
+                    setTimeout(() => {
+                        const btn = document.getElementById(
+                            "simFromMap_${plant.name.replace(/[^a-z0-9]/gi,'_')}");
+                        if (btn) btn.addEventListener("click", () => {
+                            map.closePopup();
+                            simulateFromMap(plant);
+                        });
+                    }, 50);
+                    return div;
+                }, { maxWidth: 220 });
             });
 
             // Close picker when clicking outside
@@ -513,6 +533,76 @@ document.addEventListener("DOMContentLoaded", function () {
         return L.polygon(points, { color, fillColor: color, fillOpacity: 0.4 }).addTo(map);
     }
 
+
+    // -----------------------------------------------------------------------
+    // Simulate directly from map popup
+    // Updates controls panel then runs simulation
+    // -----------------------------------------------------------------------
+    function simulateFromMap(plant) {
+        const lat = parseFloat(plant.lat);
+        const lon = parseFloat(plant.lon);
+        if (isNaN(lat) || isNaN(lon)) return;
+
+        // Update selected location
+        selectedLat = lat;
+        selectedLon = lon;
+
+        // Move the selected marker
+        if (marker) map.removeLayer(marker);
+        if (customMarker) { map.removeLayer(customMarker); customMarker = null; }
+        plumeLayers.forEach(layer => map.removeLayer(layer));
+        plumeLayers = [];
+        disableMapDoubleClick();
+
+        const isClosed = plant.electrical_power_MW === 0;
+        marker = L.marker([lat, lon]).addTo(map)
+            .bindPopup(`
+                <b>${plant.name}</b><br>
+                <b>Country:</b> ${plant.country}<br>
+                <b>Reactor:</b> ${plant.reactor_type}<br>
+                <b>Power:</b> ${isClosed ? '<i style="color:#1d4ed8">Closed</i>' : plant.electrical_power_MW + " MW"}
+                ${isClosed ? "<br><b style='color:gray'>Only INES 3–4 applicable.</b>" : ""}
+            `).openPopup();
+
+        // Update plant picker input to show selected plant name
+        const pickerInput = document.getElementById("plantPickerInput");
+        if (pickerInput) {
+            pickerInput.value = isClosed
+                ? `${plant.name} (closed)`
+                : `${plant.name} (${plant.electrical_power_MW} MW)`;
+        }
+
+        // Hide reactor type selector, reset to large
+        document.getElementById("reactorTypeRow").style.display = "none";
+        document.getElementById("reactorType").value = "large";
+
+        // Apply INES restrictions
+        const inesSelect = document.getElementById("ines");
+        Array.from(inesSelect.options).forEach(opt => opt.disabled = false);
+        if (isClosed) {
+            Array.from(inesSelect.options).forEach(opt => {
+                opt.disabled = parseInt(opt.value) > 4;
+            });
+            if (parseInt(inesSelect.value) > 4) inesSelect.value = "4";
+        }
+
+        // Fetch real weather for this location if checkbox is active
+        if (document.getElementById("useWeatherBasedValues").checked) {
+            fetchWeather();
+            // Weather fetch is async — run simulation after short delay
+            setTimeout(() => simulateGaussian(lat, lon), 1500);
+        } else {
+            simulateGaussian(lat, lon);
+        }
+
+        // Show controls panel if collapsed
+        const controls = document.getElementById("controls");
+        if (controls.classList.contains("collapsed")) {
+            controls.classList.remove("collapsed");
+            document.getElementById("toggleControls").textContent = "▶";
+            document.getElementById("reactorTypeRow").style.display = "none";
+        }
+    }
 
     // -----------------------------------------------------------------------
     // Gaussian plume — static simulation
