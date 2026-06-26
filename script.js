@@ -492,9 +492,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Collapse/expand animation controls bar (frees up map space on small screens)
     document.getElementById("toggleAnimationControls").addEventListener("click", function () {
-        const bar = document.getElementById("animationControls");
-        bar.classList.toggle("collapsed");
-        this.textContent = bar.classList.contains("collapsed") ? "▲" : "▼";
+        const body = document.getElementById("animation-body");
+        const visible = body.style.display !== "none";
+        body.style.display = visible ? "none" : "flex";
+        this.textContent = visible ? "▲" : "▼";
     });
 
 
