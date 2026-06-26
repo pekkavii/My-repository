@@ -94,11 +94,12 @@ html, body {
 }
 
 #controls h1 {
-    font-size: 16px;
+    font-size: 11px;
     font-weight: 700;
     margin: 0;
-    color: #1e3a5f;
-    letter-spacing: 0.3px;
+    color: #6b7280;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
 }
 
 /* Info button — now inside header, icon only */
@@ -166,7 +167,12 @@ html, body {
     backdrop-filter: none;
 }
 
-#controls.collapsed > *:not(#toggleControls) {
+#controls.collapsed > *:not(#toggleControls):not(#controls-header) {
+    display: none;
+}
+
+/* When collapsed, hide info button but keep title visible */
+#controls.collapsed #infoButton {
     display: none;
 }
 
@@ -302,17 +308,49 @@ html, body {
     transform: translateX(-50%);
     z-index: 1001;
     max-width: calc(100vw - 20px);
-    padding: 8px 16px;
+    min-width: 260px;
+    padding: 6px 12px 8px;
     background: rgba(255, 255, 255, 0.92);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
-    border-radius: 24px;
+    border-radius: 16px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
     border: 1px solid rgba(255, 255, 255, 0.6);
+}
+
+#animation-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 4px;
+}
+
+#animation-title {
+    font-size: 11px;
+    font-weight: 700;
+    color: #6b7280;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+}
+
+#animation-body {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 4px;
+}
+
+#animation-controls-row {
     display: flex;
     align-items: center;
     gap: 8px;
     flex-wrap: nowrap;
+}
+
+#animation-slider-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
 /* Media control buttons */
@@ -326,6 +364,17 @@ html, body {
     color: #1e3a5f;
     transition: background 0.15s;
     line-height: 1;
+}
+
+#toggleAnimationControls {
+    font-size: 10px !important;
+    color: #9ca3af !important;
+    padding: 0 !important;
+}
+
+#toggleAnimationControls:hover {
+    background: none !important;
+    color: #374151 !important;
 }
 
 #animationControls button:hover {
@@ -342,8 +391,7 @@ html, body {
 }
 
 #animationSlider {
-    max-width: calc(100vw - 240px);
-    min-width: 80px;
+    width: 100%;
     accent-color: #2563eb;
     cursor: pointer;
 }
