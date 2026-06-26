@@ -33,7 +33,7 @@
 
     <!-- Header: title + info button -->
     <div id="controls-header">
-        <h1>Accident Model</h1>
+        <h1>Accident model</h1>
         <button id="infoButton" title="About this model">i</button>
     </div>
 
@@ -165,13 +165,18 @@
 
 <!-- Animation controls -->
 <div id="animationControls">
-    <button id="toggleAnimationControls" title="Hide/show animation controls">▼</button>
-    <button id="resetAnimationButton" title="Reset">⏮</button>
-    <button id="toggleAnimationButton" title="Play / Pause">▶ / ⏸</button>
-    <button id="jumpToEndButton" title="Jump to end">⏭</button>
-    <span id="animationStatus">0 / 168 h</span>
-    <input type="range" id="animationSlider" min="0" max="168" value="0"
-           oninput="seekAnimation(this.value)">
+    <div id="animation-header">
+        <span id="animation-title">Animation</span>
+        <button id="toggleAnimationControls" title="Hide/show animation controls">▼</button>
+    </div>
+    <div id="animation-body">
+        <button id="resetAnimationButton" title="Reset">⏮</button>
+        <button id="toggleAnimationButton" title="Play / Pause">▶ / ⏸</button>
+        <button id="jumpToEndButton" title="Jump to end">⏭</button>
+        <span id="animationStatus">0 / 168 h</span>
+        <input type="range" id="animationSlider" min="0" max="168" value="0"
+               oninput="seekAnimation(this.value)">
+    </div>
 </div>
 
 <script>
