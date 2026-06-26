@@ -272,29 +272,29 @@ document.addEventListener("DOMContentLoaded", function () {
                     ? '<span style="color:#1d4ed8">(Closed)</span>'
                     : `${plant.electrical_power_MW} MW`;
                 nppMarker.bindPopup(() => {
+                    // Build popup DOM directly — avoids innerHTML template ID issues
                     const div = document.createElement("div");
-                    div.innerHTML = `
+
+                    const info = document.createElement("div");
+                    info.innerHTML = `
                         <b>${plant.name}</b><br>
                         <b>Country:</b> ${plant.country}<br>
                         <b>Reactor:</b> ${plant.reactor_type}<br>
-                        <b>Power:</b> ${statusText}<br>
-                        <button id="simFromMap_${plant.name.replace(/[^a-z0-9]/gi,'_')}"
-                            style="margin-top:8px;width:100%;padding:5px 0;
-                            background:linear-gradient(135deg,#1d4ed8,#2563eb);
-                            color:white;border:none;border-radius:6px;
-                            font-size:12px;font-weight:700;cursor:pointer;">
-                            ▶ Simulate from here
-                        </button>`;
+                        <b>Power:</b> ${statusText}`;
+                    div.appendChild(info);
 
-                    // Wire up button after popup renders
-                    setTimeout(() => {
-                        const btn = document.getElementById(
-                            "simFromMap_${plant.name.replace(/[^a-z0-9]/gi,'_')}");
-                        if (btn) btn.addEventListener("click", () => {
-                            map.closePopup();
-                            simulateFromMap(plant);
-                        });
-                    }, 50);
+                    const btn = document.createElement("button");
+                    btn.textContent = "▶ Simulate from here";
+                    btn.style.cssText = "margin-top:8px;width:100%;padding:5px 0;" +
+                        "background:linear-gradient(135deg,#1d4ed8,#2563eb);" +
+                        "color:white;border:none;border-radius:6px;" +
+                        "font-size:12px;font-weight:700;cursor:pointer;";
+                    btn.addEventListener("click", () => {
+                        map.closePopup();
+                        window.simulateFromMap(plant);
+                    });
+                    div.appendChild(btn);
+
                     return div;
                 }, { maxWidth: 220 });
             });
