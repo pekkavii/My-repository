@@ -483,7 +483,16 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         hideDayDisplay();
-        simulateGaussian(selectedLat, selectedLon);
+        // Show spinner briefly during calculation
+        const spinner = document.getElementById("radiationSpinner");
+        if (spinner) {
+            spinner.style.display = "block";
+            document.getElementById("radiationSpinnerText").textContent = "Calculating...";
+        }
+        setTimeout(() => {
+            if (spinner) spinner.style.display = "none";
+            simulateGaussian(selectedLat, selectedLon);
+        }, 50);
     });
 
     document.getElementById("resetAnimationButton").addEventListener("click", resetAnimation);
@@ -602,13 +611,30 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         // Fetch real weather for this location if checkbox is active
+        const spinner = document.getElementById("radiationSpinner");
         if (document.getElementById("useWeatherBasedValues").checked) {
+            // Show spinning radiation symbol during weather fetch delay
+            if (spinner) {
+                spinner.style.display = "block";
+                document.getElementById("radiationSpinnerText").textContent =
+                    "Fetching weather...";
+            }
             fetchWeather();
-            // Weather fetch is async — run simulation after short delay
-            setTimeout(() => simulateGaussian(lat, lon), 1500);
+            setTimeout(() => {
+                if (spinner) spinner.style.display = "none";
+                simulateGaussian(lat, lon);
+            }, 1500);
         } else {
-            // Small delay ensures marker placement completes first
-            setTimeout(() => simulateGaussian(lat, lon), 100);
+            // Show spinner briefly during simulation calculation
+            if (spinner) {
+                spinner.style.display = "block";
+                document.getElementById("radiationSpinnerText").textContent =
+                    "Calculating...";
+            }
+            setTimeout(() => {
+                if (spinner) spinner.style.display = "none";
+                simulateGaussian(lat, lon);
+            }, 100);
         }
 
         // Leave controls panel in whatever state it was — don't force open
