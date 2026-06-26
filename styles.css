@@ -70,7 +70,7 @@ html, body {
 #radiationSVG {
     width: 56px;
     height: 56px;
-    animation: spinRadiation 1.2s linear infinite;
+    animation: spinRadiation 3s linear infinite;
 }
 
 @keyframes spinRadiation {
