@@ -70,6 +70,11 @@ document.addEventListener("DOMContentLoaded", function () {
     map.createPane('doseOrange'); map.getPane('doseOrange').style.zIndex = 420;
     map.createPane('doseRed');    map.getPane('doseRed').style.zIndex    = 430;
     map.createPane('doseBlack');  map.getPane('doseBlack').style.zIndex  = 440;
+    // Cone pane sits above dose circles so its border is tappable
+    map.createPane('conePane');   map.getPane('conePane').style.zIndex   = 450;
+    map.getPane('conePane').style.pointerEvents = 'none'; // fill non-interactive
+    // Label pane on top of everything
+    map.createPane('labelPane');  map.getPane('labelPane').style.zIndex  = 460;
     
     let select = document.getElementById("powerPlantSelection");
     let marker;
@@ -605,13 +610,8 @@ document.addEventListener("DOMContentLoaded", function () {
             setTimeout(() => simulateGaussian(lat, lon), 100);
         }
 
-        // Show controls panel if collapsed
-        const controls = document.getElementById("controls");
-        if (controls.classList.contains("collapsed")) {
-            controls.classList.remove("collapsed");
-            document.getElementById("toggleControls").textContent = "▶";
-            document.getElementById("reactorTypeRow").style.display = "none";
-        }
+        // Leave controls panel in whatever state it was — don't force open
+        // on small screens this would hide the map
     }
 
     // -----------------------------------------------------------------------
@@ -795,13 +795,29 @@ document.addEventListener("DOMContentLoaded", function () {
                 plumeLayers.push(label);
             }
 
-            // Outer uncertainty cone (yellow)
+            // Outer uncertainty cone (yellow) — drawn in conePane above dose circles
+            // Fill is non-interactive (don't block dose circle taps), border is tappable
             const wedge = L.polygon(buildWedge(actualMaxRangeKm), {
-                color: "gray", weight: 1, opacity: 0.3,
+                color: "gray", weight: 3, opacity: 0.5,
                 fillColor: "yellow", fillOpacity: 0.08,
-                interactive: false
+                interactive: false,
+                pane: 'conePane'
             }).addTo(map);
+            // Separate thin interactive border polygon for the popup
+            const wedgeTap = L.polygon(buildWedge(actualMaxRangeKm), {
+                color: "transparent", weight: 12, opacity: 0,
+                fillColor: "transparent", fillOpacity: 0,
+                interactive: true,
+                pane: 'conePane'
+            }).addTo(map);
+            wedgeTap.bindPopup(
+                "<b>Uncertainty cone ±30°</b><br>" +
+                "Wind direction may vary ±30° from the centreline.<br>" +
+                "The actual plume could extend anywhere within this cone.<br>" +
+                "Dose depends on the real wind direction."
+            );
             plumeLayers.push(wedge);
+            plumeLayers.push(wedgeTap);
             addDistanceLabel(
                 actualMaxRangeKm, "#555", "rgba(255,255,180,0.9)",
                 "Uncertainty cone boundary<br>Wind direction uncertainty ±30°<br>" +
