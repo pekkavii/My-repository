@@ -164,21 +164,15 @@
 <div id="radiationSpinner" style="display:none;">
     <div id="radiationSpinnerInner">
         <svg id="radiationSVG" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-            <!-- Radiation trefoil: three filled wedge arcs with gaps between them -->
-            <!-- Blade 1: top (270° to 30°) -->
-            <path d="M50,50 L50,12 A38,38 0 0,1 82.9,69 Z" fill="#1e3a5f"/>
-            <!-- Blade 2: bottom-right (30° gap) (150° to 210°) -->
-            <path d="M50,50 L82.9,69 A38,38 0 0,1 17.1,69 Z" fill="#1e3a5f"/>
-            <!-- Blade 3: bottom-left (150° gap) -->
-            <path d="M50,50 L17.1,69 A38,38 0 0,1 50,12 Z" fill="#1e3a5f"/>
-            <!-- Inner white ring to create donut shape on blades -->
-            <circle cx="50" cy="50" r="20" fill="white"/>
+            <!-- Properly shaped radiation trefoil — 3 annular sector blades -->
+            <path d="M 57.293,8.638 A 42,42 0 0,1 89.467,64.365 L 66.914,56.156 A 18,18 0 0,0 53.126,32.273 Z" fill="#1e3a5f"/>
+            <path d="M 82.174,76.997 A 42,42 0 0,1 17.826,76.997 L 36.211,61.570 A 18,18 0 0,0 63.789,61.570 Z" fill="#1e3a5f"/>
+            <path d="M 10.533,64.365 A 42,42 0 0,1 42.707,8.638 L 46.874,32.273 A 18,18 0 0,0 33.086,56.156 Z" fill="#1e3a5f"/>
             <!-- Centre dot -->
-            <circle cx="50" cy="50" r="7" fill="#1e3a5f"/>
-            <!-- White gaps between blades (3 x 20° gaps at 90°, 210°, 330°) -->
-            <line x1="50" y1="50" x2="50" y2="10" stroke="white" stroke-width="5"/>
-            <line x1="50" y1="50" x2="83" y2="70" stroke="white" stroke-width="5"/>
-            <line x1="50" y1="50" x2="17" y2="70" stroke="white" stroke-width="5"/>
+            <circle cx="50" cy="50" r="8" fill="#1e3a5f"/>
+            <!-- Inner ring gap (white donut) -->
+            <circle cx="50" cy="50" r="18" fill="white"/>
+            <circle cx="50" cy="50" r="8" fill="#1e3a5f"/>
         </svg>
         <div id="radiationSpinnerText">Fetching weather...</div>
     </div>
