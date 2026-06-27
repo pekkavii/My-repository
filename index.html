@@ -163,20 +163,7 @@
 <!-- Radiation spinner shown during weather fetch + simulate delay -->
 <div id="radiationSpinner" style="display:none;">
     <div id="radiationSpinnerInner">
-        <svg id="radiationSVG" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-            <!-- Yellow background circle -->
-            <circle cx="50" cy="50" r="50" fill="#f59e0b"/>
-            <!-- Black warning triangle -->
-            <polygon points="50,8 94,86 6,86" fill="none" stroke="#1a1a1a" stroke-width="5" stroke-linejoin="round"/>
-            <!-- Three trefoil blades -->
-            <path d="M 56.95,10.61 A 40,40 0 0,1 87.59,63.68 L 66.91,56.16 A 18,18 0 0,0 53.13,32.27 Z" fill="#1a1a1a"/>
-            <path d="M 80.64,75.71 A 40,40 0 0,1 19.36,75.71 L 36.21,61.57 A 18,18 0 0,0 63.79,61.57 Z" fill="#1a1a1a"/>
-            <path d="M 12.41,63.68 A 40,40 0 0,1 43.05,10.61 L 46.87,32.27 A 18,18 0 0,0 33.09,56.16 Z" fill="#1a1a1a"/>
-            <!-- Inner white ring -->
-            <circle cx="50" cy="50" r="18" fill="#f59e0b"/>
-            <!-- Centre dot -->
-            <circle cx="50" cy="50" r="8" fill="#1a1a1a"/>
-        </svg>
+        <img id="radiationSVG" src="favicon.ico" alt="radiation symbol">
         <div id="radiationSpinnerText">Fetching weather...</div>
     </div>
 </div>
