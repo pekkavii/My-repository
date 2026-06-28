@@ -209,6 +209,8 @@ html, body {
     top: auto;
     width: auto;
     min-width: 0;
+    height: auto !important;
+    max-height: none !important;
     padding: 8px 12px;
     background: rgba(255, 255, 255, 0.92);
     backdrop-filter: blur(8px);
@@ -216,6 +218,7 @@ html, body {
     border-radius: 12px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
     border: 1px solid rgba(255, 255, 255, 0.6);
+    overflow: hidden;
 }
 
 #controls.collapsed > *:not(#toggleControls):not(#controls-header) {
@@ -857,7 +860,10 @@ html, body {
     }
 
     #controls.collapsed {
-        top: 190px; /* clear banner + zoom buttons on iPhone */
+        /* Override top positioning — collapsed sits at bottom right */
+        top: auto;
+        bottom: 16px;
+        right: 10px;
     }
 
     /* Push zoom controls further down on mobile to clear banner */
