@@ -501,10 +501,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Collapse/expand animation controls bar (frees up map space on small screens)
     document.getElementById("toggleAnimationControls").addEventListener("click", function () {
-        const body = document.getElementById("animation-body");
-        const visible = body.style.display !== "none";
-        body.style.display = visible ? "none" : "flex";
-        this.textContent = visible ? "▲" : "▼";
+        const bar = document.getElementById("animationControls");
+        bar.classList.toggle("collapsed");
+        this.textContent = bar.classList.contains("collapsed") ? "▲" : "▼";
     });
 
 
@@ -1207,9 +1206,14 @@ document.addEventListener("DOMContentLoaded", function () {
         selectedLon = lng;
         map.setView([lat, lng], 7);
 
-        // Update reactor type selector visibility
-        document.getElementById("reactorTypeRow").style.display = "block";
+        // Update INES options for custom location but don't force-open reactor type row
+        // on mobile this would push content off screen
         updateInesOptions();
+        // Only show reactor type selector if controls panel is expanded
+        const ctrl = document.getElementById("controls");
+        if (!ctrl.classList.contains("collapsed")) {
+            document.getElementById("reactorTypeRow").style.display = "block";
+        }
 
         // If using real weather data, re-fetch for the new location
         if (document.getElementById("useWeatherBasedValues").checked) {
