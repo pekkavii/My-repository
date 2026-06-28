@@ -202,13 +202,20 @@ html, body {
 
 /* Collapsed state */
 #controls.collapsed {
-    padding: 0;
+    /* Bottom right, matching legend position style */
+    position: fixed;
+    bottom: 16px;
+    right: 10px;
+    top: auto;
     width: auto;
     min-width: 0;
-    background: transparent;
-    box-shadow: none;
-    border: none;
-    backdrop-filter: none;
+    padding: 8px 12px;
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.6);
 }
 
 #controls.collapsed > *:not(#toggleControls):not(#controls-header) {
@@ -220,31 +227,17 @@ html, body {
     display: none;
 }
 
-#controls.collapsed {
-    /* Fixed to right edge, below banner + zoom buttons */
-    position: fixed;
-    right: 0;
-    top: 160px;
-    width: auto;
-    padding: 6px 10px 6px 12px;
-    background: rgba(255, 255, 255, 0.92);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    border-radius: 12px 0 0 12px;
-    box-shadow: -3px 2px 12px rgba(0,0,0,0.15);
-    border: 1px solid rgba(255,255,255,0.6);
-    border-right: none;
-}
-
+/* Hide the left-edge tab when collapsed — not needed at bottom */
 #controls.collapsed #toggleControls {
     position: static;
-    border-radius: 8px 0 0 8px;
-    border: 1px solid rgba(255,255,255,0.6);
-    border-right: none;
-    box-shadow: -3px 2px 8px rgba(0,0,0,0.12);
-    background: rgba(255, 255, 255, 0.92);
     left: auto;
     top: auto;
+    border-radius: 6px;
+    border: none;
+    box-shadow: none;
+    background: none;
+    width: auto;
+    height: auto;
 }
 
 /* Form elements inside controls */
@@ -369,6 +362,7 @@ html, body {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 8px;
     margin-bottom: 4px;
 }
 
@@ -458,7 +452,17 @@ html, body {
     border-radius: 16px;
 }
 
-#animationControls.collapsed > *:not(#toggleAnimationControls) {
+#animationControls.collapsed {
+    padding: 6px 10px;
+    border-radius: 12px;
+}
+
+#animationControls.collapsed #animation-header {
+    margin-bottom: 0;
+    gap: 6px;
+}
+
+#animationControls.collapsed > *:not(#animation-header) {
     display: none;
 }
 
