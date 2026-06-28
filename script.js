@@ -1206,14 +1206,9 @@ document.addEventListener("DOMContentLoaded", function () {
         selectedLon = lng;
         map.setView([lat, lng], 7);
 
-        // Update INES options for custom location but don't force-open reactor type row
-        // on mobile this would push content off screen
+        // Show reactor type selector in controls panel for custom location
+        document.getElementById("reactorTypeRow").style.display = "block";
         updateInesOptions();
-        // Only show reactor type selector if controls panel is expanded
-        const ctrl = document.getElementById("controls");
-        if (!ctrl.classList.contains("collapsed")) {
-            document.getElementById("reactorTypeRow").style.display = "block";
-        }
 
         // If using real weather data, re-fetch for the new location
         if (document.getElementById("useWeatherBasedValues").checked) {
