@@ -451,13 +451,11 @@ html, body {
 /* Collapsed state: shrink to a small pill showing only the toggle */
 #animationControls.collapsed {
     padding: 6px 10px;
-    gap: 0;
-    border-radius: 16px;
-}
-
-#animationControls.collapsed {
-    padding: 6px 10px;
     border-radius: 12px;
+    width: fit-content;
+    min-width: 0;
+    left: 50%;
+    transform: translateX(-50%);
 }
 
 #animationControls.collapsed #animation-header {
@@ -903,9 +901,21 @@ html, body {
     }
 
     #legend {
-        bottom: 70px;
+        bottom: 10px;
         font-size: 11px;
         padding: 8px 10px;
+    }
+
+    /* Animation controls centred, above legend */
+    #animationControls {
+        bottom: 10px;
+    }
+
+    /* Collapsed controls box sits above animation bar */
+    #controls.collapsed {
+        bottom: 70px;
+        right: 10px;
+        top: auto;
     }
 
     #construction-banner {
