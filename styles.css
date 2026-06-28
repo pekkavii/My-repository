@@ -452,10 +452,7 @@ html, body {
 #animationControls.collapsed {
     padding: 6px 10px;
     border-radius: 12px;
-    width: fit-content;
-    min-width: 0;
-    left: 50%;
-    transform: translateX(-50%);
+    /* width shrinks to content naturally since animation-body is hidden */
 }
 
 #animationControls.collapsed #animation-header {
