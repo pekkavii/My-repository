@@ -202,15 +202,14 @@ html, body {
 
 /* Collapsed state */
 #controls.collapsed {
-    /* Bottom right, matching legend position style */
+    /* Fixed bottom-right, above the bottomBar */
     position: fixed;
-    bottom: 16px;
+    bottom: 80px; /* above bottomBar height ~60px */
     right: 10px;
     top: auto;
     width: auto;
     min-width: 0;
-    height: auto !important;
-    max-height: none !important;
+    height: auto;
     padding: 8px 12px;
     background: rgba(255, 255, 255, 0.92);
     backdrop-filter: blur(8px);
@@ -345,13 +344,11 @@ html, body {
    Animation controls
    ============================================================ */
 #animationControls {
-    position: absolute;
-    bottom: 16px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 1001;
-    max-width: calc(100vw - 20px);
-    min-width: 260px;
+    position: static;
+    flex-shrink: 1;
+    min-width: 0;
+    max-width: calc(100vw - 200px);
+    min-width: 200px;
     padding: 6px 12px 8px;
     background: rgba(255, 255, 255, 0.92);
     backdrop-filter: blur(8px);
@@ -465,12 +462,33 @@ html, body {
 }
 
 /* ============================================================
-   Legend — bottom left
+   Bottom bar — holds legend, animation controls, collapsed controls
+   in a row that never overlaps on any screen size
+   ============================================================ */
+#bottomBar {
+    position: fixed;
+    bottom: 10px;
+    left: 10px;
+    right: 10px;
+    z-index: 1001;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 8px;
+    pointer-events: none; /* children handle their own events */
+}
+
+#bottomBar > * {
+    pointer-events: auto;
+}
+
+/* ============================================================
+   Legend — bottom left (inside bottomBar)
    ============================================================ */
 #legend {
-    position: absolute;
-    bottom: 16px;
-    left: 10px;
+    position: static;
+    flex-shrink: 0;
     padding: 10px 12px;
     background: rgba(255, 255, 255, 0.92);
     backdrop-filter: blur(8px);
@@ -903,17 +921,7 @@ html, body {
         padding: 8px 10px;
     }
 
-    /* Animation controls centred, above legend */
-    #animationControls {
-        bottom: 10px;
-    }
-
-    /* Collapsed controls box sits above animation bar */
-    #controls.collapsed {
-        bottom: 70px;
-        right: 10px;
-        top: auto;
-    }
+    /* bottomBar handles layout on mobile — no overrides needed */
 
     #construction-banner {
         font-size: 12px;
