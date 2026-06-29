@@ -903,20 +903,24 @@ html, body {
         padding: 8px 10px;
     }
 
-    /* Mobile: push everything up from home indicator */
+    /* Mobile: stack vertically so nothing overlaps
+       Animation bar at bottom, legend above it, collapsed controls above legend */
     #animationControls {
-        bottom: 20px;
-        max-width: calc(100vw - 40px);
+        bottom: max(10px, env(safe-area-inset-bottom));
+        max-width: calc(100vw - 20px);
+        min-width: 0;
     }
 
     #legend {
-        bottom: 20px;
+        /* Sit above animation bar (~70px tall when expanded) */
+        bottom: calc(max(10px, env(safe-area-inset-bottom)) + 75px);
         left: 10px;
-        max-width: 45vw; /* prevent legend overflowing on narrow screen */
+        max-width: calc(100vw - 20px);
     }
 
     #controls.collapsed {
-        bottom: 90px;
+        /* Sit above legend — legend is max ~200px tall */
+        bottom: calc(max(10px, env(safe-area-inset-bottom)) + 75px);
         right: 10px;
     }
 
