@@ -204,8 +204,8 @@ html, body {
 #controls.collapsed {
     /* Fixed bottom-right, above the bottomBar */
     position: fixed;
-    bottom: 80px; /* above bottomBar height ~60px */
-    right: 10px;
+    bottom: calc(max(10px, env(safe-area-inset-bottom)) + 70px);
+    right: max(10px, env(safe-area-inset-right));
     top: auto;
     width: auto;
     min-width: 0;
@@ -345,10 +345,10 @@ html, body {
    ============================================================ */
 #animationControls {
     position: fixed;
-    bottom: 10px;
+    bottom: max(10px, env(safe-area-inset-bottom));
     left: 50%;
     transform: translateX(-50%);
-    z-index: 1001;
+    z-index: 1050;
     /* Leave space for legend (~150px left) and collapsed controls (~120px right) */
     max-width: calc(100vw - 300px);
     min-width: 160px;
@@ -469,8 +469,8 @@ html, body {
    ============================================================ */
 #legend {
     position: fixed;
-    bottom: 10px;
-    left: 10px;
+    bottom: max(10px, env(safe-area-inset-bottom));
+    left: max(10px, env(safe-area-inset-left));
     padding: 10px 12px;
     background: rgba(255, 255, 255, 0.92);
     backdrop-filter: blur(8px);
@@ -479,7 +479,7 @@ html, body {
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
     border: 1px solid rgba(255, 255, 255, 0.6);
     font-size: 12px;
-    z-index: 900; /* below controls panel */
+    z-index: 1050;
     text-align: left;
 }
 
@@ -903,18 +903,21 @@ html, body {
         padding: 8px 10px;
     }
 
-    /* On narrow mobile, raise animation controls above legend/controls */
+    /* Mobile: push everything up from home indicator */
     #animationControls {
-        bottom: 10px;
+        bottom: 20px;
         max-width: calc(100vw - 40px);
     }
 
     #legend {
-        bottom: 10px;
+        bottom: 20px;
+        left: 10px;
+        max-width: 45vw; /* prevent legend overflowing on narrow screen */
     }
 
     #controls.collapsed {
-        bottom: 80px;
+        bottom: 90px;
+        right: 10px;
     }
 
     #construction-banner {
