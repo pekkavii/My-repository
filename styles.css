@@ -344,11 +344,14 @@ html, body {
    Animation controls
    ============================================================ */
 #animationControls {
-    position: static;
-    flex-shrink: 1;
-    min-width: 0;
-    max-width: calc(100vw - 200px);
-    min-width: 200px;
+    position: fixed;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1001;
+    /* Leave space for legend (~150px left) and collapsed controls (~120px right) */
+    max-width: calc(100vw - 300px);
+    min-width: 160px;
     padding: 6px 12px 8px;
     background: rgba(255, 255, 255, 0.92);
     backdrop-filter: blur(8px);
@@ -462,33 +465,12 @@ html, body {
 }
 
 /* ============================================================
-   Bottom bar — holds legend, animation controls, collapsed controls
-   in a row that never overlaps on any screen size
+   Legend — bottom left
    ============================================================ */
-#bottomBar {
+#legend {
     position: fixed;
     bottom: 10px;
     left: 10px;
-    right: 10px;
-    z-index: 1001;
-    display: flex;
-    flex-direction: row;
-    align-items: flex-end;
-    justify-content: space-between;
-    gap: 8px;
-    pointer-events: none; /* children handle their own events */
-}
-
-#bottomBar > * {
-    pointer-events: auto;
-}
-
-/* ============================================================
-   Legend — bottom left (inside bottomBar)
-   ============================================================ */
-#legend {
-    position: static;
-    flex-shrink: 0;
     padding: 10px 12px;
     background: rgba(255, 255, 255, 0.92);
     backdrop-filter: blur(8px);
@@ -921,7 +903,19 @@ html, body {
         padding: 8px 10px;
     }
 
-    /* bottomBar handles layout on mobile — no overrides needed */
+    /* On narrow mobile, raise animation controls above legend/controls */
+    #animationControls {
+        bottom: 10px;
+        max-width: calc(100vw - 40px);
+    }
+
+    #legend {
+        bottom: 10px;
+    }
+
+    #controls.collapsed {
+        bottom: 80px;
+    }
 
     #construction-banner {
         font-size: 12px;
