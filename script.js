@@ -238,10 +238,14 @@ document.addEventListener("DOMContentLoaded", function () {
                 plumeLayers.forEach(layer => map.removeLayer(layer));
                 plumeLayers = [];
                 enableMapDoubleClick();
-                // Mark reactor type row as active but don't force open controls panel
+                // Mark reactor type row as active
                 const rtrPicker = document.getElementById("reactorTypeRow");
                 rtrPicker.dataset.active = "true";
                 updateInesOptions();
+                // Show immediately if controls panel is already expanded
+                if (!document.getElementById("controls").classList.contains("collapsed")) {
+                    rtrPicker.style.display = "block";
+                }
                 document.getElementById("plantPickerInput").value = "Custom location";
             });
             picker.insertBefore(customRow, picker.firstChild);
@@ -1211,10 +1215,13 @@ document.addEventListener("DOMContentLoaded", function () {
         map.setView([lat, lng], 7);
 
         // Mark reactor type row as active for custom location
-        // but don't force it visible — user opens controls panel themselves
         const rtr = document.getElementById("reactorTypeRow");
         rtr.dataset.active = "true";
         updateInesOptions();
+        // Show immediately if controls panel is already expanded
+        if (!document.getElementById("controls").classList.contains("collapsed")) {
+            rtr.style.display = "block";
+        }
 
         // If using real weather data, re-fetch for the new location
         if (document.getElementById("useWeatherBasedValues").checked) {
