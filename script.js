@@ -238,7 +238,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 plumeLayers.forEach(layer => map.removeLayer(layer));
                 plumeLayers = [];
                 enableMapDoubleClick();
-                document.getElementById("reactorTypeRow").style.display = "block";
+                // Mark reactor type row as active but don't force open controls panel
+                const rtrPicker = document.getElementById("reactorTypeRow");
+                rtrPicker.dataset.active = "true";
                 updateInesOptions();
                 document.getElementById("plantPickerInput").value = "Custom location";
             });
@@ -1208,9 +1210,9 @@ document.addEventListener("DOMContentLoaded", function () {
         selectedLon = lng;
         map.setView([lat, lng], 7);
 
-        // Show reactor type selector and mark it active for custom location
+        // Mark reactor type row as active for custom location
+        // but don't force it visible — user opens controls panel themselves
         const rtr = document.getElementById("reactorTypeRow");
-        rtr.style.display = "block";
         rtr.dataset.active = "true";
         updateInesOptions();
 
