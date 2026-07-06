@@ -7,6 +7,11 @@
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="manifest" href="manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="NuclearModel">
+    <meta name="theme-color" content="#1e3a5f">
 </head>
 
 <script>
@@ -200,5 +205,16 @@ document.getElementById("closeInfo").addEventListener("click", function () {
 });
 </script>
 <script src="script.js"></script>
+
+<script>
+// Register service worker for PWA offline support
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/My-repository/sw.js')
+            .then(reg => console.log('Service worker registered:', reg.scope))
+            .catch(err => console.log('Service worker registration failed:', err));
+    });
+}
+</script>
 </body>
 </html>
