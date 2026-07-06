@@ -1,0 +1,19 @@
+{
+    "name": "Nuclear Accident Model",
+    "short_name": "NuclearModel",
+    "description": "Gaussian plume dispersion model for nuclear power plant accidents",
+    "start_url": "/My-repository/",
+    "scope": "/My-repository/",
+    "display": "standalone",
+    "orientation": "any",
+    "background_color": "#ffffff",
+    "theme_color": "#1e3a5f",
+    "icons": [
+        {
+            "src": "favicon.ico",
+            "sizes": "any",
+            "type": "image/x-icon",
+            "purpose": "any maskable"
+        }
+    ]
+}
