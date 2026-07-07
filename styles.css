@@ -14,6 +14,7 @@ html, body {
     min-height: 100vh;
     min-height: -webkit-fill-available;
     font-family: 'Segoe UI', Arial, sans-serif;
+    background: #1a1a2e; /* dark background so any gaps don't show as white */
 }
 
 /* ============================================================
@@ -26,6 +27,7 @@ html, body {
     width: 100%;
     height: 100vh;
     height: -webkit-fill-available;
+    height: 100dvh; /* dynamic viewport height — covers full screen on iOS */
     max-width: 100%;
 }
 
