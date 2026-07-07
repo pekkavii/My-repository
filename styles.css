@@ -88,33 +88,14 @@ html, body {
 /* ============================================================
    Construction banner — amber instead of aggressive red
    ============================================================ */
-#construction-banner {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    background: linear-gradient(90deg, #f59e0b, #d97706);
-    color: white;
-    text-align: center;
-    font-size: 14px;
-    font-weight: 600;
-    padding: 7px 10px;
-    z-index: 1100;
-    letter-spacing: 0.5px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-}
-
-/* Push Leaflet zoom controls below the construction banner */
-.leaflet-top.leaflet-left {
-    top: 40px !important;
-}
+/* Construction banner removed */
 
 /* ============================================================
    Controls panel
    ============================================================ */
 #controls {
     position: absolute;
-    top: 40px;
+    top: 10px;
     right: 10px;
     width: 50vw;
     max-width: 340px;
@@ -861,10 +842,7 @@ html, body {
         right: 10px;
     }
 
-    /* Push zoom controls further down on mobile to clear banner */
-    .leaflet-top.leaflet-left {
-        top: 50px !important;
-    }
+
 
     #controls h1 {
         font-size: 14px;
@@ -924,8 +902,5 @@ html, body {
         right: 10px;
     }
 
-    #construction-banner {
-        font-size: 12px;
-        padding: 5px 8px;
-    }
+
 }
