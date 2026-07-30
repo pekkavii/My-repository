@@ -1,7 +1,7 @@
 // Nuclear Accident Model — Service Worker
 // Caches all app files for offline use
 
-const CACHE_NAME = 'nuclear-model-v1';
+const CACHE_NAME = 'nuclear-model-v2';
 const ASSETS = [
     '/My-repository/',
     '/My-repository/index.html',
