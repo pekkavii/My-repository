@@ -4,10 +4,9 @@ let customMarker = null;
 
 document.addEventListener("DOMContentLoaded", function () {
     const map = L.map('map').setView([51.3833, 30.0997], 5); // Chernobyl as default
-    // Carto Light tile layer — shows place names in English globally
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-        subdomains: 'abcd',
+    // OpenStreetMap tiles — free, no API key required
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
         maxZoom: 19
     }).addTo(map);
 
